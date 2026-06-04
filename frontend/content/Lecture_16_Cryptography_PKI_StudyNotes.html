@@ -1,0 +1,912 @@
+<section id="s0">
+  <div class="section-header">
+    <span class="section-num">00</span>
+    <h2>PKI Basics — Foundations of Public Key Cryptography</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Historical Background</h3>
+    <p>All early cryptographic systems (including Rotor Machines used in World War II) were based on <strong>permutation and substitution</strong> of characters. As computers became available, more complex symmetric systems like <strong>DES</strong> and <strong>AES</strong> were developed — but all still relied on permutation and substitution.</p>
+    <p style="margin-top:8px">Public-key cryptography was fundamentally different: it is based on <strong>mathematical functions</strong> rather than permutation and substitution. The idea was proposed in <strong>1976 by Diffie and Hellman</strong> — a landmark moment in cryptography history.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">💡 Why Was Public-Key Cryptography Needed?</h3>
+      <p>Public-key encryption was developed to solve two critical problems that symmetric cryptography could not address:</p>
+      <ol style="padding-left:18px; margin-top:8px">
+        <li><strong>Key Distribution Problem</strong> — How to establish secure communication without needing to first share a secret key through a secure channel (or trust a Key Distribution Centre with your key)</li>
+        <li><strong>Digital Signatures Problem</strong> — How to verify that a message truly comes intact from the claimed sender (authenticity + integrity)</li>
+      </ol>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">⚠ Common Misconceptions About Public-Key Crypto</h3>
+      <ul>
+        <li><strong>Misconception 1:</strong> "Public-key algorithms are completely secure" — No algorithm is unconditionally secure; security is computational (infeasibility-based)</li>
+        <li><strong>Misconception 2:</strong> "Public-key encryption makes symmetric encryption obsolete" — False. Symmetric encryption is much faster; asymmetric is used for key exchange and signatures, not bulk data</li>
+        <li><strong>Misconception 3:</strong> "Key distribution is solved completely" — Key distribution is easier but the trust problem (how do you know a public key really belongs to who you think?) led to the need for PKI itself</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🏗 PKI — Formal Definition (from PDF)</h3>
+    <p><strong>Public Key Infrastructure (PKI)</strong> is a framework of <em>Technologies, Policies, and Procedures</em> that enables secure communication and data exchange using public key cryptography. It provides a reliable way to:</p>
+    <ul style="padding-left:20px; margin-top:8px">
+      <li>Verify the <strong>identity of users, devices, or services</strong></li>
+      <li>Protect data through <strong>encryption</strong></li>
+      <li>Authenticate through <strong>digital signatures</strong></li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🏗 PKI Components (PDF Version — Simplified)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Certificate Authority (CA)</strong></td><td>The trusted organization that issues and manages digital certificates</td></tr>
+          <tr><td><strong>Registration Authority (RA)</strong></td><td>Acts as a verifier for the CA — checks credentials before certificates are issued</td></tr>
+          <tr><td><strong>Digital Certificates</strong></td><td>Electronic documents that bind a public key with the identity of its owner (X.509 standard)</td></tr>
+          <tr><td><strong>Public and Private Keys</strong></td><td>A matched cryptographic pair — public key is shared, private key is kept secret</td></tr>
+          <tr><td><strong>Certificate Repository / Directory</strong></td><td>Stores and distributes valid certificates for verification</td></tr>
+          <tr><td><strong>Certificate Revocation List (CRL)</strong></td><td>Lists certificates revoked before expiration due to compromise or invalidation</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">⚙ How PKI Works — End-to-End Process</h3>
+    <div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:180px">1. Certificate Request</div>
+        <span style="color:var(--text-muted); font-size:13px">User requests a digital certificate from the CA</span>
+      </div>
+      <div style="padding-left:20px; color:var(--accent);">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:180px">2. Verification (RA)</div>
+        <span style="color:var(--text-muted); font-size:13px">The RA verifies the user's identity against databases</span>
+      </div>
+      <div style="padding-left:20px; color:var(--accent);">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:180px">3. Certificate Issuance (CA)</div>
+        <span style="color:var(--text-muted); font-size:13px">CA issues a digital certificate binding user's identity with their public key</span>
+      </div>
+      <div style="padding-left:20px; color:var(--accent);">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:180px">4. Secure Communication</div>
+        <span style="color:var(--text-muted); font-size:13px">Others use the public key from the certificate to encrypt messages or verify signatures</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛡 PKI Functions (The Four Pillars)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Authentication</strong></td><td>Confirms the identity of users or systems</td></tr>
+          <tr><td><strong>Confidentiality</strong></td><td>Ensures only authorized parties can access data</td></tr>
+          <tr><td><strong>Integrity</strong></td><td>Prevents unauthorized changes to data</td></tr>
+          <tr><td><strong>Non-Repudiation</strong></td><td>Ensures the sender cannot deny sending a message</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔑 Characteristics of Public-Key Encryption (Technical)</h3>
+    <p>Public-key algorithms rely on two keys with these mathematical characteristics:</p>
+    <ul style="padding-left:20px; margin-top:8px">
+      <li>It is <strong>computationally infeasible</strong> to find the decryption key knowing only the algorithm and the encryption key</li>
+      <li>It is <strong>computationally easy</strong> to encrypt or decrypt messages when the relevant key is known</li>
+      <li><strong>Either of the two related keys</strong> can be used for encryption — with the other used for decryption (in some schemes like digital signatures)</li>
+    </ul>
+    <p class="note">The Diffie-Hellman (1976) proposal: each user generates a key pair; one key is placed in a "public ring" (public directory) and the other is the private key.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> What problem did Diffie-Hellman solve in 1976? Name the two key problems.</li>
+      <li><strong>MCQ:</strong> What year was public-key cryptography proposed? → 1976 (Diffie-Hellman)</li>
+      <li><strong>Short:</strong> What is PKI? What is its framework based on?</li>
+      <li><strong>Short:</strong> What is the key distribution problem? How does public-key cryptography solve it?</li>
+      <li><strong>Long:</strong> Explain how PKI works end-to-end from certificate request to secure communication.</li>
+      <li><strong>MCQ:</strong> What are the four functions of PKI? → Authentication, Confidentiality, Integrity, Non-Repudiation</li>
+      <li><strong>Misconception Q:</strong> Does public-key encryption make symmetric encryption obsolete? Explain why or why not.</li>
+      <li><strong>Technical:</strong> What are the three computational characteristics of public-key algorithms?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Public Key Cryptography (Asymmetric Encryption)</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-left">
+      <h3>📖 Definition</h3>
+      <p>A cryptographic system where every user has <strong>two mathematically linked keys</strong> — a <em>public key</em> (shared openly) and a <em>private key</em> (kept secret). Also called <strong>asymmetric encryption</strong> because two different keys are used for encryption and decryption.</p>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">🔑 Key Pair Properties</h3>
+      <ul>
+        <li>Public and private keys are mathematically linked</li>
+        <li>Cannot guess or derive one key from the other</li>
+        <li>Only the matching key from the pair can decrypt</li>
+        <li>Public key → shared on internet, social media, email</li>
+        <li>Private key → confidential, stored securely</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔄 How It Works — Step by Step</h3>
+    <div class="flow">
+      <div class="flow-step">Sender gets recipient's<br>Public Key</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Encrypts message with<br>Recipient's Public Key</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Sends Ciphertext<br>over internet</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Recipient decrypts with<br>their Private Key</div>
+    </div>
+    <p class="note">Example from slides: Sundar encrypts with Venkatesh's Public Key → Venkatesh decrypts with his own Private Key. No other key can decrypt the message.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card purple-left">
+      <h3 class="purple">🧠 Beginner Explanation</h3>
+      <p>Think of the public key like a <em>padlock</em> you give to everyone. Anyone can lock a box using your padlock. But only YOU have the key to open it (private key). No one else can open the box even though everyone has your padlock.</p>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">🏛 Technical Explanation</h3>
+      <p>Asymmetric cryptography uses a trapdoor one-way function (e.g., RSA uses prime factorization difficulty, ECC uses elliptic curve discrete logarithm). Encrypting with public key guarantees only the private key holder can decrypt — mathematically infeasible to reverse without the private key.</p>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠ Common Mistakes Students Make</h3>
+    <ul>
+      <li>Confusing public and private key roles — remember: <em>public key encrypts</em>, <em>private key decrypts</em> (for confidentiality)</li>
+      <li>Thinking symmetric = two keys. It's the opposite — symmetric uses ONE shared key</li>
+      <li>Assuming asymmetric is faster than symmetric — it is actually SLOWER (used for key exchange, not bulk data)</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> What is asymmetric encryption? Why is it called "asymmetric"?</li>
+      <li><strong>Short:</strong> What is a key pair? What are its properties?</li>
+      <li><strong>MCQ:</strong> If Alice wants to send a secret message to Bob, which key does she use to encrypt? → Bob's Public Key</li>
+      <li><strong>Long:</strong> Explain the process of public key cryptography with a real-world example. Include the role of each key.</li>
+      <li><strong>Scenario:</strong> Sundar wants to send a confidential message to Venkatesh. Describe step by step how public key cryptography ensures only Venkatesh can read it.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Hashing / Hash Functions</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Definition</h3>
+    <p>A <strong>hash function</strong> is a mathematical algorithm that converts any input data of <em>arbitrary length</em> into a <em>fixed-length hexadecimal number</em>. No keys are required. The output is called a <strong>Hash Value</strong> or <strong>Message Digest</strong>. It is also called <strong>one-way encryption</strong> because you cannot reverse-engineer the original message from the hash.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">✅ Key Properties</h3>
+      <ul>
+        <li><strong>Fixed-length output</strong> regardless of input size</li>
+        <li><strong>Deterministic:</strong> Same input → always same hash</li>
+        <li><strong>Avalanche Effect:</strong> Even 1 character change = completely different hash</li>
+        <li><strong>One-way:</strong> Cannot retrieve original message from hash</li>
+        <li><strong>No keys required</strong> (unlike encryption)</li>
+        <li>Also called the <em>digital thumbprint</em> of data</li>
+      </ul>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">📊 SHA-256 Example (from slides)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Input</th><th>Hash Output (first 16 chars)</th></tr></thead>
+          <tbody>
+            <tr><td><code>Hello World</code></td><td><code>a591a6d40bf42040…</code></td></tr>
+            <tr><td><code>Hello World!</code></td><td><code>7f83b1657ff1fc53…</code></td></tr>
+            <tr><td><code>Cryptography is awesome</code></td><td><code>2d601088ecb12661…</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">SHA-256 always outputs 256 bits = 32 bytes = 64 hex characters. Note how adding just "!" completely changes the hash — Avalanche Effect.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔄 Hashing Process Flow</h3>
+    <div class="flow">
+      <div class="flow-step">Input Data<br>(any length)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Hashing Algorithm<br>(e.g. SHA-256)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Fixed-Length<br>Hash Value (Hex)</div>
+    </div>
+    <p class="note">Common algorithms: MD5 (128-bit, deprecated), SHA-1 (160-bit, deprecated), SHA-256 (256-bit), SHA-512 (512-bit)</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card purple-left">
+      <h3 class="purple">🧠 Beginner Explanation</h3>
+      <p>A hash is like a fingerprint of data. Just as every person has a unique fingerprint, every piece of data has a unique hash. If you change even one letter in a document, the fingerprint changes completely. And you can't reconstruct a person from their fingerprint — that's why it's one-way.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">🌍 Real-World Use</h3>
+      <ul>
+        <li>Password storage (systems store hash of password, not password itself)</li>
+        <li>File integrity checking (download verification)</li>
+        <li>Digital signatures (sign the hash, not the whole document)</li>
+        <li>Blockchain (each block linked via hash of previous block)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> Define hash function. What is a message digest?</li>
+      <li><strong>MCQ:</strong> What happens if you change a single character in input data? → Completely different hash value (Avalanche Effect)</li>
+      <li><strong>MCQ:</strong> SHA-256 produces an output of how many bits? → 256 bits</li>
+      <li><strong>Comparison:</strong> Differentiate between hashing and encryption.</li>
+      <li><strong>Short:</strong> Why is hashing called one-way encryption?</li>
+      <li><strong>Short:</strong> Why is hashing called the "digital thumbprint"?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Public Key Infrastructure (PKI)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Definition</h3>
+    <p><strong>PKI</strong> is a collection of <em>hardware, software, policies, procedures, people, and roles</em> that helps to create, manage, distribute, use, store, verify, and revoke <strong>digital certificates</strong> — and manages their complete lifecycle.</p>
+    <p style="margin-top:8px">PKI creates a Digital Certificate that contains the link between a <strong>public key</strong> and the <strong>person/entity</strong> to whom the certificate was issued.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Purpose of PKI</h3>
+    <ul>
+      <li>Simplify security of online transactions (email, internet banking)</li>
+      <li>Identify parties involved in a transaction and verify integrity of information shared</li>
+      <li>Used when password-based authentication is <em>not sufficient</em> — requires stronger authentication</li>
+      <li>Provides the 4 Trust Services: <strong>Authentication, Confidentiality, Integrity, Non-Repudiation</strong></li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🏗 PKI Components — Detailed</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Role</th><th>Key Point</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Registration Authority (RA)</strong></td>
+            <td>Verifies identities of persons/organizations requesting digital certificates against known databases</td>
+            <td>Forwards verified applications to Certificate Authority</td>
+          </tr>
+          <tr>
+            <td><strong>Certificate Authority (CA)</strong></td>
+            <td>Issues, stores, and signs digital certificates</td>
+            <td>The most critical component — the "trust anchor"</td>
+          </tr>
+          <tr>
+            <td><strong>Central Repository</strong></td>
+            <td>Secure storage space where keys are stored and indexed</td>
+            <td>Like a database for certificates and keys</td>
+          </tr>
+          <tr>
+            <td><strong>Certificate Management System</strong></td>
+            <td>Enables access to digital certificates, issues them to owners, manages lifecycle</td>
+            <td>Full lifecycle management</td>
+          </tr>
+          <tr>
+            <td><strong>Certificate Policy</strong></td>
+            <td>Contains requirements and procedures for PKI</td>
+            <td>Enables 3rd-party auditors to verify PKI integrity</td>
+          </tr>
+          <tr>
+            <td><strong>Validation Authority (VA)</strong></td>
+            <td>Verifies validity of digital certificates; ensures they were issued by trusted CA</td>
+            <td>Uses OCSP and CRL</td>
+          </tr>
+          <tr>
+            <td><strong>Certificate Revocation List (CRL)</strong></td>
+            <td>List of revoked/invalid certificates before expiry</td>
+            <td>Published by CA; checked before trusting a certificate</td>
+          </tr>
+          <tr>
+            <td><strong>OCSP</strong></td>
+            <td>Online Certificate Status Protocol — real-time certificate validation</td>
+            <td>Faster alternative to CRL; gives live status</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛡 PKI Trust Services (The 4 Pillars)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Capability</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Authentication</strong></td><td>We know WHO we are communicating with — creates a way to identify users/devices</td><td>Certificate proves identity of a website</td></tr>
+          <tr><td><strong>Confidentiality</strong></td><td>We know the information is secure — ensures a secure way to send/receive data</td><td>Encrypted HTTPS connection</td></tr>
+          <tr><td><strong>Integrity</strong></td><td>We know what we are talking about — data was not modified during transmission</td><td>Hash verification of downloaded file</td></tr>
+          <tr><td><strong>Non-Repudiation</strong></td><td>We cannot deny the information we sent — prevents individuals from denying sending/receiving electronic communications</td><td>Digitally signed contract</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is PKI? What does it consist of?</li>
+      <li><strong>Long:</strong> Describe all components of PKI and their roles.</li>
+      <li><strong>Short:</strong> What is the difference between a Registration Authority and a Certificate Authority?</li>
+      <li><strong>Short:</strong> What is the difference between CRL and OCSP?</li>
+      <li><strong>MCQ:</strong> Which component of PKI issues, stores, and signs digital certificates? → Certificate Authority</li>
+      <li><strong>Long:</strong> What are the four trust services provided by PKI? Explain each.</li>
+      <li><strong>Scenario:</strong> A company's password-based login is being bypassed. How would PKI solve this?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Digital Certificates &amp; Formats</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What is a Digital Certificate?</h3>
+    <ul>
+      <li>An <strong>electronic identification document</strong> — like a digital ID card</li>
+      <li>Creates a link between a <strong>public key</strong> and its <strong>owner</strong></li>
+      <li>Issued by a <strong>Certifying Authority (CA)</strong> after strong identity verification</li>
+      <li>Valid for a <strong>specific time period</strong> — has expiry date</li>
+      <li>Also called <strong>X.509 certificates</strong> (the standard format)</li>
+      <li>PKI manages the <strong>complete lifecycle</strong> of digital certificates</li>
+      <li>Owner must keep the certificate very secure</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>📂 Certificate Formats — Complete Comparison</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Format</th><th>Encoding</th><th>Extensions</th><th>Stores Private Key?</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>PEM</strong><br>(Privacy Enhanced Mail)</td>
+            <td>Base64 ASCII</td>
+            <td><code>.pem</code> <code>.crt</code> <code>.cer</code> <code>.key</code></td>
+            <td>Yes (in .pem or .key)</td>
+            <td>Most common format; used by most CAs; same file can store cert + CA cert + private key</td>
+          </tr>
+          <tr>
+            <td><strong>PKCS #7</strong><br>(P7B)</td>
+            <td>Base64 ASCII</td>
+            <td><code>.p7b</code> <code>.p7c</code></td>
+            <td>❌ NO</td>
+            <td>Certificate chains; CAs often use this to issue chain; can only store cert + chain, NOT private keys</td>
+          </tr>
+          <tr>
+            <td><strong>DER</strong><br>(Distinguished Encoding Rule)</td>
+            <td>Binary</td>
+            <td><code>.der</code> <code>.cer</code></td>
+            <td>Yes</td>
+            <td>Java environments; binary version of PEM</td>
+          </tr>
+          <tr>
+            <td><strong>PKCS #12 / PFX</strong><br>(Personal Information Exchange)</td>
+            <td>Binary</td>
+            <td><code>.pfx</code> <code>.p12</code></td>
+            <td>Yes + Password protected</td>
+            <td>Windows OS; all-in-one: end entity cert + CA cert + private key in one password-protected file</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">PKCS #7 is the ONLY format that CANNOT store private keys. This is a favorite MCQ/short question!</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card purple-left">
+      <h3 class="purple">🔑 File Extensions Quick Reference</h3>
+      <ul>
+        <li><code>.pem</code> — PEM format (all-in-one)</li>
+        <li><code>.crt</code> / <code>.cer</code> — Certificate only (PEM or DER)</li>
+        <li><code>.key</code> — Private key (PEM)</li>
+        <li><code>.p7b</code> / <code>.p7c</code> — PKCS #7 (no private key)</li>
+        <li><code>.der</code> — DER binary certificate</li>
+        <li><code>.pfx</code> / <code>.p12</code> — PKCS #12 (Windows, all-in-one)</li>
+      </ul>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">🌍 Real-World Example</h3>
+      <p>When you download a TLS certificate from a CA like DigiCert:</p>
+      <ul>
+        <li>Linux server? → Use <code>.pem</code> or <code>.crt</code></li>
+        <li>Java application? → Use <code>.der</code></li>
+        <li>Windows IIS server? → Use <code>.pfx</code> (PKCS#12)</li>
+        <li>Certificate chain to share with others? → Use <code>.p7b</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is a digital certificate? Why are they called X.509 certificates?</li>
+      <li><strong>MCQ:</strong> Which certificate format cannot store private keys? → PKCS #7 (.p7b)</li>
+      <li><strong>MCQ:</strong> Which format is predominantly used in Windows? → PKCS #12 / PFX</li>
+      <li><strong>MCQ:</strong> Which format is typically used in Java environments? → DER</li>
+      <li><strong>MCQ:</strong> What encoding does PEM use? → Base64 ASCII</li>
+      <li><strong>Comparison:</strong> Compare PEM and PKCS #12 formats.</li>
+      <li><strong>Short:</strong> What does PFX stand for? What are its advantages?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Chain of Trust &amp; Trust Store</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Chain of Trust — Definition</h3>
+    <p>The <strong>Chain of Trust</strong> (also called Certificate Chain) is a hierarchical structure of digital certificates that links an end-entity certificate back to a trusted Root CA. It establishes trust by verifying each certificate is signed by the authority above it.</p>
+  </div>
+
+  <div class="card">
+    <h3>🏗 Structure of the Chain of Trust</h3>
+    <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="flow-step" style="background:#1a2e0e; border-color:#3a5020; min-width:200px">🏛 Root CA<br><span style="font-size:11px; color:var(--text-muted)">Trust Anchor · Self-Signed · Highest Trust</span></div>
+        <span style="color:var(--text-muted); font-size:12px">→ Signs Intermediate CA's certificate</span>
+      </div>
+      <div style="padding-left: 30px; color: var(--accent);">↓</div>
+      <div style="display: flex; align-items: center; gap: 12px; padding-left: 30px;">
+        <div class="flow-step" style="min-width:200px">🔗 Intermediate CA<br><span style="font-size:11px; color:var(--text-muted)">Layer of protection · Can have sub-CAs</span></div>
+        <span style="color:var(--text-muted); font-size:12px">→ Signs End Entity certificate</span>
+      </div>
+      <div style="padding-left: 60px; color: var(--accent);">↓</div>
+      <div style="display: flex; align-items: center; gap: 12px; padding-left: 60px;">
+        <div class="flow-step" style="background:#1a1a2e; border-color:#3030aa; min-width:200px">📄 End Entity Certificate<br><span style="font-size:11px; color:var(--text-muted)">Issued to person/server/org/website</span></div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:14px">Key insight: Root CA is self-signing — it signs its own certificate. The Intermediate CA acts as a buffer, so Root CA's private key is rarely used (kept offline for security).</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🔍 Certificate Verification Process — Step by Step</h3>
+    <ol style="padding-left:20px;">
+      <li>Customer presents their certificate (usually includes full chain to Root CA)</li>
+      <li>Verifying entity uses the <strong>issuing authority's public key</strong> to verify the certificate signature</li>
+      <li>If the verifying entity <strong>trusts this CA</strong> → verification complete. Stop.</li>
+      <li>If NOT trusted → move up the chain to the next CA and repeat verification</li>
+      <li>Continue until a <strong>trusted CA is found</strong> or you reach the <strong>Root CA</strong></li>
+      <li>If Root CA is not in trust store → certificate is rejected</li>
+    </ol>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🏪 Trust Store</h3>
+    <p>A <strong>Trust Store</strong> (also: Certification Store) is a collection of Root CAs that are trusted by default. It is maintained by the organizations that create operating systems and browsers.</p>
+    <div class="table-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Organization</th><th>Trust Store Program</th></tr></thead>
+        <tbody>
+          <tr><td>Microsoft</td><td>Microsoft Trusted Root Certificate Program</td></tr>
+          <tr><td>Apple</td><td>Apple Root Certificate Program</td></tr>
+          <tr><td>Oracle/Java</td><td>Java Root Certificate Program</td></tr>
+          <tr><td>Mozilla</td><td>Mozilla Network Security Services</td></tr>
+          <tr><td>Adobe</td><td>Adobe Trusted Certificates List</td></tr>
+          <tr><td>Google</td><td>Google Trust Store</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is the Chain of Trust? What are its three levels?</li>
+      <li><strong>Short:</strong> What is a Root CA? Why is it called a "trust anchor"?</li>
+      <li><strong>Short:</strong> What is the role of an Intermediate CA? Why not issue certificates directly from Root CA?</li>
+      <li><strong>Long:</strong> Explain the certificate verification process step by step.</li>
+      <li><strong>Short:</strong> What is a Trust Store? Give two examples.</li>
+      <li><strong>MCQ:</strong> Which certificate is self-signed in the chain of trust? → Root CA</li>
+      <li><strong>Scenario:</strong> A browser shows "Certificate Not Trusted." What could be the reason based on chain of trust?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>TLS Certificate Types</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 TLS Certificates — Two Classification Dimensions</h3>
+    <p>TLS (Transport Layer Security) certificates are classified by <strong>two independent criteria</strong>: (1) Validation Method and (2) Domain Coverage Type.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔐 By Validation Method</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Assurance Level</th><th>What's Verified</th><th>Browser Display</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Domain Validation (DV)</strong></td>
+            <td>Minimum / Basic</td>
+            <td>Only ownership of domain name</td>
+            <td>Padlock — no org name</td>
+            <td>Personal blogs, basic sites; easy to obtain</td>
+          </tr>
+          <tr>
+            <td><strong>Organization Validation (OV)</strong></td>
+            <td>High — Most Common</td>
+            <td>Domain + Organization existence verified by CA</td>
+            <td>Padlock + Business/Org name</td>
+            <td>Businesses handling sensitive customer data</td>
+          </tr>
+          <tr>
+            <td><strong>Extended Validation (EV)</strong></td>
+            <td>Highest</td>
+            <td>Registration, location, operations, industry of company</td>
+            <td>Green padlock + Org name + Country + Business type</td>
+            <td>Banks, e-commerce, high-security sites</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">DV certificates DO NOT let users verify the website actually belongs to the business they're interested in — only that the domain is owned by someone.</div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🌐 By Domain Coverage Type</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>What It Covers</th><th>Key Details</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Single Domain</strong></td>
+            <td>One specific domain or subdomain</td>
+            <td>Simplest; issued to one domain (e.g., www.example.com)</td>
+          </tr>
+          <tr>
+            <td><strong>Multi-Domain (SAN / UCC)</strong></td>
+            <td>Multiple different domains</td>
+            <td>Up to 250 domains in one cert; all domains must pass domain validation; also called Subject Alternative Name or Unified Communications Certificate</td>
+          </tr>
+          <tr>
+            <td><strong>Wildcard</strong></td>
+            <td>All subdomains of one domain</td>
+            <td>Uses asterisk: <code>*.domainname.com</code>; covers www.example.com, mail.example.com, etc.; OV and EV only</td>
+          </tr>
+          <tr>
+            <td><strong>Multi-Domain Wildcard</strong></td>
+            <td>Multiple domains + their subdomains</td>
+            <td>Most complex; mix of FQDN and wildcard SAN; Common Name must be FQDN; up to 250 domains</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Comparison:</strong> Compare DV, OV, and EV TLS certificates.</li>
+      <li><strong>MCQ:</strong> Which certificate type provides the highest level of assurance? → Extended Validation (EV)</li>
+      <li><strong>MCQ:</strong> What does the asterisk (*) represent in a wildcard certificate? → All subdomains</li>
+      <li><strong>Short:</strong> What is a SAN certificate? When is it used?</li>
+      <li><strong>Short:</strong> What is the maximum number of domains that can be added in a multi-domain certificate? → 250</li>
+      <li><strong>MCQ:</strong> Wildcard certificates are issued by which validation types? → OV and EV only</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Digital Signatures &amp; Certificate-Based Authentication</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Digital Signature — Definition</h3>
+    <p>A <strong>digital signature</strong> is a cryptographic mechanism used to verify the <em>authenticity</em> and <em>integrity</em> of a digital document or message. It proves: (1) who sent it (authentication), and (2) it was not tampered with (integrity), and (3) the sender cannot deny it (non-repudiation).</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✍ Signing Process — Step by Step</h3>
+    <div class="flow">
+      <div class="flow-step">Original Document</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Hashing Function<br>(creates Hash Value)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Encrypt Hash with<br>Signer's <strong>Private Key</strong></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Digital Signature<br>created</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Attach to Document<br>= Digitally Signed Doc</div>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔍 Verification Process — Step by Step</h3>
+    <div class="flow">
+      <div class="flow-step">Receive Signed Document</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Decrypt signature with<br>Signer's <strong>Public Key</strong><br>→ Hash Value #2</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Run document through<br>same Hashing Function<br>→ Hash Value #1</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Compare<br>#1 vs #2</div>
+    </div>
+    <p class="note" style="margin-top:8px"><strong>If Hash #1 = Hash #2 → Signature is VALID.</strong> If they differ → document was tampered with.</p>
+  </div>
+
+  <div class="highlight">Key insight: In digital signatures, you use your <strong>PRIVATE key to sign</strong> and the recipient uses your <strong>PUBLIC key to verify</strong>. This is the OPPOSITE of encryption (where public key encrypts, private key decrypts).</div>
+
+  <div class="card">
+    <h3>🏅 Digital Signature Certificate Classes</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Class</th><th>Issued To</th><th>Risk Level</th><th>Special Requirement</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Class 1</strong></td>
+            <td>Business personnel &amp; private individuals</td>
+            <td>Low — minor significance</td>
+            <td>Info verified against consumer databases</td>
+          </tr>
+          <tr>
+            <td><strong>Class 2</strong></td>
+            <td>Business personnel &amp; private individuals</td>
+            <td>Moderate — substantial monetary value or fraud risk</td>
+            <td>Info verified against consumer databases; for transactions with substantial value</td>
+          </tr>
+          <tr>
+            <td><strong>Class 3</strong></td>
+            <td>Individuals &amp; organizations</td>
+            <td>High — very high value transactions, high fraud risk</td>
+            <td>Physical appearance before CA required; for e-commerce</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔒 Certificate-Based Authentication — 4 Validation Questions</h3>
+    <p>Before granting access, the system asks 4 questions. Failure on ANY ONE = access denied.</p>
+    <ol style="padding-left:20px; margin-top:10px">
+      <li><strong>Trusted CA?</strong> — Was the certificate issued by a trusted CA? Is the intermediate and Root CA trusted?</li>
+      <li><strong>Validity period?</strong> — What is the issue and expiry date? Is the certificate expired?</li>
+      <li><strong>Revocation status?</strong> — Has the certificate been revoked for any reason? (Checked via CRL or OCSP)</li>
+      <li><strong>Proof of ownership?</strong> — Can the user prove they have the private key associated with this certificate?</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>💳 Smart Cards</h3>
+    <ul>
+      <li>A small computer <em>without screen or keyboard</em> — integrates microprocessor, memory, and applications</li>
+      <li>Compliant with ISO/IEC 7810 ID-1, 7816 &amp; 14443</li>
+      <li>Can perform cryptographic operations <em>within the card itself</em>: encryption, decryption, digital signatures, hashing, key pair creation</li>
+      <li>Secure storage for private keys, digital certificates, account numbers, passwords</li>
+      <li><strong>Only public key and digital certificates are exposed</strong> — private keys stay inside</li>
+      <li>Use cases: National ID (Aadhaar), E-Passport, Banking (Debit/Credit), Smart SIM, Building access</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Long:</strong> Explain the digital signature process. Include both signing and verification.</li>
+      <li><strong>MCQ:</strong> Which key is used to create (sign) a digital signature? → Signer's Private Key</li>
+      <li><strong>MCQ:</strong> Which key is used to verify a digital signature? → Signer's Public Key</li>
+      <li><strong>Short:</strong> What are the 4 questions asked in certificate-based authentication?</li>
+      <li><strong>Comparison:</strong> Compare Class 1, Class 2, and Class 3 digital signature certificates.</li>
+      <li><strong>Short:</strong> What is a smart card? What cryptographic operations can it perform?</li>
+      <li><strong>MCQ:</strong> Certificate-based authentication can authenticate which types of identities? → Human users, servers, devices, applications, APIs, smart devices</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Code Signing Certificates</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Definition</h3>
+    <p><strong>Code Signing</strong> is the process of digitally signing software (executables, binaries, scripts, source code) to identify the publisher and assure that the software has not been modified or tampered with since it was signed.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">✅ What Code Signing Proves</h3>
+      <ul>
+        <li>Identity of the software publisher (who made it)</li>
+        <li>Software has not been tampered with after signing (integrity via hash values)</li>
+        <li>The publisher's certificate was issued by a CA connected to a trusted Root CA (chain of trust)</li>
+      </ul>
+      <p class="note">Code signing does NOT prove the software is safe or malware-free — only that it came from a verified publisher unchanged.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">🔑 Security Dependency</h3>
+      <p>The entire system's security depends on the software publisher keeping the <strong>private key confidential</strong>. If the private key is compromised, attackers can sign malicious software with the publisher's identity.</p>
+      <p class="note">Best practice: Store private keys in a <strong>Hardware Security Module (HSM)</strong> — a tamper-resistant cryptographic hardware device.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Standard vs Extended Validation Code Signing</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Standard Code Signing</th><th>EV Code Signing</th></tr></thead>
+        <tbody>
+          <tr><td>Verification strictness</td><td>Standard verification</td><td>Stringent verification of publisher</td></tr>
+          <tr><td>Microsoft SmartScreen</td><td>Keeps showing warnings until publisher builds reputation through large downloads</td><td>Immediately builds reputation — no initial warnings</td></tr>
+          <tr><td>Proves software is safe?</td><td>No — only verifies publisher identity</td><td>No — only verifies publisher identity</td></tr>
+          <tr><td>Private key storage</td><td>Standard</td><td>Must be stored on HSM</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔄 Code Signing Process</h3>
+    <p>Identical to digital signature process but applied to software:</p>
+    <div class="flow" style="margin-top:10px">
+      <div class="flow-step">Software/Code</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Hash the code</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Encrypt hash with<br>Publisher's Private Key</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Attach Digital Signature<br>to Software</div>
+    </div>
+    <p class="note" style="margin-top:8px">Verification: Hash the received code → Decrypt signature with publisher's public key → Compare hashes. If they match → code is unmodified.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is code signing? What does it guarantee?</li>
+      <li><strong>Short:</strong> What does code signing NOT prove?</li>
+      <li><strong>Short:</strong> What is an HSM? Why is it used in code signing?</li>
+      <li><strong>Comparison:</strong> Compare Standard and EV Code Signing certificates.</li>
+      <li><strong>MCQ:</strong> Which tool in Windows shows warnings for unsigned software? → Microsoft SmartScreen</li>
+      <li><strong>Short:</strong> Why is the security of code signing dependent on the private key?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Time Stamping</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Definition</h3>
+    <p><strong>Time Stamping</strong> is the process of securely recording the creation or modification time of a document. The output is called a <strong>Trusted Time Stamp</strong>. Once timestamped, the document <em>cannot be modified</em> — even by the document's owner.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">✅ Benefits of Timestamping</h3>
+      <ul>
+        <li>Increases integrity of digital signatures and code signing</li>
+        <li>Provides secure record of date and time of transaction</li>
+        <li><strong>Key benefit:</strong> A digital signature WITHOUT timestamp expires when the underlying certificate expires. WITH timestamp → signature remains valid even after certificate expiry</li>
+        <li>Can timestamp separately or while signing</li>
+      </ul>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">⚙ How It Works</h3>
+      <ol style="padding-left:18px">
+        <li>Document's Hash Value is sent to Time Stamping Authority (TSA)</li>
+        <li>TSA combines Hash + Current Time</li>
+        <li>TSA encrypts combined value with <strong>TSA's Private Key</strong> → creates Time Stamp Token</li>
+        <li>Time Stamp Token attached to document</li>
+        <li>TSA syncs time with Authoritative Time Server (NTP)</li>
+      </ol>
+      <p class="note">In India: Authoritative time server is managed by the National Physics Laboratory. All CAs and TSAs in India must sync with it (required by CCA).</p>
+    </div>
+  </div>
+
+  <div class="highlight">Critical exam point: A digital signature expires with its certificate. Adding a timestamp makes the signature permanently valid beyond certificate expiry.</div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is time stamping? What is a Trusted Time Stamp?</li>
+      <li><strong>Short:</strong> What is the most important advantage of timestamping a digital signature?</li>
+      <li><strong>MCQ:</strong> What happens to a digital signature without a timestamp when the certificate expires? → The signature becomes invalid</li>
+      <li><strong>Short:</strong> What is a Time Stamping Authority (TSA)? What protocol does it use to sync time? → NTP</li>
+      <li><strong>Short:</strong> Who manages the authoritative time server in India? → National Physics Laboratory</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Email Encryption Certificates (S/MIME)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 S/MIME — Definition</h3>
+    <p><strong>S/MIME</strong> stands for <em>Secure/Multipurpose Internet Mail Extensions</em>. It is a standard for public key encryption and digital signing of email messages. S/MIME certificates enable both email encryption (confidentiality) and digital signing (authentication + integrity + non-repudiation) of emails.</p>
+  </div>
+
+  <div class="card">
+    <h3>📋 S/MIME Certificate Types</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>What's Validated</th><th>Requirements</th><th>Certificate Contains</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Email Validation</strong></td>
+            <td>Email address and website domains only</td>
+            <td>Lowest barrier</td>
+            <td>Email address</td>
+          </tr>
+          <tr>
+            <td><strong>Individual Validation (IV)</strong></td>
+            <td>Identity of each individual</td>
+            <td>Government-issued ID required + email address validated</td>
+            <td>Email address + Owner's name</td>
+          </tr>
+          <tr>
+            <td><strong>Organization Validation (OV)</strong></td>
+            <td>Existence and operations of the organization</td>
+            <td>Similar process to OV TLS certificates</td>
+            <td>Organization details</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is S/MIME? What does it provide?</li>
+      <li><strong>Short:</strong> What are the three types of S/MIME certificates?</li>
+      <li><strong>MCQ:</strong> Which S/MIME certificate type requires a government-issued ID? → Individual Validation (IV)</li>
+      <li><strong>Comparison:</strong> Compare S/MIME Individual Validation with Organization Validation.</li>
+    </ul>
+  </div>
+</section>

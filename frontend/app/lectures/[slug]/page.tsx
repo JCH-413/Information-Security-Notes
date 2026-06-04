@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { lectures, getLectureBySlug } from "@/data/lectures";
+import { lectures, getLectureBySlug } from "@/lib/content";
 import { TopicNav } from "@/components/navigation/TopicNav";
-import { YouTubeEmbed } from "@/components/ui/YouTubeEmbed";
-import { NoteContent } from "@/components/ui/NoteContent";
+import { LectureVideos } from "@/components/ui/LectureVideos";
+import "@/app/content.css";
 
 /** Pre-render every lecture at build time. */
 export function generateStaticParams() {
@@ -48,12 +48,8 @@ export default async function LecturePage({
           {lecture.description}
         </p>
 
-        {/* Lecture video */}
-        {lecture.youtubeUrl && (
-          <div className="mt-7 max-w-2xl">
-            <YouTubeEmbed url={lecture.youtubeUrl} title={lecture.title} />
-          </div>
-        )}
+        {/* Lecture video(s) */}
+        <LectureVideos videos={lecture.videos} />
 
         {/* Inline topic nav for mobile / narrow screens */}
         <div className="mt-8 rounded-xl border border-border bg-surface p-4 xl:hidden">
@@ -61,20 +57,16 @@ export default async function LecturePage({
         </div>
 
         {/* Topic sections */}
-        <div className="mt-10 space-y-12">
+        <div className="mt-10 space-y-14">
           {lecture.topics.map((topic) => (
             <section key={topic.id} id={topic.slug} className="scroll-mt-20">
-              <h2 className="text-xl font-semibold tracking-tight text-ink">
+              <h2 className="mb-5 text-xl font-semibold tracking-tight text-ink">
                 {topic.title}
               </h2>
-              <div className="mt-4">
-                <NoteContent content={topic.content} />
-              </div>
-              {topic.youtubeUrl && (
-                <div className="mt-6 max-w-2xl">
-                  <YouTubeEmbed url={topic.youtubeUrl} title={topic.title} />
-                </div>
-              )}
+              <div
+                className="lecture-content"
+                dangerouslySetInnerHTML={{ __html: topic.content }}
+              />
             </section>
           ))}
         </div>

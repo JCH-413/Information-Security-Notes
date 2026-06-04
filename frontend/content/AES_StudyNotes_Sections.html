@@ -1,0 +1,619 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Why AES Was Needed — DES Weakness &amp; Multiple-DES</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠ DES Weakness: Brute Force</h3>
+    <p>DES is vulnerable to <strong>brute-force attack</strong> due to its small key size.</p>
+    <div class="math-block">
+      2⁵⁶ = 72,057,594,037,927,936 possible keys<br>
+      <span class="comment">The number of different possible keys in the obsolete 56-bit DES symmetric cipher.</span>
+    </div>
+    <p>Once the necessary technology became available, DES was cracked in a relatively short time after over 20 years of use as the encryption standard. NIST therefore decided a new standard — the <strong>Advanced Encryption Standard (AES)</strong> — was needed.</p>
+    <p>As an interim alternative that reuses existing DES software/equipment/knowledge, two options emerged:</p>
+    <ul>
+      <li><strong>Double DES</strong></li>
+      <li><strong>Triple DES (3DES)</strong></li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚙ Double DES</h3>
+    <p>Double DES uses <strong>2 × 56-bit keys</strong>, giving a nominal key length of <strong>112 bits</strong>.</p>
+    <div class="math-block">
+      C = E(K2; E(K1; P))<br>
+      <span class="comment">Plaintext P is encrypted with K1, then encrypted again with K2.</span>
+    </div>
+    <p class="note">However, the <strong>Meet-in-the-Middle attack</strong> makes Double DES much weaker than its 112-bit key size suggests.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔴 Meet-in-the-Middle Attack</h3>
+    <p>The attacker knows two known plaintext–ciphertext pairs <strong>(Pₐ, Cₐ)</strong> and <strong>(P_b, C_b)</strong>.</p>
+    <ol>
+      <li>Encrypt <strong>Pₐ</strong> using all 2⁵⁶ values of K1 → generates multiple values of the intermediate value <strong>X</strong>. Store results in a table sorted by X.</li>
+      <li>Note that <code>E(K1; P) = X = D(K2; C)</code>.</li>
+      <li>Decrypt <strong>Cₐ</strong> using all 2⁵⁶ values of K2.</li>
+      <li>As each decryption result is produced, check it against the stored table.</li>
+      <li>If a match is found, verify the candidate key pair (K1, K2) against the second pair: check whether encrypting P_b with these keys yields C_b.</li>
+      <li>If P_b is obtained, <strong>accept the keys</strong>.</li>
+    </ol>
+    <div class="math-block">
+      Encrypt/decrypt operations required: 2⁵⁶<br>
+      <span class="comment">(twice as many as single DES, NOT 2¹¹²)</span>
+    </div>
+    <p>With two known plaintext–ciphertext pairs, the probability of a successful attack is <strong>almost 1</strong>. This means Double DES provides <em>no more security than single DES</em>.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚙ Triple DES (3DES)</h3>
+    <p>Because Double DES is no more secure than single DES (due to the Meet-in-the-Middle attack reducing its work factor to roughly that of DES), <strong>3DES</strong> was introduced. It uses <strong>48 rounds</strong> in its computation, making it highly resistant to differential cryptanalysis.</p>
+    <div class="highlight">3DES can take up to <strong>three times longer</strong> than DES to perform encryption and decryption — a heavy performance hit.</div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📋 3DES Modes</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Mode</th><th>Keys Used</th><th>Operations</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>DES-EEE3</strong></td><td>3 different keys</td><td>Encrypt → Encrypt → Encrypt</td></tr>
+          <tr><td><strong>DES-EDE3</strong></td><td>3 different keys</td><td>Encrypt → Decrypt → Encrypt</td></tr>
+          <tr><td><strong>DES-EEE2</strong></td><td>2 keys (1st &amp; 3rd use same key)</td><td>Encrypt → Encrypt → Encrypt</td></tr>
+          <tr><td><strong>DES-EDE2</strong></td><td>2 keys (1st &amp; 3rd use same key)</td><td>Encrypt → Decrypt → Encrypt</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Why is DES considered weak? → 56-bit key; brute-force feasible (2⁵⁶ keys)</li>
+      <li>What is the Meet-in-the-Middle attack? Explain the steps.</li>
+      <li>Why does Double DES not provide 112-bit security? → Meet-in-the-Middle reduces work factor to 2⁵⁶</li>
+      <li>How many rounds does 3DES use? → 48 rounds</li>
+      <li>List the four modes of 3DES and their operations.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>AES Overview &amp; Background</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Is AES?</h3>
+    <p>The <strong>Advanced Encryption Standard (AES)</strong> is a symmetric key, symmetric block cipher standardised by NIST. It was created in <strong>2001</strong> after an open selection process. The winning algorithm, <strong>Rijndael</strong>, was developed by two Belgian cryptographers:</p>
+    <ul>
+      <li><strong>Vincent Rijmen</strong></li>
+      <li><strong>Joan Daemen</strong></li>
+    </ul>
+    <p>AES is <strong>stronger and faster than Triple-DES</strong> — approximately <strong>six times faster</strong>. It is the most widely adopted symmetric encryption algorithm and is generally considered secure.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📊 AES Parameters</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Parameter</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Algorithm name</td><td>AES (based on Rijndael)</td></tr>
+          <tr><td>Type</td><td>Symmetric key, symmetric block cipher</td></tr>
+          <tr><td>Block size</td><td>128 bits (other sizes possible)</td></tr>
+          <tr><td>Key sizes</td><td>128, 192, or 256 bits</td></tr>
+          <tr><td>Number of rounds</td><td>10 (128-bit key), 12 (192-bit key), 14 (256-bit key)</td></tr>
+          <tr><td>Operations</td><td>XOR with round key, substitutions (S-Boxes), mixing via Galois Field arithmetic</td></tr>
+          <tr><td>Standardised by</td><td>NIST, 2001</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌍 AES vs. Triple-DES</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Triple-DES (3DES)</th><th>AES</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Speed</td><td>Up to 3× slower than DES</td><td class="match">~6× faster than 3DES</td></tr>
+          <tr><td>Key size</td><td>112 or 168 bits</td><td class="match">128, 192, or 256 bits</td></tr>
+          <tr><td>Block size</td><td>64 bits</td><td class="match">128 bits</td></tr>
+          <tr><td>Rounds</td><td>48</td><td class="match">10 / 12 / 14</td></tr>
+          <tr><td>Security status</td><td>Legacy — being phased out</td><td class="match">Currently secure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ Strengths of AES</h3>
+    <ul>
+      <li>Implemented in both <strong>hardware and software</strong> — most robust security protocol.</li>
+      <li>Uses <strong>higher key sizes</strong> (128, 192, 256 bits) — makes it much more resistant to hacking than DES.</li>
+      <li>Most common security protocol used for wireless communication, financial transactions, e-business, encrypted data storage, and more.</li>
+      <li>One of the most widespread commercial and open-source solutions used worldwide.</li>
+      <li>For a 128-bit key, approximately <strong>2¹²⁸ attempts</strong> are needed to break it — extremely difficult to hack.</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Who developed the Rijndael cipher? → Vincent Rijmen and Joan Daemen (Belgian cryptographers)</li>
+      <li>When was AES standardised? → 2001</li>
+      <li>What are the three AES key sizes and their corresponding round counts? → 128-bit/10, 192-bit/12, 256-bit/14</li>
+      <li>What is the AES block size? → 128 bits</li>
+      <li>How much faster is AES compared to Triple-DES? → Approximately 6× faster</li>
+      <li>How many attempts are needed to brute-force a 128-bit AES key? → 2¹²⁸</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>AES Process Overview — Two Main Steps</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Two High-Level Steps</h3>
+    <p>AES processing has two major components:</p>
+    <ol>
+      <li><strong>Key Generation</strong> — Derives round sub-keys from the original key.</li>
+      <li><strong>Rounds</strong> — Processes the plaintext block through multiple rounds of transformation.</li>
+    </ol>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 Key Generation Steps</h3>
+    <ol>
+      <li><strong>ROT word</strong> of the last column of the current key state — rotate the 4 bytes of the last column left by one position.</li>
+      <li><strong>SubByte</strong> of the rotated word — substitute each byte through the S-Box.</li>
+      <li><strong>XOR</strong> with RCON (round constant) and the first column of the key, then XOR with the SubByte result → becomes the <strong>first column of the new round key</strong>.</li>
+      <li>Subsequent columns of the round key are derived by XOR-ing the previous column of the new key with the corresponding column of the previous key.</li>
+    </ol>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔄 Round Structure Overview</h3>
+    <div class="flow">
+      <div class="flow-step">Initial Round</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Main Rounds (1 to Nᵣ−1)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Final Round</div>
+    </div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📋 Operations Per Round Type</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Round Type</th><th>Operations (in order)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Initial Round</strong></td><td>AddRoundKey (XOR with round key 0 only)</td></tr>
+          <tr>
+            <td><strong>Main Round</strong> (rounds 1 to Nᵣ−1)</td>
+            <td>
+              1. SubBytes<br>
+              2. ShiftRows<br>
+              3. MixColumns<br>
+              4. AddRoundKey
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Final Round</strong></td>
+            <td>
+              1. SubBytes<br>
+              2. ShiftRows<br>
+              3. AddRoundKey<br>
+              <em>(No MixColumns in the final round)</em>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">The Final Round omits MixColumns. This is intentional — omitting it makes the cipher structure symmetric for decryption without loss of security.</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What are the two main steps of AES processing? → Key Generation and Rounds</li>
+      <li>What are the three types of rounds in AES? → Initial Round, Main Round, Final Round</li>
+      <li>Which operation is present in Main Rounds but absent in the Final Round? → MixColumns</li>
+      <li>What operation forms the Initial Round? → AddRoundKey with round key 0</li>
+      <li>List the four operations of the AES Main Round in order.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>AES State &amp; Key Representation</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The State Matrix</h3>
+    <p>AES operates on a <strong>4 × 4 matrix of bytes</strong> called the <strong>State</strong>. Both the plaintext block and the key are loaded into state matrices before processing begins.</p>
+    <ul>
+      <li>The <strong>128-bit (16-byte) message</strong> is arranged column-by-column into the 4 × 4 state matrix.</li>
+      <li>Example message: <code>MESSAGEENCRPTION</code> → each character occupies one byte cell in the matrix.</li>
+      <li>The <strong>128-bit key</strong> (e.g., <code>TEAMSCORPIAN1234</code>) is similarly arranged into a 4 × 4 key state.</li>
+      <li>Every single column is one <strong>word = 4 bytes = 32 bits</strong>.</li>
+      <li>Each individual cell is <strong>8 bits = 1 byte</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📐 State Dimensions Summary</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Unit</th><th>Size</th></tr></thead>
+        <tbody>
+          <tr><td>Full State / Block</td><td>128 bits = 16 bytes</td></tr>
+          <tr><td>One column (word)</td><td>32 bits = 4 bytes</td></tr>
+          <tr><td>One cell</td><td>8 bits = 1 byte</td></tr>
+          <tr><td>Matrix dimensions</td><td>4 rows × 4 columns</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 Key Expansion into Round Keys</h3>
+    <p>The original 128-bit key generates <strong>one round key per round plus one for the initial AddRoundKey</strong>. For a 128-bit key with 10 rounds, <strong>11 round keys</strong> (round key 0 through round key 10) are generated from the original key using the key schedule.</p>
+    <p>Each round key is the same size as the block — <strong>128 bits (4 words)</strong>.</p>
+    <p>The sub-key generation process for each subsequent round key uses:</p>
+    <ol>
+      <li>Take the <strong>last column (word)</strong> of the current round key.</li>
+      <li>Apply <strong>RotWord</strong>: rotate the 4 bytes left by one position.</li>
+      <li>Apply <strong>SubWord</strong>: substitute each byte through the AES S-Box.</li>
+      <li><strong>XOR</strong> the result with the <strong>RCON</strong> (round constant — derived from powers of 2 in GF(2⁸)) for the current round.</li>
+      <li><strong>XOR</strong> the result with the <strong>first word</strong> of the previous round key → gives the first word of the new round key.</li>
+      <li>Each subsequent word of the new round key = XOR of the previous word in the new key and the corresponding word in the old key.</li>
+    </ol>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What is the AES State? → A 4 × 4 matrix of bytes (128 bits total)</li>
+      <li>How many bytes are in one column of the AES state? → 4 bytes (32 bits)</li>
+      <li>For a 128-bit AES key, how many round keys are generated? → 11 (round key 0 to round key 10)</li>
+      <li>List the steps of AES key expansion for generating a new round key column.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Round Step 1 — AddRoundKey</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 AddRoundKey Operation</h3>
+    <p><strong>AddRoundKey</strong> XORs the current State matrix with the corresponding round key matrix, byte by byte.</p>
+    <div class="math-block">
+      State[i][j] = State[i][j] ⊕ RoundKey[i][j]<br>
+      <span class="comment">⊕ = bitwise XOR, applied to every byte in the 4 × 4 state</span>
+    </div>
+    <ul>
+      <li>Used in the <strong>Initial Round</strong> (with round key 0), every <strong>Main Round</strong>, and the <strong>Final Round</strong>.</li>
+      <li>It is the only operation that directly introduces key material into the cipher state.</li>
+      <li>The inverse of AddRoundKey is itself — XOR-ing with the same round key again undoes the operation.</li>
+    </ul>
+  </div>
+
+  <div class="analogy-box">
+    <div class="a-title">💡 Intuition</div>
+    <p>Think of AddRoundKey as "mixing" secret key material into the data. XOR is symmetric — applying the same key twice returns the original, which is why encryption and decryption share this exact same step.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What operation does AddRoundKey perform? → XOR of State with the round key, byte by byte</li>
+      <li>In which rounds is AddRoundKey used? → All rounds — Initial, Main, and Final</li>
+      <li>What is the inverse of AddRoundKey? → Itself (XOR with the same key)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Round Step 2 — SubBytes</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 SubBytes Operation</h3>
+    <p><strong>SubBytes</strong> is a <em>non-linear byte substitution</em> step. Every byte in the 4 × 4 State is independently replaced with a corresponding byte from a fixed <strong>substitution table called the S-Box (Substitution Box)</strong>.</p>
+    <ul>
+      <li>The S-Box is a <strong>16 × 16 lookup table</strong> (256 entries, one for each possible byte value 0x00–0xFF).</li>
+      <li>The S-Box is constructed using a <strong>multiplicative inverse in GF(2⁸)</strong> followed by an affine transformation — this makes it non-linear and resistant to linear and differential cryptanalysis.</li>
+      <li>Every byte of the state is substituted <strong>independently</strong> — no inter-byte dependencies in this step alone.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🎯 Purpose of SubBytes</h3>
+    <ul>
+      <li>Provides <strong>confusion</strong> — makes the relationship between key and ciphertext as complex as possible.</li>
+      <li>The non-linearity of the S-Box is AES's primary defence against differential and linear cryptanalysis.</li>
+      <li>The inverse of SubBytes uses the <strong>inverse S-Box</strong> during decryption.</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What does SubBytes do? → Non-linearly substitutes each byte of the state using the S-Box lookup table</li>
+      <li>What cryptographic property does SubBytes provide? → Confusion; non-linearity</li>
+      <li>How is the AES S-Box constructed? → Multiplicative inverse in GF(2⁸) then affine transformation</li>
+      <li>How is SubBytes reversed during decryption? → Using the inverse S-Box</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Round Step 3 — ShiftRows</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 ShiftRows Operation</h3>
+    <p><strong>ShiftRows</strong> cyclically shifts the bytes in each row of the State to the left by a different offset depending on the row number.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Row</th><th>Left Shift Amount (bytes)</th></tr></thead>
+        <tbody>
+          <tr><td>Row 0</td><td>0 (no shift)</td></tr>
+          <tr><td>Row 1</td><td>1 byte left</td></tr>
+          <tr><td>Row 2</td><td>2 bytes left</td></tr>
+          <tr><td>Row 3</td><td>3 bytes left</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🎯 Purpose of ShiftRows</h3>
+    <ul>
+      <li>Provides <strong>diffusion</strong> across columns — bytes from different columns are mixed into every column after subsequent MixColumns steps.</li>
+      <li>Ensures that bytes from the same original column are spread across all four columns, preventing column-independent attacks.</li>
+      <li>The inverse (for decryption) is <strong>InvShiftRows</strong> — shifts each row to the <em>right</em> by the same amounts.</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What does ShiftRows do? → Cyclically shifts each row of the state left by 0, 1, 2, 3 bytes respectively</li>
+      <li>What cryptographic property does ShiftRows provide? → Diffusion</li>
+      <li>Which row is not shifted in ShiftRows? → Row 0</li>
+      <li>What is the inverse of ShiftRows? → InvShiftRows (right shifts by same amounts)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Round Step 4 — MixColumns &amp; Galois Field Arithmetic</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 MixColumns Operation</h3>
+    <p><strong>MixColumns</strong> operates on each column of the State independently, treating each column as a <strong>4-element vector of bytes (elements of GF(2⁸))</strong>. Each column is multiplied by a fixed <strong>4 × 4 matrix</strong> using Galois Field arithmetic.</p>
+    <div class="math-block">
+      Fixed mixing matrix (hexadecimal):<br>
+      [ 02  03  01  01 ]<br>
+      [ 01  02  03  01 ]<br>
+      [ 01  01  02  03 ]<br>
+      [ 03  01  01  02 ]<br>
+      <span class="comment">Matrix multiplication is performed in GF(2⁸).</span>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧮 Galois Field (GF) Arithmetic in MixColumns</h3>
+    <p>The multiplication in MixColumns is a <strong>dot product of vectors over Galois Field GF(2⁸)</strong> — not ordinary multiplication.</p>
+    <ul>
+      <li>Each byte is treated as a polynomial over GF(2) with coefficients in {0, 1}.</li>
+      <li><strong>Addition</strong> in GF(2⁸) = XOR (⊕).</li>
+      <li><strong>Multiplication</strong> in GF(2⁸) = polynomial multiplication modulo an irreducible polynomial.</li>
+      <li>The dot product of two vectors means: multiply corresponding GF(2⁸) elements and XOR (sum) the products.</li>
+    </ul>
+    <div class="highlight">If the product of two GF(2⁸) elements is bigger than a byte (exceeds 8 bits / value 255), it must be <strong>reduced using the reducing (irreducible) polynomial</strong>.</div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📐 Reducing Polynomial</h3>
+    <p>AES uses the irreducible polynomial over GF(2):</p>
+    <div class="math-block">
+      m(x) = x⁸ + x⁴ + x³ + x + 1<br>
+      <span class="comment">Binary: 100011011 (hex: 0x11B)</span><br><br>
+      If a product exceeds 8 bits, XOR it with 0x11B to reduce it back to 8 bits.
+    </div>
+    <p>Multiplying any byte by <strong>02</strong> (hex) in GF(2⁸) = left shift the byte by 1 bit. If the high-order bit of the original byte was 1 (result overflows 8 bits), XOR the shifted result with <code>0x1B</code> (the lower 8 bits of the reducing polynomial).</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🎯 Purpose of MixColumns</h3>
+    <ul>
+      <li>Provides <strong>diffusion</strong> within each column — each byte in the output column depends on all four bytes of the input column.</li>
+      <li>Together with ShiftRows, ensures that every output bit depends on every input bit after a few rounds (<strong>complete diffusion</strong>).</li>
+      <li>The inverse (for decryption) is <strong>InvMixColumns</strong>, which uses a different fixed matrix.</li>
+      <li>MixColumns is <strong>absent in the Final Round</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What does MixColumns do? → Multiplies each column of the state by a fixed matrix using GF(2⁸) arithmetic</li>
+      <li>What field does MixColumns operate over? → GF(2⁸) — Galois Field with 2⁸ = 256 elements</li>
+      <li>What is "addition" in GF(2⁸)? → Bitwise XOR (⊕)</li>
+      <li>What is the AES reducing polynomial? → x⁸ + x⁴ + x³ + x + 1 (0x11B)</li>
+      <li>In which round is MixColumns omitted? → The Final Round</li>
+      <li>What cryptographic properties do ShiftRows and MixColumns together provide? → Full diffusion</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>AES Encryption vs. Decryption</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Decryption — Inverting AES</h3>
+    <p>AES decryption applies the inverse of each operation in <strong>reverse order</strong>. The round keys are applied in reverse (from round key Nᵣ down to round key 0).</p>
+    <div class="flow">
+      <div class="flow-step">Ciphertext</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">AddRoundKey (Nᵣ)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">InvShiftRows</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">InvSubBytes</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">AddRoundKey</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">InvMixColumns</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">… (repeat)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Plaintext</div>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔄 Inverse Operations</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Encryption Step</th><th>Decryption Inverse</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>AddRoundKey</td><td>AddRoundKey (same)</td><td>Self-inverse — XOR twice = identity</td></tr>
+          <tr><td>SubBytes</td><td>InvSubBytes</td><td>Uses the inverse S-Box lookup table</td></tr>
+          <tr><td>ShiftRows</td><td>InvShiftRows</td><td>Right-shifts rows by 0, 1, 2, 3</td></tr>
+          <tr><td>MixColumns</td><td>InvMixColumns</td><td>Uses a different fixed inverse matrix; omitted in final decryption round</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔬 Equivalent Inverse Cipher</h3>
+    <p>AES also has an <strong>Equivalent Inverse Cipher</strong> formulation (as defined in the AES standard). In this variant, the order of InvShiftRows and InvSubBytes is swapped, and the AddRoundKey and InvMixColumns steps are interchanged. This is mathematically equivalent to the standard decryption but allows an implementation that mirrors the encryption structure more closely, potentially simplifying hardware implementations.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Which AES operation is its own inverse? → AddRoundKey</li>
+      <li>What is InvSubBytes? → Byte substitution using the inverse S-Box</li>
+      <li>What is InvShiftRows? → Cyclic right shift of rows by 0, 1, 2, 3 bytes</li>
+      <li>What is the Equivalent Inverse Cipher? → An alternative decryption formulation that swaps the order of some inverse operations for implementation convenience</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>AES Applications &amp; Real-World Use</h2>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌍 Where AES Is Used</h3>
+    <p>AES is integral to the security framework of modern society. Key applications include:</p>
+    <ul>
+      <li><strong>File compression/encryption:</strong> RAR, WinZip</li>
+      <li><strong>VPNs</strong> (Virtual Private Networks)</li>
+      <li><strong>IEEE 802.11i</strong> — Wi-Fi Protected Access (WPA2) for wireless network security</li>
+      <li><strong>Signal Protocol</strong> — the cryptographic protocol underlying secure messaging</li>
+      <li><strong>Facebook Messenger</strong> (end-to-end encrypted messages)</li>
+      <li><strong>WhatsApp</strong> (end-to-end encryption)</li>
+      <li>Wireless communication, financial transactions, e-business, encrypted data storage</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ Why AES Is Trusted</h3>
+    <ul>
+      <li>Open, publicly vetted selection process — Rijndael won over 15 competing submissions.</li>
+      <li>Designed by academics with full public scrutiny for years before standardisation.</li>
+      <li>No practical attack has broken AES-128, AES-192, or AES-256 to date.</li>
+      <li>Approved by the NSA for <strong>Top Secret</strong> data when used with 192 or 256-bit keys.</li>
+      <li>Both hardware-accelerated (AES-NI CPU instructions) and efficient in software.</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Name four real-world applications of AES.</li>
+      <li>Which wireless security standard uses AES? → IEEE 802.11i (WPA2)</li>
+      <li>Which messaging apps use AES-based encryption? → WhatsApp, Facebook Messenger (Signal Protocol)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>DES key size</strong>56 bits → 2⁵⁶ possible keys; brute-force vulnerable</div>
+    <div class="qr-item"><strong>Double DES key</strong>2 × 56 = 112 bits (nominal); attacked by Meet-in-the-Middle</div>
+    <div class="qr-item"><strong>Meet-in-the-Middle work</strong>2⁵⁶ operations — same as single DES</div>
+    <div class="qr-item"><strong>3DES rounds</strong>48 rounds; up to 3× slower than DES</div>
+    <div class="qr-item"><strong>3DES modes</strong>EEE3, EDE3, EEE2, EDE2</div>
+    <div class="qr-item"><strong>AES designers</strong>Vincent Rijmen &amp; Joan Daemen (Belgian)</div>
+    <div class="qr-item"><strong>AES standardised</strong>NIST, 2001 (Rijndael cipher)</div>
+    <div class="qr-item"><strong>AES type</strong>Symmetric key, symmetric block cipher</div>
+    <div class="qr-item"><strong>AES block size</strong>128 bits (always)</div>
+    <div class="qr-item"><strong>AES key sizes</strong>128 / 192 / 256 bits</div>
+    <div class="qr-item"><strong>AES rounds</strong>10 (128-bit) / 12 (192-bit) / 14 (256-bit)</div>
+    <div class="qr-item"><strong>AES speed vs 3DES</strong>~6× faster than Triple-DES</div>
+    <div class="qr-item"><strong>AES brute-force</strong>2¹²⁸ attempts for 128-bit key</div>
+    <div class="qr-item"><strong>State matrix</strong>4 × 4 bytes = 128 bits; one cell = 1 byte</div>
+    <div class="qr-item"><strong>Round key count (128-bit)</strong>11 round keys (key 0 through key 10)</div>
+    <div class="qr-item"><strong>Initial Round</strong>AddRoundKey only (with round key 0)</div>
+    <div class="qr-item"><strong>Main Round steps</strong>SubBytes → ShiftRows → MixColumns → AddRoundKey</div>
+    <div class="qr-item"><strong>Final Round steps</strong>SubBytes → ShiftRows → AddRoundKey (no MixColumns)</div>
+    <div class="qr-item"><strong>AddRoundKey</strong>XOR State ⊕ RoundKey; self-inverse</div>
+    <div class="qr-item"><strong>SubBytes</strong>Non-linear S-Box substitution; provides confusion</div>
+    <div class="qr-item"><strong>ShiftRows offsets</strong>Row 0: 0, Row 1: 1, Row 2: 2, Row 3: 3 (left)</div>
+    <div class="qr-item"><strong>ShiftRows purpose</strong>Diffusion across columns</div>
+    <div class="qr-item"><strong>MixColumns field</strong>GF(2⁸); addition = XOR; uses fixed 4×4 matrix</div>
+    <div class="qr-item"><strong>Reducing polynomial</strong>x⁸ + x⁴ + x³ + x + 1 = 0x11B</div>
+    <div class="qr-item"><strong>MixColumns omitted in</strong>The Final Round</div>
+    <div class="qr-item"><strong>Key schedule — RotWord</strong>Rotate last column's 4 bytes left by 1</div>
+    <div class="qr-item"><strong>Key schedule — SubWord</strong>S-Box substitute each byte of rotated word</div>
+    <div class="qr-item"><strong>Key schedule — RCON</strong>XOR with round constant (powers of 2 in GF(2⁸))</div>
+    <div class="qr-item"><strong>Decryption inverses</strong>InvSubBytes, InvShiftRows, InvMixColumns; AddRoundKey = same</div>
+    <div class="qr-item"><strong>AES applications</strong>RAR, WinZip, VPN, WPA2 (802.11i), Signal, WhatsApp</div>
+  </div>
+</section>

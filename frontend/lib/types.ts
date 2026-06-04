@@ -1,21 +1,22 @@
 /**
  * Content model for the InfoSec notes site.
- * Everything in the app is generated from data shaped like this.
+ * Lectures are parsed from the HTML study-note files in `content/`
+ * (see `lib/content.ts`); videos and metadata come from `data/lectures.ts`.
  */
+
+export interface Video {
+  url: string;
+  /** Optional caption shown above the embed. */
+  title?: string;
+}
 
 export interface Topic {
   id: string;
-  /** URL-safe id; used as the in-page anchor (e.g. `#cia-triad`). */
+  /** URL-safe id; used as the in-page anchor (e.g. `#key-generation`). */
   slug: string;
   title: string;
-  /**
-   * Note body. Plain text today, with blank lines separating paragraphs and
-   * lines starting with "- " rendered as list items. Swap in a markdown
-   * renderer later without touching the rest of the app.
-   */
+  /** Pre-rendered HTML for the topic body (from the source study notes). */
   content: string;
-  /** Optional per-topic video; falls back to the lecture video when absent. */
-  youtubeUrl?: string;
 }
 
 export interface Lecture {
@@ -24,6 +25,25 @@ export interface Lecture {
   slug: string;
   title: string;
   description: string;
-  youtubeUrl?: string;
+  /** One or more lecture videos. */
+  videos: Video[];
   topics: Topic[];
+}
+
+/* ── Lightweight shapes for the (client) sidebar ──────────────────
+   The sidebar never needs topic HTML, so we pass only what it renders.
+   This keeps the heavy content out of the client bundle.            */
+
+export interface NavTopic {
+  id: string;
+  slug: string;
+  title: string;
+}
+
+export interface NavLecture {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  topics: NavTopic[];
 }

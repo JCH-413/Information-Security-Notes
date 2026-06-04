@@ -2,7 +2,9 @@
 
 A static, data-driven notes site for information security lectures. Built with
 Next.js 15 (App Router), TypeScript, and Tailwind CSS v4. No backend, database,
-or CMS — all content lives in one typed file.
+or CMS. Lecture content lives as HTML study-note files in `content/`; the app
+parses each `<section>` into a navigable topic and renders it under its own
+light theme.
 
 ## Develop
 
@@ -14,35 +16,33 @@ npm run build    # static production build
 
 ## Adding a lecture
 
-Everything is generated from [`data/lectures.ts`](data/lectures.ts). Append a
-lecture object — the sidebar, routes (`/lectures/[slug]`), search, and topic
-navigation all update automatically. No other file changes.
+Two steps — the sidebar, routes (`/lectures/[slug]`), search, and topic
+navigation all update automatically:
+
+1. Drop the study-notes `.html` file into [`content/`](content/).
+2. Register it in [`data/lectures.ts`](data/lectures.ts):
 
 ```ts
 {
-  id: "4",
-  slug: "access-control",          // becomes /lectures/access-control
+  id: "5",
+  file: "Access_Control_StudyNotes.html", // file in content/
+  slug: "access-control",                  // → /lectures/access-control
   title: "Access Control",
   description: "One-line summary shown on the home page and sidebar.",
-  youtubeUrl: "https://www.youtube.com/watch?v=...",  // optional
-  topics: [
-    {
-      id: "4-1",
-      slug: "rbac",                // in-page anchor: /lectures/access-control#rbac
-      title: "Role-Based Access Control",
-      content:
-        "A paragraph of notes.\n\n" +
-        "- A bullet point\n- Another bullet point",
-      youtubeUrl: "https://...",   // optional per-topic video
-    },
+  videos: [
+    { url: "https://youtu.be/..." },
+    { url: "https://youtu.be/...", title: "Part 2" }, // optional caption
   ],
 }
 ```
 
-**Content formatting:** `content` is plain text. Blank lines separate
-paragraphs; lines starting with `- ` render as a bullet list. To support full
-markdown later, replace [`components/ui/NoteContent.tsx`](components/ui/NoteContent.tsx)
-with a markdown renderer — nothing else needs to change.
+**How parsing works:** [`lib/content.ts`](lib/content.ts) reads each file at
+build time, turns every `<section>` into a topic (its `<h2>` becomes the title
+and nav anchor), strips the source's dark-theme chrome (top bar, hero, table of
+contents), and keeps the rich section bodies. Those bodies are re-styled by
+[`app/content.css`](app/content.css), which maps the source's component classes
+(`.card`, `.math-block`, `.exam-box`, tables, …) onto the site's light palette.
+If a new file introduces a class not yet covered, add a rule there.
 
 ## Structure
 
@@ -50,13 +50,16 @@ with a markdown renderer — nothing else needs to change.
 app/
   layout.tsx                 root layout + app shell
   page.tsx                   home page (lecture cards)
+  content.css                light re-theme for imported note HTML
   lectures/[slug]/page.tsx   lecture detail (SSG)
 components/
   layout/   AppShell, Header
   navigation/ Sidebar, TopicNav (scroll-spy)
   search/   SearchBar
-  ui/       YouTubeEmbed, NoteContent
-data/lectures.ts             ← the single source of content
+  ui/       YouTubeEmbed, LectureVideos
+content/                     ← study-note .html files (one per lecture)
+data/lectures.ts             ← register each file here (slug, title, videos)
+lib/content.ts               HTML → lecture/topic parser (build time)
 lib/types.ts                 content model
 lib/search.ts                lecture/topic filtering
 ```

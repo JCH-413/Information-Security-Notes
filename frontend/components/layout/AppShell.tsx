@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import type { Lecture } from "@/lib/types";
+import type { NavLecture } from "@/lib/types";
 import { Header } from "./Header";
 import { Sidebar } from "@/components/navigation/Sidebar";
 
@@ -14,7 +14,7 @@ export function AppShell({
   lectures,
   children,
 }: {
-  lectures: Lecture[];
+  lectures: NavLecture[];
   children: ReactNode;
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);

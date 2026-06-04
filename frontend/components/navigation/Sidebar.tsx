@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { Lecture } from "@/lib/types";
+import type { NavLecture } from "@/lib/types";
 import { filterLectures } from "@/lib/search";
 import { SearchBar } from "@/components/search/SearchBar";
 
@@ -11,7 +11,7 @@ export function Sidebar({
   lectures,
   onNavigate,
 }: {
-  lectures: Lecture[];
+  lectures: NavLecture[];
   /** Called when a link is clicked — used to close the mobile drawer. */
   onNavigate?: () => void;
 }) {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { lectures } from "@/data/lectures";
+import { nav } from "@/lib/content";
 import { AppShell } from "@/components/layout/AppShell";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -40,7 +40,7 @@ export default function RootLayout({
         <meta name="msapplication-TileImage" content="/favicon-192x192.png" />
       </head>
       <body className="font-sans">
-        <AppShell lectures={lectures}>{children}</AppShell>
+        <AppShell lectures={nav}>{children}</AppShell>
       </body>
     </html>
   );

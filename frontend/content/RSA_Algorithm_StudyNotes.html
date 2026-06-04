@@ -1,0 +1,624 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>RSA Introduction &amp; Background</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Is RSA?</h3>
+    <p><strong>RSA</strong> stands for <strong>Rivest, Shamir, and Adleman</strong> — the three inventors. It was developed at <strong>MIT in 1978</strong> and is one of the most widely used public-key cryptographic algorithms in the world.</p>
+    <ul style="padding-left:20px; margin-top:8px">
+      <li>RSA is a <strong>block cipher algorithm</strong> — it operates on fixed-size blocks of data</li>
+      <li>Plaintext and ciphertext are integers in the range <strong>0 to n</strong></li>
+      <li>Typical block size: <strong>1024 bits</strong> (historically); modern use: 2048 or 4096 bits</li>
+      <li>It is an <strong>asymmetric (public-key) cryptosystem</strong> — uses two different keys</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">🔑 The Two Keys in RSA</h3>
+      <div class="math-block">
+        Public Key  = (e, n)<br>
+        Private Key = (d, n)<br><br>
+        <span class="comment">Encryption:  C = Mᵉ mod n</span><br>
+        <span class="comment">Decryption:  M = Cᵈ mod n</span>
+      </div>
+      <ul style="padding-left:18px; margin-top:8px">
+        <li><strong>e</strong> = public exponent (shared openly)</li>
+        <li><strong>d</strong> = private exponent (kept secret)</li>
+        <li><strong>n</strong> = modulus (part of both keys)</li>
+      </ul>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">🧱 The Core Security Principle</h3>
+      <p>RSA's security relies on the <strong>Integer Factorization Problem</strong>:</p>
+      <ul style="padding-left:18px; margin-top:8px">
+        <li>Multiplying two large prime numbers p and q to get n = p × q is <strong>computationally easy</strong></li>
+        <li>Factoring n back into p and q (when n is very large) is <strong>computationally infeasible</strong> with current technology</li>
+      </ul>
+      <p class="note">This asymmetry — easy to do, hard to undo — is the mathematical trapdoor RSA is built on.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">🧠 Beginner Explanation</h3>
+      <p>Imagine multiplying two huge prime numbers is like mixing two paints to get a unique color — easy to mix, but impossible to tell from the result what the original colors were. RSA uses this one-way mixing property to create a lock (public key) that anyone can use, but only the key-owner (private key) can unlock.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">⚠ Common Misconceptions</h3>
+      <ul>
+        <li>RSA is NOT used to encrypt large files — it's too slow. It's used for key exchange and digital signatures</li>
+        <li>Both n values (public and private key) are the SAME n = p × q</li>
+        <li>Larger key size = more security BUT also much slower computation</li>
+        <li>RSA key length refers to the size of n, not e or d individually</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> What does RSA stand for? When and where was it developed?</li>
+      <li><strong>MCQ:</strong> What type of cipher is RSA? → Block cipher</li>
+      <li><strong>Short:</strong> What is the mathematical basis (hardness assumption) of RSA's security? → Integer factorization problem</li>
+      <li><strong>Write the formula:</strong> Encryption in RSA → C = Mᵉ mod n</li>
+      <li><strong>Write the formula:</strong> Decryption in RSA → M = Cᵈ mod n</li>
+      <li><strong>MCQ:</strong> What is the public key in RSA? → (e, n)</li>
+      <li><strong>MCQ:</strong> What is the private key in RSA? → (d, n)</li>
+      <li><strong>Short:</strong> What is the typical key size for RSA? → 1024 bits (traditional); 2048 bits (modern standard)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Key Generation — Theory &amp; Steps</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Key Generation Overview</h3>
+    <p>Key generation is performed by the <strong>receiver</strong> (the person who wants to receive encrypted messages). They generate both their public key (which they share) and their private key (which they keep secret).</p>
+  </div>
+
+  <div class="card">
+    <h3>🔢 Key Generation — Step by Step</h3>
+
+    <div class="worked-step">
+      <div class="step-label">Step 1 — Choose Two Large Primes</div>
+      <p>Select two distinct large prime numbers <strong>p</strong> and <strong>q</strong> at random.</p>
+      <div class="formula">p and q must be large, distinct prime numbers</div>
+      <p class="result">In real RSA: p and q are hundreds of digits long. In examples, small numbers are used for illustration.</p>
+    </div>
+
+    <div class="worked-step">
+      <div class="step-label">Step 2 — Compute the Modulus n</div>
+      <p>Calculate the modulus <strong>n = p × q</strong>. This is shared as part of both the public and private keys.</p>
+      <div class="formula">n = p × q</div>
+      <p class="result">The length of n in bits is the "key length" of RSA (e.g., 2048-bit RSA means n has 2048 bits).</p>
+    </div>
+
+    <div class="worked-step">
+      <div class="step-label">Step 3 — Compute Euler's Totient φ(n)</div>
+      <p>Calculate <strong>φ(n) = (p−1)(q−1)</strong>. This value is kept secret after key generation.</p>
+      <div class="formula">φ(n) = (p−1)(q−1)</div>
+      <p class="result">φ(n) counts how many integers from 1 to n are coprime with n. This is only easy to compute if you know p and q — which is why factoring n would break RSA.</p>
+    </div>
+
+    <div class="worked-step">
+      <div class="step-label">Step 4 — Choose Public Exponent e</div>
+      <p>Select an integer <strong>e</strong> (the public exponent) such that:</p>
+      <div class="formula">1 &lt; e &lt; φ(n)</div>
+      <div class="formula">GCD(e, φ(n)) = 1</div>
+      <p><em>e and φ(n) must be coprime</em> (share no common factor other than 1). Common values: e = 3, 17, or 65537.</p>
+    </div>
+
+    <div class="worked-step">
+      <div class="step-label">Step 5 — Compute Private Exponent d</div>
+      <p>Find <strong>d</strong> such that it is the <em>modular multiplicative inverse</em> of e modulo φ(n):</p>
+      <div class="formula">d × e ≡ 1 (mod φ(n))</div>
+      <div class="formula">Or equivalently: d × e = 1 + k × φ(n) for some integer k</div>
+      <p>This is calculated using the <strong>Extended Euclidean Algorithm</strong> (see Section 6).</p>
+    </div>
+
+    <div class="worked-step">
+      <div class="step-label">Step 6 — Publish Public Key, Keep Private Key Secret</div>
+      <div class="formula">Public Key:  KU = &#123;e, n&#125;</div>
+      <div class="formula">Private Key: KR = &#123;d, n&#125;  (also destroy p, q, φ(n) after use)</div>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📊 Key Generation Summary Table</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>Symbol</th><th>How Obtained</th><th>Kept Secret?</th></tr></thead>
+        <tbody>
+          <tr><td>Two large primes</td><td>p, q</td><td>Randomly selected</td><td>Yes — destroy after use</td></tr>
+          <tr><td>Modulus</td><td>n</td><td>n = p × q</td><td>No — part of public key</td></tr>
+          <tr><td>Euler's Totient</td><td>φ(n)</td><td>(p−1)(q−1)</td><td>Yes</td></tr>
+          <tr><td>Public Exponent</td><td>e</td><td>Chosen: GCD(e, φ(n)) = 1</td><td>No — part of public key</td></tr>
+          <tr><td>Private Exponent</td><td>d</td><td>d × e ≡ 1 (mod φ(n))</td><td>Yes — part of private key</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔢 Small Textbook Example (from slides — p=11, q=47)</h3>
+    <div class="math-block">
+      p = 11, q = 47<br>
+      n = 11 × 47 = <strong>517</strong><br>
+      φ(n) = (11−1)(47−1) = 10 × 46 = <strong>460</strong><br>
+      Select e = 3 → Check: GCD(3, 460) = 1 ✓<br>
+      Find d: e × d ≡ 1 (mod 460) → d = <strong>307</strong><br><br>
+      Public Key  = &#123;3, 517&#125;<br>
+      Private Key = &#123;307, 11, 47&#125;
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Long:</strong> Describe all steps of RSA key generation with formulas.</li>
+      <li><strong>MCQ:</strong> What is φ(n) in RSA? → φ(n) = (p−1)(q−1)</li>
+      <li><strong>MCQ:</strong> What condition must e satisfy? → GCD(e, φ(n)) = 1 and 1 &lt; e &lt; φ(n)</li>
+      <li><strong>Short:</strong> What algorithm is used to find d? → Extended Euclidean Algorithm</li>
+      <li><strong>Numerical:</strong> Given p=11, q=47, e=3: find n, φ(n), and d.</li>
+      <li><strong>MCQ:</strong> Who performs RSA key generation — sender or receiver? → Receiver</li>
+      <li><strong>Short:</strong> Why must p and q be destroyed after key generation?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>RSA Encryption</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Encryption — Definition</h3>
+    <p>RSA encryption is performed by the <strong>sender</strong> using the <strong>receiver's public key</strong>. The sender converts their message into a number and applies the encryption formula.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔒 Encryption Formula</h3>
+    <div class="math-block">
+      C = Mᵉ mod n<br><br>
+      <span class="comment">Where:</span><br>
+      <span class="comment">M = plaintext message (as a number, M &lt; n)</span><br>
+      <span class="comment">e = public exponent</span><br>
+      <span class="comment">n = modulus</span><br>
+      <span class="comment">C = ciphertext output</span>
+    </div>
+    <div class="highlight">Important: M must be less than n. If the message is larger than n, it must be broken into blocks.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">📝 Encryption Steps</h3>
+      <ol style="padding-left:18px">
+        <li>Obtain the receiver's <strong>public key (e, n)</strong></li>
+        <li>Convert message to a number M (e.g., ASCII encoding)</li>
+        <li>Ensure M &lt; n (break into blocks if needed)</li>
+        <li>Compute: <strong>C = Mᵉ mod n</strong></li>
+        <li>Send ciphertext C to receiver</li>
+      </ol>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">🌍 Real-World Context</h3>
+      <p>In practice, text is converted to numbers using schemes like <strong>ASCII</strong> or <strong>Unicode</strong>. For example, the letter 'A' = 65 in ASCII. The entire message is treated as a large number (or broken into blocks if too large).</p>
+      <p class="note">Modern systems use RSA only to encrypt a symmetric key (like an AES key), not the full message — because RSA is slow for large data.</p>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Write formula:</strong> What is the RSA encryption formula? → C = Mᵉ mod n</li>
+      <li><strong>MCQ:</strong> Who performs encryption in RSA? → The sender, using receiver's public key</li>
+      <li><strong>MCQ:</strong> Which key is used for RSA encryption? → Receiver's public key (e, n)</li>
+      <li><strong>Short:</strong> What constraint must the plaintext M satisfy before encryption? → M &lt; n</li>
+      <li><strong>Numerical:</strong> Given M=65, e=17, n=3233: compute C. → C = 65¹⁷ mod 3233 = 2790</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>RSA Decryption</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Decryption — Definition</h3>
+    <p>RSA decryption is performed by the <strong>receiver</strong> using their own <strong>private key (d, n)</strong> to recover the original plaintext M from the ciphertext C.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔓 Decryption Formula</h3>
+    <div class="math-block">
+      M = Cᵈ mod n<br><br>
+      <span class="comment">Where:</span><br>
+      <span class="comment">C = ciphertext received</span><br>
+      <span class="comment">d = private exponent (secret)</span><br>
+      <span class="comment">n = modulus</span><br>
+      <span class="comment">M = recovered plaintext</span>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📝 Decryption Steps</h3>
+    <ol style="padding-left:18px">
+      <li>Obtain private key parameters <strong>(d, n)</strong></li>
+      <li>Receive ciphertext C</li>
+      <li>Perform <strong>modular exponentiation: M = Cᵈ mod n</strong></li>
+      <li>Recover the original plaintext number M</li>
+      <li>Convert M back to the original message (e.g., ASCII)</li>
+    </ol>
+    <p class="note">Cᵈ mod n is an extremely large calculation, but it can be done efficiently using <strong>modular exponentiation</strong> (square-and-multiply algorithm) — so "impossibly large" numbers in examples are computed efficiently in practice.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔄 RSA — 4 Steps Summary</h3>
+    <div class="flow">
+      <div class="flow-step">1. Key Generation<br><small style="color:var(--text-muted)">Done by: Bob (receiver)</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">2. Key Distribution<br><small style="color:var(--text-muted)">Bob shares public key</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">3. Encryption<br><small style="color:var(--text-muted)">Done by: Alice (sender)</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">4. Decryption<br><small style="color:var(--text-muted)">Done by: Bob (receiver)</small></div>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Write formula:</strong> What is the RSA decryption formula? → M = Cᵈ mod n</li>
+      <li><strong>MCQ:</strong> Who performs decryption in RSA? → The receiver, using their private key</li>
+      <li><strong>MCQ:</strong> Which key is used for RSA decryption? → Receiver's private key (d, n)</li>
+      <li><strong>Numerical:</strong> Given C=2790, d=2753, n=3233: compute M. → M = 2790²⁷⁵³ mod 3233 = 65</li>
+      <li><strong>Short:</strong> What technique makes modular exponentiation of huge numbers feasible? → Square-and-multiply (fast modular exponentiation)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Full Worked Example — Alice &amp; Bob</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Scenario</h3>
+    <p><strong>Alice</strong> wants to send a secret message to <strong>Bob</strong>. Bob generates the key pair; Alice encrypts with Bob's public key; Bob decrypts with his private key.</p>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="worked-step">
+    <div class="step-label">Step 1 — Key Generation (Bob's Job)</div>
+    <p><strong>Choose two distinct primes:</strong></p>
+    <div class="formula">p = 61,  q = 53</div>
+    <p style="margin-top:8px"><strong>Compute n:</strong></p>
+    <div class="formula">n = p × q = 61 × 53 = 3233</div>
+    <p class="result">→ n = 3233. This is the modulus and is part of BOTH keys. Its bit-length is the "key length."</p>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="worked-step">
+    <div class="step-label">Step 2 — Compute φ(n)</div>
+    <div class="formula">φ(n) = (p−1)(q−1) = (61−1)(53−1) = 60 × 52 = 3120</div>
+    <p class="result">→ φ(n) = 3120. This is kept secret.</p>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="worked-step">
+    <div class="step-label">Step 3 — Choose Public Exponent e</div>
+    <p>Pick e such that 1 &lt; e &lt; 3120 and GCD(e, 3120) = 1.</p>
+    <div class="formula">e = 17</div>
+    <p>Verify: GCD(17, 3120) = 1 ✓ (17 is prime and does not divide 3120)</p>
+    <p class="result">→ Public exponent e = 17</p>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="worked-step">
+    <div class="step-label">Step 4 — Compute Private Exponent d</div>
+    <p>Find d such that: <strong>(d × 17) mod 3120 = 1</strong></p>
+    <p>Using the Extended Euclidean Algorithm (detailed in Section 6):</p>
+    <div class="formula">d = 2753</div>
+    <p>Verification: 2753 × 17 = 46801. Then: 46801 mod 3120 = 1 ✓</p>
+    <p class="result">→ Private exponent d = 2753</p>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="worked-step">
+    <div class="step-label">Step 5 — Bob's Final Keys</div>
+    <div class="formula">Public Key  = (e=17, n=3233)   ← shared with Alice</div>
+    <div class="formula">Private Key = (d=2753, n=3233)  ← Bob keeps secret</div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="worked-step">
+    <div class="step-label">Step 6 — Encryption (Alice's Job)</div>
+    <p>Alice's message is the number <strong>M = 65</strong> (e.g., ASCII for 'A'). Note: 65 &lt; 3233 ✓</p>
+    <div class="formula">C = Mᵉ mod n = 65¹⁷ mod 3233</div>
+    <p>Using modular exponentiation:</p>
+    <div class="formula">C = 2790</div>
+    <p class="result">→ Alice sends ciphertext C = 2790 to Bob.</p>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="worked-step">
+    <div class="step-label">Step 7 — Decryption (Bob's Job)</div>
+    <p>Bob receives C = 2790 and uses his private key:</p>
+    <div class="formula">M = Cᵈ mod n = 2790²⁷⁵³ mod 3233</div>
+    <p>Using modular exponentiation:</p>
+    <div class="formula">M = 65</div>
+    <p class="result">→ Bob successfully recovers the original message M = 65. ✅</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📊 Complete Example Summary Table</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Used In</th></tr></thead>
+        <tbody>
+          <tr><td>p</td><td>61</td><td>Key generation only (then discard)</td></tr>
+          <tr><td>q</td><td>53</td><td>Key generation only (then discard)</td></tr>
+          <tr><td>n (modulus)</td><td>3233</td><td>Both public and private keys</td></tr>
+          <tr><td>φ(n)</td><td>3120</td><td>Key generation only</td></tr>
+          <tr><td>e (public exp.)</td><td>17</td><td>Public key → Encryption</td></tr>
+          <tr><td>d (private exp.)</td><td>2753</td><td>Private key → Decryption</td></tr>
+          <tr><td>Public Key</td><td>(17, 3233)</td><td>Shared with Alice for encryption</td></tr>
+          <tr><td>Private Key</td><td>(2753, 3233)</td><td>Bob keeps for decryption</td></tr>
+          <tr><td>Plaintext M</td><td>65</td><td>Alice's message</td></tr>
+          <tr><td>Ciphertext C</td><td>2790</td><td>Transmitted over network</td></tr>
+          <tr><td>Decrypted M</td><td>65</td><td>Bob's recovered message ✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Numerical (Very Likely):</strong> Given p=61, q=53, e=17: find n, φ(n), d, public key, private key.</li>
+      <li><strong>Numerical:</strong> Using the example above, encrypt M=65 and verify the result is C=2790.</li>
+      <li><strong>Numerical:</strong> Using d=2753, n=3233: decrypt C=2790 and verify M=65.</li>
+      <li><strong>Scenario:</strong> Alice wants to send a message to Bob using RSA. Who generates the keys? What does Alice do? What does Bob do?</li>
+      <li><strong>Verify:</strong> Verify that d=2753 is the correct private exponent when e=17 and φ(n)=3120. (Show: 2753×17 mod 3120 = 1)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Extended Euclidean Algorithm — Finding d</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Is It?</h3>
+    <p>The <strong>Extended Euclidean Algorithm</strong> is a method to find the modular multiplicative inverse — i.e., to solve the equation <code>d × e ≡ 1 (mod φ(n))</code>. It extends the basic Euclidean Algorithm for GCD to also find the coefficients d and k that satisfy <code>e × d + φ(n) × k = 1</code>.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔢 Problem to Solve</h3>
+    <div class="math-block">
+      Given: e = 17, φ(n) = 3120<br>
+      Find: d such that 17 × d ≡ 1 (mod 3120)<br>
+      Equivalently: find d and k such that 17 × d + 3120 × k = 1
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📐 Step 1 — Run the Euclidean Algorithm (Find GCD)</h3>
+    <p>Repeatedly divide and record remainders:</p>
+    <div class="math-block">
+      3120 = 183 × 17 + 9 &nbsp;&nbsp; <span class="comment">(3120 ÷ 17 = 183, remainder 9)</span><br>
+      17   = 1 × 9 + 8 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">(17 ÷ 9 = 1, remainder 8)</span><br>
+      9    = 1 × 8 + 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">(9 ÷ 8 = 1, remainder 1)</span><br>
+      8    = 8 × 1 + 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">(8 ÷ 1 = 8, remainder 0 → STOP)</span><br><br>
+      <span class="comment">GCD(17, 3120) = 1 ✓ (as expected — they are coprime)</span>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📐 Step 2 — Back-Substitute to Find d</h3>
+    <p>Work backwards through the equations:</p>
+    <div class="math-block">
+      From: 9 = 1 × 8 + 1  →  <strong>1 = 9 − 1 × 8</strong><br><br>
+      Substitute 8 = 17 − 1 × 9:<br>
+      1 = 9 − 1 × (17 − 1 × 9) = 2 × 9 − 1 × 17<br><br>
+      Substitute 9 = 3120 − 183 × 17:<br>
+      1 = 2 × (3120 − 183 × 17) − 1 × 17<br>
+      1 = 2 × 3120 − 366 × 17 − 1 × 17<br>
+      <strong>1 = 2 × 3120 − 367 × 17</strong><br><br>
+      Therefore: <strong>d = −367</strong>, k = 2
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📐 Step 3 — Make d Positive</h3>
+    <p>Since d = −367 is negative, add φ(n) = 3120 to bring it into the positive range:</p>
+    <div class="math-block">
+      d = −367 + 3120 = <strong>2753</strong>
+    </div>
+    <p><strong>Verification:</strong></p>
+    <div class="math-block">
+      17 × 2753 = 46801<br>
+      46801 ÷ 3120 = 15 remainder <strong>1</strong><br>
+      ∴ 46801 ≡ 1 (mod 3120) ✅
+    </div>
+  </div>
+
+  <div class="highlight">The Extended Euclidean Algorithm is the standard method for finding d in RSA key generation. Expect a step-by-step numerical question in exams.</div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Long Numerical:</strong> Using the Extended Euclidean Algorithm, find d given e=17 and φ(n)=3120. Show all steps.</li>
+      <li><strong>Short:</strong> What equation does the Extended Euclidean Algorithm solve in RSA? → d × e ≡ 1 (mod φ(n))</li>
+      <li><strong>Short:</strong> Why do we add φ(n) when d comes out negative? → Because we're working in modular arithmetic; negative values are converted to their positive equivalent mod φ(n)</li>
+      <li><strong>Short:</strong> What must GCD(e, φ(n)) equal for the algorithm to work? → 1 (they must be coprime)</li>
+      <li><strong>Assignment from slides:</strong> Calculate GCD(185, 259) — practice using Euclidean Algorithm</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>RSA Security &amp; The Factoring Problem</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Why Is RSA Secure?</h3>
+    <p>RSA's security rests entirely on the <strong>computational difficulty of factoring large integers</strong>. Given n = p × q (where p and q are large primes), there is no known efficient algorithm to factor n back into p and q when n is sufficiently large.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Three Approaches to Break RSA (Cryptanalysis)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Approach</th><th>Method</th><th>Equivalent To</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Factor n</strong></td>
+            <td>Factor N = p × q, then compute φ(n) and find d</td>
+            <td>Directly breaks RSA</td>
+          </tr>
+          <tr>
+            <td><strong>Determine φ(n) directly</strong></td>
+            <td>Find φ(n) without factoring n, then find d</td>
+            <td>Believed equivalent to factoring</td>
+          </tr>
+          <tr>
+            <td><strong>Find d directly</strong></td>
+            <td>Determine the private key d without φ(n)</td>
+            <td>Believed equivalent to factoring</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">All three approaches are currently believed to be equivalent in difficulty to factoring n — which is computationally infeasible for large n.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">📈 State of Factoring (as of the slides)</h3>
+      <ul>
+        <li>As of Aug 1999: best factored was <strong>130 decimal digits (512 bits)</strong> using GNFS (Generalized Number Field Sieve)</li>
+        <li>Biggest improvements came from algorithm improvements: Quadratic Sieve → Generalized Number Field Sieve</li>
+        <li>Conclusion: <strong>1024+ bit RSA is secure</strong> against factoring attacks (barring dramatic breakthroughs)</li>
+      </ul>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">⚙ RSA Key Size Recommendations</h3>
+      <ul>
+        <li>Ensure p and q are of <strong>similar size</strong> and satisfy certain constraints</li>
+        <li>Typical historical size: <strong>1024 bits</strong></li>
+        <li>Modern recommended minimum: <strong>2048 bits</strong></li>
+        <li>High-security environments: <strong>4096 bits</strong></li>
+      </ul>
+      <p class="note">Larger key = more security but slower performance. Trade-off must be balanced.</p>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> What is the mathematical hardness problem that RSA relies on? → Integer factorization</li>
+      <li><strong>Short:</strong> Name three ways an attacker could try to break RSA.</li>
+      <li><strong>MCQ:</strong> What is the best practical factoring algorithm? → Generalized Number Field Sieve (GNFS)</li>
+      <li><strong>Short:</strong> Why is 1024-bit RSA considered secure? → Factoring a 1024-bit number is computationally infeasible with current technology</li>
+      <li><strong>Short:</strong> What constraint should p and q satisfy for security? → They should be of similar size</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Timing Attacks on RSA</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Is a Timing Attack?</h3>
+    <p>A <strong>timing attack</strong> is a <em>side-channel attack</em> developed in the mid-1990s. Instead of attacking the mathematical structure of RSA, it exploits <strong>variations in the time taken</strong> to perform cryptographic operations. By carefully measuring how long decryption takes, an attacker can infer information about the private key.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card orange-left">
+      <h3 class="orange">⚡ How Timing Attacks Work</h3>
+      <ul>
+        <li>Multiplying by a <strong>small number</strong> takes less time than multiplying by a <strong>large number</strong></li>
+        <li>Different execution paths (IF branches) cause different instruction counts, leading to different timing</li>
+        <li>Attacker measures timing of many decryption operations and uses statistical analysis to <strong>infer operand size</strong></li>
+        <li>In RSA: exploits time taken during the <strong>modular exponentiation</strong> step (computing Cᵈ mod n)</li>
+      </ul>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">🛡 Countermeasures</h3>
+      <ul>
+        <li><strong>Constant Exponentiation Time:</strong> Ensure all exponentiations take the same time regardless of key bits (pad or delay)</li>
+        <li><strong>Add Random Delays:</strong> Insert random pauses to break correlation between timing and key values</li>
+        <li><strong>Blinding:</strong> Blind (randomize) values used in calculations before performing modular exponentiation, then unblind after — this masks actual timing from the attacker</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">Timing attacks are NOT about breaking the math of RSA — they are about leaking information through the physical implementation. Real-world RSA implementations MUST include timing attack countermeasures.</div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> What is a timing attack? How does it exploit RSA?</li>
+      <li><strong>Short:</strong> When were timing attacks developed? → Mid-1990s</li>
+      <li><strong>Short:</strong> What type of attack is a timing attack? → Side-channel attack</li>
+      <li><strong>MCQ:</strong> Which step of RSA do timing attacks exploit? → Modular exponentiation</li>
+      <li><strong>Short:</strong> Name three countermeasures against timing attacks.</li>
+      <li><strong>Comparison:</strong> Compare a timing attack to a mathematical cryptanalysis attack on RSA.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision — RSA Key Facts</h2>
+  </div>
+  <div class="qr-grid">
+    <div class="qr-item"><strong>RSA stands for</strong>Rivest, Shamir<br>&amp; Adleman</div>
+    <div class="qr-item"><strong>Developed at</strong>MIT, 1978</div>
+    <div class="qr-item"><strong>RSA type</strong>Block cipher<br>Asymmetric</div>
+    <div class="qr-item"><strong>Security basis</strong>Integer factorization<br>hardness</div>
+    <div class="qr-item"><strong>Typical key size</strong>1024 bits (old)<br>2048 bits (modern)</div>
+    <div class="qr-item"><strong>Public key</strong>(e, n)</div>
+    <div class="qr-item"><strong>Private key</strong>(d, n)</div>
+    <div class="qr-item"><strong>Encryption formula</strong>C = Mᵉ mod n</div>
+    <div class="qr-item"><strong>Decryption formula</strong>M = Cᵈ mod n</div>
+    <div class="qr-item"><strong>n = ?</strong>p × q<br>(two large primes)</div>
+    <div class="qr-item"><strong>φ(n) = ?</strong>(p−1)(q−1)</div>
+    <div class="qr-item"><strong>e condition</strong>GCD(e, φ(n)) = 1<br>1 &lt; e &lt; φ(n)</div>
+    <div class="qr-item"><strong>d condition</strong>d × e ≡ 1<br>(mod φ(n))</div>
+    <div class="qr-item"><strong>Find d using</strong>Extended Euclidean<br>Algorithm</div>
+    <div class="qr-item"><strong>Key gen done by</strong>Receiver (Bob)</div>
+    <div class="qr-item"><strong>Encryption done by</strong>Sender (Alice)</div>
+    <div class="qr-item"><strong>Decryption done by</strong>Receiver (Bob)</div>
+    <div class="qr-item"><strong>M must satisfy</strong>M &lt; n<br>(or break into blocks)</div>
+    <div class="qr-item"><strong>Example: n</strong>61×53 = 3233</div>
+    <div class="qr-item"><strong>Example: φ(n)</strong>60×52 = 3120</div>
+    <div class="qr-item"><strong>Example: e, d</strong>e=17, d=2753</div>
+    <div class="qr-item"><strong>Example: encrypt</strong>65¹⁷ mod 3233 = 2790</div>
+    <div class="qr-item"><strong>Example: decrypt</strong>2790²⁷⁵³ mod 3233 = 65</div>
+    <div class="qr-item"><strong>Timing attack =</strong>Side-channel attack<br>mid-1990s</div>
+    <div class="qr-item"><strong>Timing countermeasure</strong>Constant time +<br>blinding + delays</div>
+    <div class="qr-item"><strong>Best factoring algo</strong>Generalized Number<br>Field Sieve (GNFS)</div>
+    <div class="qr-item"><strong>1024+ bit RSA</strong>Secure against<br>factoring attacks</div>
+  </div>
+</section>

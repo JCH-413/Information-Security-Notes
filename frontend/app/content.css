@@ -1,0 +1,267 @@
+/* ────────────────────────────────────────────────────────────────
+   Light re-theme for the imported study-note HTML.
+   Every rule is scoped to `.lecture-content` so it can never leak into
+   the app shell. The source files use semantic class names
+   (.card, .math-block, .green, .blue, .exam-box, …); we restyle those
+   into the site's calm stone/clay palette while preserving structure.
+   ──────────────────────────────────────────────────────────────── */
+
+.lecture-content {
+  --c-surface: #ffffff;
+  --c-surface2: #f6f4f0;
+  --c-border: #e7e3dc;
+  --c-text: #2a2723;
+  --c-muted: #6f6a63;
+
+  --c-accent: #bd5d3a; /* clay — the unified primary */
+  --c-green: #2f8a55;
+  --c-blue: #2563eb;
+  --c-red: #c2410c;
+  --c-orange: #b45309;
+  --c-purple: #7c3aed;
+
+  --c-math-bg: #faf7f2;
+  --c-tag-bg: #f4e9e3;
+  --c-tag-border: #e6d3c8;
+
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Aliases for the source files' original variable names, so any inline
+     `style="color:var(--text-muted)"` etc. resolves under the light theme. */
+  --text: var(--c-text);
+  --text-muted: var(--c-muted);
+  --accent: var(--c-accent);
+  --accent3: var(--c-red);
+  --tag-bg: var(--c-tag-bg);
+  --tag-border: var(--c-tag-border);
+
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--c-text);
+}
+
+.lecture-content a {
+  color: var(--c-accent);
+  text-decoration: none;
+}
+.lecture-content a:hover { text-decoration: underline; }
+
+.lecture-content strong { font-weight: 600; }
+.lecture-content :first-child { margin-top: 0; }
+
+/* ── CARDS ───────────────────────────────────────────────── */
+.lecture-content .card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(40, 37, 33, 0.04);
+}
+.lecture-content .card.accent-left { border-left: 3px solid var(--c-accent); }
+.lecture-content .card.green-left  { border-left: 3px solid var(--c-green); }
+.lecture-content .card.blue-left   { border-left: 3px solid var(--c-blue); }
+.lecture-content .card.red-left    { border-left: 3px solid var(--c-red); }
+.lecture-content .card.orange-left { border-left: 3px solid var(--c-orange); }
+.lecture-content .card.purple-left { border-left: 3px solid var(--c-purple); }
+
+.lecture-content .card h3 {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--c-accent);
+  margin-bottom: 10px;
+}
+.lecture-content .card h3.green  { color: var(--c-green); }
+.lecture-content .card h3.blue   { color: var(--c-blue); }
+.lecture-content .card h3.red    { color: var(--c-red); }
+.lecture-content .card h3.orange { color: var(--c-orange); }
+.lecture-content .card h3.purple { color: var(--c-purple); }
+
+.lecture-content .card p,
+.lecture-content .card li { font-size: 14.5px; color: var(--c-text); line-height: 1.7; }
+.lecture-content .card ul,
+.lecture-content .card ol { padding-left: 20px; }
+.lecture-content .card ul li,
+.lecture-content .card ol li { margin-bottom: 5px; }
+.lecture-content .card .note {
+  color: var(--c-muted); font-size: 13px; font-style: italic; margin-top: 8px;
+}
+
+/* ── MATH BLOCK ──────────────────────────────────────────── */
+.lecture-content .math-block {
+  background: var(--c-math-bg);
+  border: 1px solid var(--c-border);
+  border-left: 3px solid var(--c-accent);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--c-accent);
+  line-height: 2;
+  overflow-x: auto;
+}
+.lecture-content .math-block .comment {
+  color: var(--c-muted); font-size: 12px;
+  font-family: inherit; font-style: italic;
+}
+.lecture-content .math-block { font-feature-settings: "tnum"; }
+.lecture-content .val-public, .lecture-content .pub { color: var(--c-blue); }
+.lecture-content .val-secret, .lecture-content .priv { color: var(--c-red); }
+.lecture-content .val-shared, .lecture-content .shared { color: var(--c-green); }
+
+/* ── WORKED STEP (RSA) ───────────────────────────────────── */
+.lecture-content .worked-step {
+  background: var(--c-surface2);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  font-size: 13.5px;
+}
+.lecture-content .worked-step .step-label {
+  font-family: var(--mono); font-size: 11px; color: var(--c-accent);
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;
+}
+.lecture-content .worked-step .formula,
+.lecture-content .step-box .formula {
+  font-family: var(--mono); color: var(--c-orange); font-size: 14px;
+  background: var(--c-math-bg); padding: 6px 12px; border-radius: 5px;
+  display: inline-block; margin: 4px 0;
+}
+.lecture-content .worked-step p { color: var(--c-text); }
+.lecture-content .worked-step .result {
+  font-family: var(--mono); color: var(--c-green); font-size: 13px; margin-top: 6px;
+}
+
+/* ── STEP BOX (Diffie-Hellman) ───────────────────────────── */
+.lecture-content .step-box {
+  background: var(--c-surface2);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+}
+.lecture-content .step-box .step-num {
+  font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--c-accent);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.lecture-content .step-box .step-num::before {
+  content: attr(data-n);
+  background: var(--c-accent); color: #fff; border-radius: 50%;
+  width: 22px; height: 22px; display: inline-flex; align-items: center;
+  justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.lecture-content .step-box h4 { font-size: 15px; font-weight: 700; color: var(--c-text); margin-bottom: 10px; }
+.lecture-content .step-box p, .lecture-content .step-box li { font-size: 14.5px; color: var(--c-text); }
+.lecture-content .step-box ul { padding-left: 20px; margin-top: 6px; }
+.lecture-content .step-box .note { color: var(--c-muted); font-size: 13px; font-style: italic; margin-top: 8px; }
+
+/* ── ANALOGY BOX ─────────────────────────────────────────── */
+.lecture-content .analogy-box {
+  background: #eef7f0; border: 1px solid #cfe8d6;
+  border-radius: 10px; padding: 20px 24px; margin: 16px 0;
+}
+.lecture-content .analogy-box .a-title {
+  font-family: var(--mono); font-size: 11px; color: var(--c-green);
+  letter-spacing: 1px; text-transform: uppercase; font-weight: 600; margin-bottom: 12px;
+}
+.lecture-content .analogy-box p, .lecture-content .analogy-box li { font-size: 14.5px; color: var(--c-text); }
+.lecture-content .analogy-box ul { padding-left: 20px; }
+.lecture-content .analogy-box li { margin-bottom: 5px; }
+
+/* ── SIMILARITY BANNER (cross-lecture overlap) ───────────── */
+.lecture-content .similarity-banner {
+  background: #fdf6e3; border: 1px solid #ecd9a6;
+  border-radius: 10px; padding: 16px 20px; margin-bottom: 16px;
+}
+.lecture-content .similarity-banner .sim-label {
+  font-family: var(--mono); font-size: 11px; color: var(--c-orange);
+  letter-spacing: 1px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+}
+.lecture-content .similarity-banner p, .lecture-content .similarity-banner li { font-size: 14.5px; color: var(--c-text); }
+.lecture-content .similarity-banner ul { padding-left: 20px; }
+.lecture-content .similarity-banner li { margin-bottom: 4px; }
+
+/* ── GRIDS ───────────────────────────────────────────────── */
+.lecture-content .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.lecture-content .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+@media (max-width: 760px) {
+  .lecture-content .grid-2,
+  .lecture-content .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ── KNOWLEDGE TABLE (Alice / Bob / Eve) ─────────────────── */
+.lecture-content .know-table { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 12px 0; }
+.lecture-content .know-col {
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 14px;
+}
+.lecture-content .know-col .who {
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+  margin-bottom: 10px; text-align: center; padding: 4px; border-radius: 5px;
+}
+.lecture-content .know-col.alice .who { background: #e7eefb; color: var(--c-blue); }
+.lecture-content .know-col.bob .who   { background: #e7f3ec; color: var(--c-green); }
+.lecture-content .know-col.eve .who   { background: #fbeae6; color: var(--c-red); }
+.lecture-content .know-col ul { padding-left: 18px; }
+.lecture-content .know-col li { font-size: 13px; font-family: var(--mono); margin-bottom: 4px; color: var(--c-text); }
+@media (max-width: 640px) { .lecture-content .know-table { grid-template-columns: 1fr; } }
+
+/* ── TABLES ──────────────────────────────────────────────── */
+.lecture-content .table-wrap { overflow-x: auto; margin-bottom: 16px; border-radius: 10px; border: 1px solid var(--c-border); }
+.lecture-content table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.lecture-content th {
+  background: var(--c-surface2); color: var(--c-accent);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--c-border);
+}
+.lecture-content td { padding: 9px 14px; border-top: 1px solid var(--c-border); color: var(--c-text); vertical-align: top; }
+.lecture-content tr:nth-child(even) td { background: #faf8f5; }
+.lecture-content td.match { color: var(--c-accent); font-weight: 600; }
+.lecture-content td.diff { color: var(--c-green); }
+
+/* ── HIGHLIGHT / WARNING ─────────────────────────────────── */
+.lecture-content .highlight {
+  background: #fbf3df; border: 1px solid #ecd9a6;
+  border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 13.5px; color: var(--c-text);
+}
+.lecture-content .highlight::before { content: "⚠ "; color: var(--c-orange); font-weight: 700; }
+
+/* ── EXAM BOX ────────────────────────────────────────────── */
+.lecture-content .exam-box {
+  background: #eef4fb; border: 1px solid #cfe0f5;
+  border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 13.5px;
+}
+.lecture-content .exam-box .label {
+  font-family: var(--mono); font-size: 10px; color: var(--c-blue);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;
+}
+.lecture-content .exam-box ul { padding-left: 18px; }
+.lecture-content .exam-box li { margin-bottom: 4px; color: var(--c-text); }
+
+/* ── FLOW ────────────────────────────────────────────────── */
+.lecture-content .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0; }
+.lecture-content .flow-step {
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: var(--c-text);
+}
+.lecture-content .flow-arrow { color: var(--c-accent); padding: 0 2px; font-size: 18px; }
+
+/* ── QUICK REVISION GRID ─────────────────────────────────── */
+.lecture-content .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.lecture-content .qr-item {
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--c-muted); font-family: var(--mono);
+}
+.lecture-content .qr-item strong { color: var(--c-accent); display: block; margin-bottom: 3px; font-size: 11px; }
+
+/* ── INLINE CODE & RULES ─────────────────────────────────── */
+.lecture-content code {
+  font-family: var(--mono); font-size: 12.5px;
+  background: var(--c-tag-bg); color: var(--c-accent); padding: 2px 6px; border-radius: 4px;
+}
+.lecture-content hr { border: none; border-top: 1px solid var(--c-border); margin: 32px 0; }

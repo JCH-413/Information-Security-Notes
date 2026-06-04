@@ -1,0 +1,902 @@
+<section id="s0">
+  <div class="section-header">
+    <span class="section-num">00</span>
+    <h2>Cross-Lecture Overlap Analysis</h2>
+  </div>
+
+  <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px">Both uploaded sources cover SHA-512. Here is exactly where they agree, where one adds detail, and what is unique to each — so you don't study duplicates and don't miss anything.</p>
+
+  <div class="similarity-banner">
+    <div class="sim-label">✅ Topics Covered in BOTH Sources (Reinforced — High Exam Weight)</div>
+    <ul>
+      <li>SHA-512 is processed in <strong>1024-bit blocks</strong>, produces <strong>512-bit output</strong></li>
+      <li>SHA-512 has <strong>5 steps</strong>: Pad → Append Length → Init Buffer → Process Blocks → Output</li>
+      <li><strong>Step 1 (Padding):</strong> Always added; 1-bit followed by 0-bits; range 1–1024 bits</li>
+      <li><strong>Step 2 (Length):</strong> 128-bit block appended representing original message length</li>
+      <li><strong>Step 3 (Buffer):</strong> Eight 64-bit registers (a–h) initialized with fractional parts of square roots of first 8 primes</li>
+      <li><strong>Step 4 (Processing):</strong> Module F with <strong>80 rounds</strong>; each round uses W<sub>t</sub> (message word) and K<sub>t</sub> (additive constant)</li>
+      <li><strong>Step 5 (Output):</strong> After all N blocks processed, final 512-bit hash</li>
+      <li>Exact register initialization values (hex constants a–h)</li>
+      <li>Hash function basics: fixed-length output, one-way, variable input</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-left">
+      <h3>📄 Unique to SHA PDF</h3>
+      <ul>
+        <li>Full <strong>SHA family comparison table</strong> (SHA-1 through SHA-512 parameters)</li>
+        <li>SHA based on <strong>MD4</strong> design</li>
+        <li>FIPS 180 (1993), SHA-0, FIPS 180-1 (1995) SHA-1 history</li>
+        <li>FIPS 180-2 (2002) introduced SHA-2 family</li>
+        <li>SHA-3 published formally by NIST in 2012</li>
+        <li>NIST intention to phase out SHA-1 by 2010 (announced 2005)</li>
+        <li>Output of 80th round added to H<sub>i-1</sub> to produce H<sub>i</sub></li>
+        <li><strong>Full worked step-by-step example</strong> for "abc" — Round 0 calculations (S0, S1, Ch, Maj, temp1, temp2, variable updates)</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">📊 Unique to PPTX Lecture</h3>
+      <ul>
+        <li><strong>Security Goals</strong> (Privacy, Integrity, Authentication, Non-Repudiation) with Alice-Bob-Eve scenarios</li>
+        <li>Cryptographic goals taxonomy diagram (symmetric, asymmetric, hash, MAC, digital signatures)</li>
+        <li><strong>Formal requirements for hash functions</strong> (collision resistance, one-way property)</li>
+        <li><strong>Avalanche Effect</strong> demonstrated with SHA-1 example (dog vs dogs)</li>
+        <li><strong>Hash function families</strong>: SHA, RIPEMD, MD, BLAKE2</li>
+        <li><strong>MD5</strong> coverage: design, overview, compression function, strength and attacks</li>
+        <li>Hash used for message authentication context</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📌 What This Means for Your Exam</h3>
+    <p>Topics in both sources are <strong>doubly emphasized</strong> — treat them as near-certain exam questions. The 5 SHA-512 steps, 80 rounds, buffer initialization, padding rule, and the 128-bit length append are covered identically in both and should be memorized exactly. The PDF adds the detailed worked example (Round 0 math) which is likely to appear as a step-by-step question. The PPTX adds foundational theory (security goals, hash requirements, avalanche effect) which are likely short/MCQ questions.</p>
+  </div>
+</section>
+
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Security Goals &amp; Why Hashing Exists</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Problem: Four Security Risks</h3>
+    <p>Consider Alice sending a message to Bob over an unprotected network. An attacker Eve can exploit four categories of weakness:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Risk</th><th>What Happens</th><th>Security Goal Violated</th><th>Solution</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Eavesdropping</td>
+          <td>Eve views the secret message in transit</td>
+          <td><strong>Privacy / Confidentiality</strong></td>
+          <td>Encryption (symmetric or asymmetric)</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Message Alteration</td>
+          <td>Eve alters/corrupts the message; Bob receives modified data without knowing</td>
+          <td><strong>Integrity</strong></td>
+          <td>Hash functions, MACs</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>Impersonation</td>
+          <td>Eve sends a message to Bob pretending to be Alice; Bob cannot verify the true source</td>
+          <td><strong>Authentication</strong></td>
+          <td>Digital signatures, certificates</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Repudiation</td>
+          <td>Alice denies ever having sent the message to Bob</td>
+          <td><strong>Non-Repudiation</strong></td>
+          <td>Digital signatures</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card green-left">
+    <h3>🗺 Cryptographic Goals Taxonomy</h3>
+    <p>Different cryptographic tools address different goals:</p>
+    <div class="table-wrap" style="margin-top:10px">
+      <table>
+        <thead><tr><th>Goal</th><th>Tool</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Confidentiality</strong></td><td>Symmetric ciphers (block/stream), Public-key ciphers</td></tr>
+          <tr><td><strong>Data Integrity</strong></td><td>Hash functions, MACs</td></tr>
+          <tr><td><strong>Message Authentication</strong></td><td>MACs, Digital Signatures</td></tr>
+          <tr><td><strong>Entity Authentication</strong></td><td>Digital Signatures</td></tr>
+          <tr><td><strong>Non-Repudiation</strong></td><td>Digital Signatures, MACs</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Hash functions primarily address <strong>Data Integrity</strong> — they verify that data has not been tampered with.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> Name the four security goals in communication. Give one-line explanation of each.</li>
+      <li><strong>MCQ:</strong> Which security goal does a hash function primarily address? → Integrity</li>
+      <li><strong>Scenario:</strong> Eve modifies Alice's message before it reaches Bob. Which security goal is violated? → Integrity</li>
+      <li><strong>Short:</strong> What is non-repudiation? Which cryptographic tool provides it? → Digital signatures</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Hash Functions — Theory &amp; Requirements</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Formal Definition</h3>
+    <p>A <strong>hash function H</strong> accepts a <em>variable-length block of data M</em> as input and produces a <em>fixed-size hash value</em> h:</p>
+    <div class="math-block">h = H(M)</div>
+    <p>The output h is also called: <strong>hash code</strong>, <strong>hash value</strong>, or <strong>message digest</strong>. It can be thought of as a fixed-size <em>fingerprint</em> of a variable-sized message. The hash function itself is assumed to be <strong>public</strong> (no secret key required).</p>
+  </div>
+
+  <div class="card">
+    <h3>✅ Formal Requirements for Hash Functions</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Requirement</th><th>Technical Definition</th><th>Plain English</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Variable Input</strong></td>
+            <td>Can be applied to any sized message M</td>
+            <td>Works on any file, message, or data regardless of size</td>
+          </tr>
+          <tr>
+            <td><strong>Fixed Output</strong></td>
+            <td>Produces fixed-length output h</td>
+            <td>Output is always the same size no matter the input size</td>
+          </tr>
+          <tr>
+            <td><strong>Efficiency</strong></td>
+            <td>Easy to compute h = H(M) for any M</td>
+            <td>Computing the hash is fast and computationally cheap</td>
+          </tr>
+          <tr>
+            <td><strong>One-Way Property</strong> (Pre-image Resistance)</td>
+            <td>Given h, it is computationally infeasible to find x such that H(x) = h</td>
+            <td>You cannot reverse the hash to get the original message</td>
+          </tr>
+          <tr>
+            <td><strong>Second Pre-image Resistance</strong></td>
+            <td>Given x, it is infeasible to find y (y ≠ x) such that H(y) = H(x)</td>
+            <td>You cannot find a different message that gives the same hash as a known message</td>
+          </tr>
+          <tr>
+            <td><strong>Collision Resistance</strong></td>
+            <td>It is infeasible to find any x, y (x ≠ y) such that H(x) = H(y)</td>
+            <td>It is practically impossible to find any two different messages with the same hash</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">Collision resistance is the strongest requirement and the hardest to achieve. Breaking collision resistance breaks the entire hash algorithm's trustworthiness.</div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌊 Avalanche Effect</h3>
+    <p>The <strong>avalanche effect</strong> means that a message digest depends on <em>ALL bits</em> in the input message. Even the tiniest change in input causes a completely different (unpredictable) hash output.</p>
+    <div class="math-block">
+      Message:  "The quick brown fox jumps over the lazy dog"<br>
+      SHA-1:    2fd4e1c67a2d28fced849ee1bb76e7391b93eb12<br><br>
+      Changed:  "The quick brown fox jumps over the lazy dogs"  (added 's')<br>
+      SHA-1:    8de49570b9d941fb26045fa1f5595005eb5f3cf2<br><br>
+      <span class="comment">→ Completely different output despite only one character change</span>
+    </div>
+    <p class="note">Real-world use: If a downloaded file is tampered with in even one bit, its hash will not match the published hash, immediately revealing the modification.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📚 Hash Function Families</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Family</th><th>Members</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SHA Family</strong></td><td>SHA-1, SHA-256, SHA-384, SHA-512 (SHA-2), SHA-3</td><td>Most widely used; NIST standard</td></tr>
+          <tr><td><strong>MD Family</strong></td><td>MD2, MD4, MD5</td><td>Designed by Ronald Rivest (the R in RSA); mostly deprecated</td></tr>
+          <tr><td><strong>RIPEMD</strong></td><td>RIPEMD-128, RIPEMD-160</td><td>RACE Integrity Primitives Evaluation Message Digest</td></tr>
+          <tr><td><strong>BLAKE2</strong></td><td>BLAKE2b, BLAKE2s</td><td>Modern, high-performance hash function</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Definition:</strong> Define a hash function. What is a message digest?</li>
+      <li><strong>Short:</strong> List the six formal requirements of a hash function.</li>
+      <li><strong>Explain:</strong> What is the one-way property of a hash function?</li>
+      <li><strong>Explain:</strong> What is collision resistance? Why is it the strongest requirement?</li>
+      <li><strong>Short:</strong> What is the avalanche effect? Give an example.</li>
+      <li><strong>MCQ:</strong> What is the output of a hash function called? → Hash value / message digest / hash code</li>
+      <li><strong>MCQ:</strong> Which hash family was designed by Ronald Rivest? → MD family (MD2, MD4, MD5)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>SHA Family — History &amp; Version Comparison</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 SHA Background</h3>
+    <ul>
+      <li>SHA is the <strong>most widely used hash function</strong> family in recent years</li>
+      <li>Developed by <strong>NIST</strong> (National Institute of Standards and Technology)</li>
+      <li>Originally published as <strong>FIPS 180 in 1993</strong></li>
+      <li>Based on <strong>MD4</strong> design — closely models MD4's structure</li>
+      <li>Standards document entitled: <em>"Secure Hash Standard"</em></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>📅 SHA Version Timeline</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Year</th><th>Standard</th><th>Version</th><th>What Changed</th></tr></thead>
+        <tbody>
+          <tr><td>1993</td><td>FIPS 180</td><td><strong>SHA-0</strong></td><td>Original SHA; weaknesses later discovered — now called SHA-0 retroactively</td></tr>
+          <tr><td>1995</td><td>FIPS 180-1</td><td><strong>SHA-1</strong></td><td>Revised version fixing SHA-0 weaknesses; produces 160-bit digest</td></tr>
+          <tr><td>2002</td><td>FIPS 180-2</td><td><strong>SHA-2</strong></td><td>Introduced SHA-224, SHA-256, SHA-384, SHA-512 — collectively called SHA-2</td></tr>
+          <tr><td>2005</td><td>NIST announcement</td><td>—</td><td>Announced intention to phase out SHA-1 and move to SHA-2 by 2010</td></tr>
+          <tr><td>2012</td><td>FIPS 202</td><td><strong>SHA-3</strong></td><td>Formally published; completely different internal design (Keccak sponge construction)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3>📊 SHA Parameters Comparison Table (EXAM FAVOURITE)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>SHA-1</th><th>SHA-224</th><th>SHA-256</th><th>SHA-384</th><th>SHA-512</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Message Digest Size (bits)</strong></td><td>160</td><td>224</td><td>256</td><td>384</td><td class="match">512</td></tr>
+          <tr><td><strong>Max Message Size (bits)</strong></td><td>&lt; 2⁶⁴</td><td>&lt; 2⁶⁴</td><td>&lt; 2⁶⁴</td><td>&lt; 2¹²⁸</td><td class="match">&lt; 2¹²⁸</td></tr>
+          <tr><td><strong>Block Size (bits)</strong></td><td>512</td><td>512</td><td>512</td><td>1024</td><td class="match">1024</td></tr>
+          <tr><td><strong>Word Size (bits)</strong></td><td>32</td><td>32</td><td>32</td><td>64</td><td class="match">64</td></tr>
+          <tr><td><strong>Number of Steps/Rounds</strong></td><td>80</td><td>64</td><td>64</td><td>80</td><td class="match">80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">All sizes measured in bits. SHA-512 uses 64-bit words and 1024-bit blocks — the largest in the SHA-2 family. Focus on memorizing the SHA-512 column.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> Who developed SHA? What does FIPS stand for?</li>
+      <li><strong>Timeline:</strong> List SHA versions in order with their year and FIPS standard number.</li>
+      <li><strong>MCQ:</strong> What hash function is SHA based on? → MD4</li>
+      <li><strong>MCQ:</strong> What is the block size of SHA-512? → 1024 bits</li>
+      <li><strong>MCQ:</strong> What is the message digest size of SHA-512? → 512 bits</li>
+      <li><strong>MCQ:</strong> How many rounds does SHA-512 use? → 80</li>
+      <li><strong>MCQ:</strong> What is the word size of SHA-512? → 64 bits</li>
+      <li><strong>Comparison:</strong> Compare SHA-256 and SHA-512 across all parameters.</li>
+      <li><strong>MCQ:</strong> When was SHA-3 formally published? → 2012</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>SHA-512 Overview</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What SHA-512 Does</h3>
+    <ul>
+      <li><strong>Input:</strong> A message of maximum length &lt; 2¹²⁸ bits (any size up to this limit)</li>
+      <li><strong>Output:</strong> A 512-bit (64-byte) message digest</li>
+      <li><strong>Processing unit:</strong> Input processed in <strong>1024-bit blocks</strong></li>
+      <li><strong>Internal state:</strong> Eight 64-bit registers (512 bits total)</li>
+      <li><strong>Rounds per block:</strong> 80 rounds</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔄 SHA-512 — Five-Step Overview</h3>
+    <div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:60px; text-align:center; background:var(--tag-bg); border-color:var(--tag-border); color:var(--accent);">Step 1</div>
+        <div style="color:var(--text); font-size:14px;"><strong>Append Padding Bits</strong> — pad message so total length ≡ 896 (mod 1024)</div>
+      </div>
+      <div style="padding-left:10px; color:var(--accent)">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:60px; text-align:center; background:var(--tag-bg); border-color:var(--tag-border); color:var(--accent);">Step 2</div>
+        <div style="color:var(--text); font-size:14px;"><strong>Append Length</strong> — append 128-bit integer = original message length</div>
+      </div>
+      <div style="padding-left:10px; color:var(--accent)">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:60px; text-align:center; background:var(--tag-bg); border-color:var(--tag-border); color:var(--accent);">Step 3</div>
+        <div style="color:var(--text); font-size:14px;"><strong>Initialize Hash Buffer</strong> — set eight 64-bit registers to fixed constants</div>
+      </div>
+      <div style="padding-left:10px; color:var(--accent)">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:60px; text-align:center; background:var(--tag-bg); border-color:var(--tag-border); color:var(--accent);">Step 4</div>
+        <div style="color:var(--text); font-size:14px;"><strong>Process 1024-bit Blocks</strong> — 80 rounds per block using message words W<sub>t</sub> and constants K<sub>t</sub></div>
+      </div>
+      <div style="padding-left:10px; color:var(--accent)">↓</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="flow-step" style="min-width:60px; text-align:center; background:var(--tag-bg); border-color:var(--tag-border); color:var(--accent);">Step 5</div>
+        <div style="color:var(--text); font-size:14px;"><strong>Output</strong> — after N blocks, the final 512-bit hash = concatenation of registers a–h</div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px">After Steps 1 and 2, the message length is always an exact multiple of 1024 bits: N × 1024 bits, processed as N blocks M₁, M₂, … M_N.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Steps 1 &amp; 2 — Padding &amp; Length Append</h2>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="1">STEP 1 — Append Padding Bits</div>
+    <h4>Goal: Make message length ≡ 896 (mod 1024)</h4>
+    <ul>
+      <li>Padding is <strong>always added</strong> — even if the message is already the right length</li>
+      <li>Number of padding bits: <strong>between 1 and 1024</strong> (never 0)</li>
+      <li>Format: a single <strong>1-bit</strong> followed by as many <strong>0-bits</strong> as needed</li>
+      <li>Why 896? Because 896 + 128 (length field) = 1024 — making the total a multiple of 1024</li>
+    </ul>
+    <div class="math-block" style="margin-top:10px">
+      Padding format:  1 0 0 0 0 0 ... 0<br>
+      <span class="comment">One mandatory '1' bit + necessary zeros to reach 896 mod 1024</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="2">STEP 2 — Append Length</div>
+    <h4>Goal: Record the original message length</h4>
+    <ul>
+      <li>A <strong>128-bit block</strong> is appended to the padded message</li>
+      <li>This block is an <strong>unsigned 128-bit integer</strong></li>
+      <li>It contains the <strong>length of the original message</strong> (before padding) in bits</li>
+      <li>After this step, the total message length = N × 1024 bits (exact multiple)</li>
+    </ul>
+    <p class="note">Why append the length? This prevents length-extension attacks and ensures different messages of the same content but different lengths produce different hashes.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3>📊 After Steps 1 &amp; 2 — Message Structure</h3>
+    <div class="math-block">
+      |←————————————————— N × 1024 bits ——————————————————→|<br>
+      |←——————————— L bits (original) ———→||← padding →||← 128 bits →|<br>
+      |      M e s s a g e      | 1000...0 |   Length L  |<br>
+      |——————1024——————|——————1024——————| ... |——————1024——————|<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M₁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M₂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M_N
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> Why is padding always added in SHA-512 even if the message is already the right length?</li>
+      <li><strong>MCQ:</strong> What is the format of SHA-512 padding? → A single 1-bit followed by 0-bits</li>
+      <li><strong>MCQ:</strong> What is the range of padding bits added in SHA-512? → 1 to 1024</li>
+      <li><strong>MCQ:</strong> How many bits are appended for the length field in SHA-512? → 128 bits</li>
+      <li><strong>Short:</strong> What does the 128-bit length field contain? → The length of the original message before padding</li>
+      <li><strong>Numerical:</strong> If a message is 24 bits (like "abc"), how many padding zeros are added? → 24 + 1 = 25; need 896 mod 1024; 896 − 25 = 871 zeros</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Step 3 — Initialize Hash Buffer</h2>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="3">STEP 3 — Initialize Hash Buffer</div>
+    <h4>Goal: Set up the eight 64-bit working registers</h4>
+    <ul>
+      <li>A <strong>512-bit buffer</strong> holds intermediate and final results</li>
+      <li>Represented as <strong>eight 64-bit registers</strong> named <strong>a, b, c, d, e, f, g, h</strong></li>
+      <li>Initialized to the <strong>first 64 bits of the fractional parts of the square roots of the first eight prime numbers</strong> (2, 3, 5, 7, 11, 13, 17, 19)</li>
+      <li>This is also called the <strong>IV (Initialization Vector)</strong> or <strong>H₀</strong></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔢 Initial Register Values (SHA-512) — MUST MEMORIZE FORMAT</h3>
+    <div class="math-block">
+      a = 6A09E667F3BCC908 &nbsp;&nbsp; <span class="comment">← first 64 bits of fractional part of √2</span><br>
+      b = BB67AE8584CAA73B &nbsp;&nbsp; <span class="comment">← fractional part of √3</span><br>
+      c = 3C6EF372FE94F82B &nbsp;&nbsp; <span class="comment">← fractional part of √5</span><br>
+      d = A54FF53A5F1D36F1 &nbsp;&nbsp; <span class="comment">← fractional part of √7</span><br>
+      e = 510E527FADE682D1 &nbsp;&nbsp; <span class="comment">← fractional part of √11</span><br>
+      f = 9B05688C2B3E6C1F &nbsp;&nbsp; <span class="comment">← fractional part of √13</span><br>
+      g = 1F83D9ABFB41BD6B &nbsp;&nbsp; <span class="comment">← fractional part of √17</span><br>
+      h = 5BE0CD19137E2179 &nbsp;&nbsp; <span class="comment">← fractional part of √19</span>
+    </div>
+    <p class="note">These are <strong>nothing-up-my-sleeve numbers</strong> — using mathematical constants as initialization values proves the algorithm has no hidden backdoors or weaknesses built into those constants.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧠 Beginner Explanation — Why These Specific Values?</h3>
+    <p>The designers needed fixed starting values that are clearly not chosen to create weaknesses. By using the first 64 bits of √2, √3, √5, etc. (irrational, unpredictable numbers), they demonstrate complete transparency: anyone can verify these values with a calculator. There's no hidden weakness, no backdoor — they are mathematically derived constants.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> How is the SHA-512 hash buffer structured? → Eight 64-bit registers (a through h) = 512 bits total</li>
+      <li><strong>Short:</strong> How are the initial values of the SHA-512 registers derived? → First 64 bits of fractional parts of square roots of first 8 primes</li>
+      <li><strong>MCQ:</strong> What are the first 8 prime numbers used in SHA-512 initialization? → 2, 3, 5, 7, 11, 13, 17, 19</li>
+      <li><strong>MCQ:</strong> What is the initial value of register <em>a</em> in SHA-512? → 6A09E667F3BCC908</li>
+      <li><strong>Short:</strong> What is the purpose of using mathematical constants for initialization in SHA-512?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Step 4 — Process 1024-Bit Blocks (80 Rounds)</h2>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="4">STEP 4 — Process Message in 1024-Bit Blocks</div>
+    <h4>Goal: Compress each 1024-bit block into the 512-bit buffer through 80 rounds</h4>
+    <ul>
+      <li>The core compression module is labeled <strong>F</strong></li>
+      <li>F consists of <strong>80 rounds</strong> (numbered 0 to 79)</li>
+      <li>Each round takes the <strong>512-bit buffer (abcdefgh)</strong> as input and updates its contents</li>
+      <li>At the start of each block's processing, the buffer is initialized to <strong>H<sub>i-1</sub></strong> (the previous block's output)</li>
+      <li>Each round <em>t</em> uses a <strong>64-bit message word W<sub>t</sub></strong> derived from the current 1024-bit block M<sub>i</sub></li>
+      <li>Each round also uses an <strong>additive constant K<sub>t</sub></strong> (t = 0 to 79) — derived from cube roots of the first 80 prime numbers</li>
+      <li>The constants K<sub>t</sub> <strong>eliminate regularities in input data</strong> and prevent attacks that exploit patterns</li>
+      <li>After round 79, the output is <strong>added to H<sub>i-1</sub></strong> to produce <strong>H<sub>i</sub></strong> (feed-forward mechanism)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔄 Block Processing — How H<sub>i</sub> is Produced</h3>
+    <div class="flow" style="flex-wrap:wrap; gap:8px; margin:12px 0">
+      <div class="flow-step">H<sub>i-1</sub><br><small style="color:var(--text-muted); font-weight:400">previous hash (512-bit)</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Initialize a–h<br><small style="color:var(--text-muted); font-weight:400">from H<sub>i-1</sub></small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">80 Rounds<br><small style="color:var(--text-muted); font-weight:400">using W<sub>t</sub> &amp; K<sub>t</sub></small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Add output<br>to H<sub>i-1</sub></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">H<sub>i</sub><br><small style="color:var(--text-muted); font-weight:400">new hash (512-bit)</small></div>
+    </div>
+    <p class="note">The <strong>feed-forward addition</strong> (adding output of round 80 to the input H<sub>i-1</sub>) is a critical security feature — it prevents certain algebraic attacks and ensures each block's output depends on ALL previous blocks.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3>📊 W<sub>t</sub> and K<sub>t</sub> — The Two Inputs to Each Round</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Input</th><th>Symbol</th><th>Source</th><th>Size</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Message Word</strong></td>
+            <td>W<sub>t</sub></td>
+            <td>Derived from current 1024-bit block M<sub>i</sub> using message schedule</td>
+            <td>64 bits</td>
+            <td>Brings the actual message content into each round</td>
+          </tr>
+          <tr>
+            <td><strong>Round Constant</strong></td>
+            <td>K<sub>t</sub></td>
+            <td>First 64 bits of the fractional parts of the cube roots of the first 80 primes</td>
+            <td>64 bits</td>
+            <td>Eliminates regularities in input data; K[0] = 428a2f98d728ae22</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> How many rounds does SHA-512 use per block? → 80 rounds</li>
+      <li><strong>Short:</strong> What does each round of SHA-512 take as input? → 512-bit buffer (a–h), message word W<sub>t</sub>, constant K<sub>t</sub></li>
+      <li><strong>Short:</strong> What are the SHA-512 round constants K<sub>t</sub> derived from? → Cube roots of the first 80 prime numbers</li>
+      <li><strong>Short:</strong> Why are constants K<sub>t</sub> used? → To eliminate regularities in input data</li>
+      <li><strong>Short:</strong> What is feed-forward in SHA-512? → Output of 80th round is added to H<sub>i-1</sub> to produce H<sub>i</sub></li>
+      <li><strong>MCQ:</strong> What is the label of the compression module in SHA-512? → F</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Round Internals — Functions &amp; Variable Updates</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Happens Inside Each Round</h3>
+    <p>Each of the 80 rounds performs the same sequence of operations on the eight working variables (a–h), computing two temporary values (temp1 and temp2) and updating all eight variables.</p>
+  </div>
+
+  <div class="card">
+    <h3>⚙ The Six Computations Per Round</h3>
+
+    <div class="step-box" style="margin-bottom:8px">
+      <div class="step-num" data-n="1">Compute S1 (Sigma-1 — based on e)</div>
+      <div class="math-block">
+        S1 = ROTR(e, 14) ⊕ ROTR(e, 18) ⊕ ROTR(e, 41)<br>
+        <span class="comment">ROTR(x, n) = rotate x right by n bits. ⊕ = XOR</span><br>
+        <span class="comment">Uses register e. Three rotations, then XOR together.</span>
+      </div>
+    </div>
+
+    <div class="step-box" style="margin-bottom:8px">
+      <div class="step-num" data-n="2">Compute Ch (Choose Function — based on e, f, g)</div>
+      <div class="math-block">
+        Ch(e, f, g) = (e ∧ f) ⊕ (¬e ∧ g)<br>
+        <span class="comment">∧ = AND, ¬ = NOT, ⊕ = XOR</span><br>
+        <span class="comment">Where e=1: choose bit from f. Where e=0: choose bit from g.</span><br>
+        <span class="comment">Ch = (e AND f) XOR (NOT e AND g)</span>
+      </div>
+    </div>
+
+    <div class="step-box" style="margin-bottom:8px">
+      <div class="step-num" data-n="3">Compute temp1</div>
+      <div class="math-block">
+        temp1 = h + S1 + Ch(e,f,g) + K[t] + W[t]<br>
+        <span class="comment">All additions are mod 2⁶⁴ (64-bit modular addition)</span><br>
+        <span class="comment">K[t] = round constant, W[t] = message word for this round</span>
+      </div>
+    </div>
+
+    <div class="step-box" style="margin-bottom:8px">
+      <div class="step-num" data-n="4">Compute S0 (Sigma-0 — based on a)</div>
+      <div class="math-block">
+        S0 = ROTR(a, 28) ⊕ ROTR(a, 34) ⊕ ROTR(a, 39)<br>
+        <span class="comment">Same pattern as S1 but applied to register a with different rotation amounts</span>
+      </div>
+    </div>
+
+    <div class="step-box" style="margin-bottom:8px">
+      <div class="step-num" data-n="5">Compute Maj (Majority Function — based on a, b, c)</div>
+      <div class="math-block">
+        Maj(a, b, c) = (a ∧ b) ⊕ (a ∧ c) ⊕ (b ∧ c)<br>
+        <span class="comment">Output bit = 1 if at least two of the three inputs are 1 (majority vote)</span><br>
+        <span class="comment">Maj = (a AND b) XOR (a AND c) XOR (b AND c)</span>
+      </div>
+    </div>
+
+    <div class="step-box" style="margin-bottom:8px">
+      <div class="step-num" data-n="6">Compute temp2</div>
+      <div class="math-block">
+        temp2 = S0 + Maj(a,b,c)<br>
+        <span class="comment">64-bit modular addition</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3>🔄 Variable Update After Each Round</h3>
+    <p>After computing temp1 and temp2, all eight variables shift and update:</p>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px"><strong>BEFORE ROUND</strong></p>
+        <div class="math-block" style="font-size:12px; line-height:1.8">
+          a, b, c, d, e, f, g, h
+        </div>
+      </div>
+      <div>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px"><strong>AFTER ROUND</strong></p>
+        <div class="math-block" style="font-size:12px; line-height:1.8">
+          a = temp1 + temp2<br>
+          b = old a<br>
+          c = old b<br>
+          d = old c<br>
+          e = old d + temp1<br>
+          f = old e<br>
+          g = old f<br>
+          h = old g
+        </div>
+      </div>
+    </div>
+    <p class="note">Most variables simply shift down (b←a, c←b, etc.). Only <strong>a</strong> and <strong>e</strong> get new computed values. This shift structure ensures every bit of every register influences future rounds — diffusion.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🧠 Intuition Behind the Functions</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>What It Does</th><th>Why It's Used</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ROTR (Rotate Right)</strong></td><td>Shifts bits right, wrapping around</td><td>Mixes bits in a non-linear way — diffusion</td></tr>
+          <tr><td><strong>Ch (Choose)</strong></td><td>e selects between bits of f and g</td><td>Non-linear selection — confusion</td></tr>
+          <tr><td><strong>Maj (Majority)</strong></td><td>Output is the majority bit of a, b, c</td><td>Non-linear combination — confusion</td></tr>
+          <tr><td><strong>XOR (⊕)</strong></td><td>Bitwise exclusive OR</td><td>Mixes bits with no key cancelation</td></tr>
+          <tr><td><strong>AND (∧)</strong></td><td>Bitwise AND</td><td>Creates non-linear interaction between bits</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Define:</strong> What is the Ch (Choose) function in SHA-512? Write the formula.</li>
+      <li><strong>Define:</strong> What is the Maj (Majority) function in SHA-512? Write the formula.</li>
+      <li><strong>Short:</strong> What does ROTR stand for? What does it do?</li>
+      <li><strong>Write:</strong> What is the formula for temp1 in SHA-512 rounds?</li>
+      <li><strong>Write:</strong> After one SHA-512 round, what is the new value of register a? → temp1 + temp2</li>
+      <li><strong>Write:</strong> After one SHA-512 round, what is the new value of register e? → old d + temp1</li>
+      <li><strong>Short:</strong> How many times do all working variables get updated across all 80 rounds?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>SHA-512 Worked Example — Input "abc"</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Problem</h3>
+    <p>Compute SHA-512 of the string <strong>"abc"</strong> (3 ASCII characters = 24 bits). We will trace through every preparatory step and the structure of Round 0.</p>
+  </div>
+
+  <!-- PREP STEP 1 -->
+  <div class="step-box">
+    <div class="step-num" data-n="A">Convert "abc" to Binary</div>
+    <div class="math-block">
+      'a' = 01100001  (ASCII 97)<br>
+      'b' = 01100010  (ASCII 98)<br>
+      'c' = 01100011  (ASCII 99)<br><br>
+      Message bits: 01100001 01100010 01100011  (24 bits total)
+    </div>
+  </div>
+
+  <!-- PREP STEP 2 -->
+  <div class="step-box">
+    <div class="step-num" data-n="B">Step 1 — Append Padding</div>
+    <p><strong>Current length:</strong> 24 bits. Need length ≡ 896 (mod 1024).</p>
+    <div class="math-block">
+      24 + 1 (the mandatory '1' bit) = 25 bits<br>
+      25 + k = 896  →  k = 871 zeros<br><br>
+      Result: 01100001 01100010 01100011 1 [871 zeros...]<br>
+      Total after padding: 896 bits
+    </div>
+  </div>
+
+  <!-- PREP STEP 3 -->
+  <div class="step-box">
+    <div class="step-num" data-n="C">Step 2 — Append Length</div>
+    <p>Original message length = 24 bits = 0x18 in hexadecimal.</p>
+    <div class="math-block">
+      Append: 000...00011000  (128 bits, representing decimal 24)<br><br>
+      Final padded message: 896 + 128 = 1024 bits = 1 complete block ✓
+    </div>
+    <p class="note">For "abc", we have exactly ONE 1024-bit block after padding.</p>
+  </div>
+
+  <!-- PREP STEP 4 -->
+  <div class="step-box">
+    <div class="step-num" data-n="D">Step 3 — Initialize Hash Values (Working Variables)</div>
+    <div class="math-block">
+      a = 6a09e667f3bcc908<br>
+      b = bb67ae8584caa73b<br>
+      c = 3c6ef372fe94f82b<br>
+      d = a54ff53a5f1d36f1<br>
+      e = 510e527fade682d1<br>
+      f = 9b05688c2b3e6c1f<br>
+      g = 1f83d9abfb41bd6b<br>
+      h = 5be0cd19137e2179
+    </div>
+  </div>
+
+  <!-- ROUND 0 -->
+  <div class="step-box">
+    <div class="step-num" data-n="E">Round 0 — Step-by-Step Calculations</div>
+    <p style="margin-bottom:12px">This pattern repeats for all 80 rounds. Only W[t] and K[t] change each round.</p>
+
+    <div class="math-block">
+      <strong style="color:var(--accent)">1. Compute S1:</strong><br>
+      S1 = ROTR(e, 14) ⊕ ROTR(e, 18) ⊕ ROTR(e, 41)<br>
+      e  = 510e527fade682d1<br><br>
+
+      <strong style="color:var(--accent)">2. Compute Ch(e, f, g):</strong><br>
+      Ch = (e AND f) XOR (NOT e AND g)<br>
+      e  = 510e527fade682d1<br>
+      f  = 9b05688c2b3e6c1f<br>
+      g  = 1f83d9abfb41bd6b<br><br>
+
+      <strong style="color:var(--accent)">3. Compute temp1:</strong><br>
+      temp1 = h + S1 + Ch + K[0] + W[0]<br>
+      h    = 5be0cd19137e2179<br>
+      K[0] = 428a2f98d728ae22  (cube root of 2nd prime)<br>
+      W[0] = first 64 bits of the padded message block<br><br>
+
+      <strong style="color:var(--accent)">4. Compute S0:</strong><br>
+      S0 = ROTR(a, 28) ⊕ ROTR(a, 34) ⊕ ROTR(a, 39)<br>
+      a  = 6a09e667f3bcc908<br><br>
+
+      <strong style="color:var(--accent)">5. Compute Maj(a, b, c):</strong><br>
+      Maj = (a AND b) XOR (a AND c) XOR (b AND c)<br>
+      a  = 6a09e667f3bcc908<br>
+      b  = bb67ae8584caa73b<br>
+      c  = 3c6ef372fe94f82b<br><br>
+
+      <strong style="color:var(--accent)">6. Compute temp2:</strong><br>
+      temp2 = S0 + Maj<br><br>
+
+      <strong style="color:var(--accent)">7. Update variables:</strong><br>
+      a = temp1 + temp2<br>
+      b = 6a09e667f3bcc908  (old a)<br>
+      c = bb67ae8584caa73b  (old b)<br>
+      d = 3c6ef372fe94f82b  (old c)<br>
+      e = a54ff53a5f1d36f1 + temp1  (old d + temp1)<br>
+      f = 510e527fade682d1  (old e)<br>
+      g = 9b05688c2b3e6c1f  (old f)<br>
+      h = 1f83d9abfb41bd6b  (old g)
+    </div>
+    <p class="note">This pattern repeats for rounds 1–79. After round 79, the final values of a–h are added (mod 2⁶⁴) to the initial values of H₀ to produce H₁ = the final hash.</p>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="card green-left">
+    <h3>✅ Expected Final Output</h3>
+    <div class="math-block">
+      Input:  "abc"<br><br>
+      SHA-512 output (128 hex characters = 512 bits):<br>
+      ddaf35a193617aba cc417349ae204131<br>
+      12e6fa4e89a97ea2 0a9eeee64b55d39a<br>
+      2192992a274fc1a8 36ba3c23a3feebbd<br>
+      454d4423643ce80e 2a9ac94fa54ca49f
+    </div>
+    <p class="note">512 bits = 64 bytes = 128 hexadecimal characters</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Trace:</strong> Show all padding steps for the input "abc" in SHA-512. How many padding zeros are added?</li>
+      <li><strong>Numerical:</strong> What is the total size of the padded "abc" message? → 1024 bits (exactly 1 block)</li>
+      <li><strong>Short:</strong> In SHA-512 Round 0, what is W[0]? → First 64 bits of the padded message block</li>
+      <li><strong>Short:</strong> What is K[0] derived from? → Fractional part of cube root of the 2nd prime (= 428a2f98d728ae22)</li>
+      <li><strong>Formula Q:</strong> Write the full formula for temp1 in SHA-512 Round 0.</li>
+      <li><strong>MCQ:</strong> What is the length of the SHA-512 output for any input? → 512 bits (128 hex chars)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>MD5 — Comparison &amp; Context</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 MD5 Background</h3>
+    <ul>
+      <li>Designed by <strong>Ronald Rivest</strong> — the "R" in RSA</li>
+      <li>Latest in the MD series: MD2 → MD4 → <strong>MD5</strong></li>
+      <li>Produces a <strong>128-bit hash value</strong></li>
+      <li>Until recently, was the <strong>most widely used hash algorithm</strong></li>
+      <li>Specified as Internet standard <strong>RFC 1321</strong></li>
+      <li>Now considered <strong>vulnerable</strong> — should NOT be used for security-sensitive applications</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>⚙ MD5 Process Overview</h3>
+    <ol style="padding-left:20px">
+      <li>Pad message so its length is <strong>448 mod 512</strong></li>
+      <li>Append a <strong>64-bit length value</strong> to the message</li>
+      <li>Initialise a <strong>4-word (128-bit) MD buffer (A, B, C, D)</strong></li>
+      <li>Process message in <strong>16-word (512-bit) blocks</strong>: using <strong>4 rounds of 16 bit operations</strong> on message block and buffer</li>
+      <li>Add output to buffer input to form new buffer value</li>
+      <li>Output: the final 128-bit buffer value</li>
+    </ol>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📊 MD5 vs SHA-512 — Quick Comparison</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>MD5</th><th>SHA-512</th></tr></thead>
+        <tbody>
+          <tr><td>Designer</td><td>Ronald Rivest</td><td>NIST</td></tr>
+          <tr><td>Output size</td><td class="diff">128 bits</td><td class="match">512 bits</td></tr>
+          <tr><td>Block size</td><td class="diff">512 bits</td><td class="match">1024 bits</td></tr>
+          <tr><td>Word size</td><td class="diff">32 bits</td><td class="match">64 bits</td></tr>
+          <tr><td>Buffer registers</td><td class="diff">4 (A, B, C, D)</td><td class="match">8 (a–h)</td></tr>
+          <tr><td>Number of rounds</td><td class="diff">4 rounds × 16 steps = 64 steps</td><td class="match">80 rounds</td></tr>
+          <tr><td>Round constant source</td><td>sin function values (T[i])</td><td>Cube roots of primes (K[t])</td></tr>
+          <tr><td>Standard</td><td>RFC 1321</td><td>FIPS 180-2</td></tr>
+          <tr><td>Security status</td><td class="diff">Vulnerable — collisions found</td><td class="match">Secure (as of now)</td></tr>
+          <tr><td>Length padding target</td><td>448 mod 512</td><td>896 mod 1024</td></tr>
+          <tr><td>Length field size</td><td>64 bits</td><td>128 bits</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠ MD5 Known Attacks &amp; Weaknesses</h3>
+    <ul>
+      <li><strong>Berson (1992):</strong> Attacked any single round using differential cryptanalysis — but couldn't extend the attack beyond one round</li>
+      <li><strong>Boer &amp; Bosselaers (1993):</strong> Found a "pseudo-collision" — similar to a collision but using different initial values — also not extendable to full MD5</li>
+      <li><strong>Dobbertin (1996):</strong> Created actual collisions in the MD5 compression function — however the standard initial constants prevented this from being exploited directly</li>
+      <li>Conclusion: MD5 looks <strong>vulnerable</strong> — real-world collision attacks on full MD5 have since been demonstrated; do not use for certificates or security-sensitive hashing</li>
+    </ul>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> Who designed MD5? What output size does it produce? → Ronald Rivest; 128 bits</li>
+      <li><strong>MCQ:</strong> What Internet standard specifies MD5? → RFC 1321</li>
+      <li><strong>Comparison:</strong> Compare MD5 and SHA-512 — output size, block size, number of rounds, security.</li>
+      <li><strong>Short:</strong> Name three known attacks on MD5 with their year and discoverers.</li>
+      <li><strong>MCQ:</strong> MD5 processes blocks of what size? → 512 bits (16 words × 32 bits)</li>
+      <li><strong>Short:</strong> Why is MD5 no longer recommended for security applications?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision — SHA-512 Key Facts</h2>
+  </div>
+  <div class="qr-grid">
+    <div class="qr-item"><strong>SHA developed by</strong>NIST<br>First published 1993</div>
+    <div class="qr-item"><strong>SHA based on</strong>MD4 design</div>
+    <div class="qr-item"><strong>SHA-0 weakness</strong>→ SHA-1 (FIPS 180-1, 1995)</div>
+    <div class="qr-item"><strong>SHA-2 introduced</strong>FIPS 180-2 in 2002</div>
+    <div class="qr-item"><strong>SHA-3 published</strong>2012 (Keccak)</div>
+    <div class="qr-item"><strong>SHA-512 input max</strong>&lt; 2¹²⁸ bits</div>
+    <div class="qr-item"><strong>SHA-512 output</strong>512 bits = 128 hex chars</div>
+    <div class="qr-item"><strong>SHA-512 block size</strong>1024 bits</div>
+    <div class="qr-item"><strong>SHA-512 word size</strong>64 bits</div>
+    <div class="qr-item"><strong>SHA-512 rounds</strong>80 rounds per block</div>
+    <div class="qr-item"><strong>SHA-512 buffer</strong>8 × 64-bit registers (a–h)</div>
+    <div class="qr-item"><strong>Padding format</strong>1 followed by 0s</div>
+    <div class="qr-item"><strong>Padding range</strong>1 to 1024 bits</div>
+    <div class="qr-item"><strong>Length field</strong>128-bit unsigned integer</div>
+    <div class="qr-item"><strong>Init values source</strong>√ of first 8 primes (fractional)</div>
+    <div class="qr-item"><strong>Init value of a</strong>6A09E667F3BCC908</div>
+    <div class="qr-item"><strong>K[t] source</strong>∛ of first 80 primes (fractional)</div>
+    <div class="qr-item"><strong>K[0] value</strong>428a2f98d728ae22</div>
+    <div class="qr-item"><strong>Ch function</strong>(e∧f) ⊕ (¬e∧g)</div>
+    <div class="qr-item"><strong>Maj function</strong>(a∧b) ⊕ (a∧c) ⊕ (b∧c)</div>
+    <div class="qr-item"><strong>temp1 formula</strong>h + S1 + Ch + K[t] + W[t]</div>
+    <div class="qr-item"><strong>temp2 formula</strong>S0 + Maj</div>
+    <div class="qr-item"><strong>After round: new a</strong>temp1 + temp2</div>
+    <div class="qr-item"><strong>After round: new e</strong>old d + temp1</div>
+    <div class="qr-item"><strong>S1 rotation amounts</strong>ROTR(e, 14, 18, 41)</div>
+    <div class="qr-item"><strong>S0 rotation amounts</strong>ROTR(a, 28, 34, 39)</div>
+    <div class="qr-item"><strong>"abc" padding</strong>24 bits → 871 zeros → 128-bit length → 1024 total</div>
+    <div class="qr-item"><strong>Feed-forward</strong>80th round output + H[i-1] = H[i]</div>
+    <div class="qr-item"><strong>MD5 output</strong>128 bits (RFC 1321)</div>
+    <div class="qr-item"><strong>MD5 designer</strong>Ronald Rivest (R in RSA)</div>
+    <div class="qr-item"><strong>MD5 status</strong>VULNERABLE — collisions found</div>
+    <div class="qr-item"><strong>Collision resistance</strong>Cannot find ANY x≠y with H(x)=H(y)</div>
+    <div class="qr-item"><strong>Avalanche effect</strong>1 bit change → completely different hash</div>
+  </div>
+</section>

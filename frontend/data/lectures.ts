@@ -1,104 +1,79 @@
-import type { Lecture } from "@/lib/types";
+import type { Video } from "@/lib/types";
 
 /**
- * Single source of truth for all lecture content.
+ * Single place to register lectures.
  *
- * To add a lecture: append an object below. Routes, the sidebar, search and
- * topic navigation all update automatically. No other file needs to change.
+ * To add a lecture:
+ *   1. Drop its study-notes `.html` file into `content/`.
+ *   2. Add an entry below (file name, url slug, title, description, videos).
  *
- * `content` is plain text for now — blank lines separate paragraphs and lines
- * beginning with "- " render as bullet list items.
+ * The HTML is parsed automatically in `lib/content.ts` — each `<section>`
+ * becomes a navigable topic. Nothing else needs to change.
  */
-export const lectures: Lecture[] = [
+export interface LectureSource {
+  id: string;
+  /** File name inside `content/`. */
+  file: string;
+  /** URL slug → /lectures/[slug] */
+  slug: string;
+  title: string;
+  description: string;
+  videos: Video[];
+}
+
+export const lectureSources: LectureSource[] = [
   {
     id: "1",
-    slug: "introduction-to-information-security",
-    title: "Introduction to Information Security",
+    file: "Lecture_16_Cryptography_PKI_StudyNotes.html",
+    slug: "public-key-infrastructure",
+    title: "Cryptography & Public Key Infrastructure",
     description:
-      "Foundational concepts: what we protect, why it matters, and the core principles every security program is built on.",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    topics: [
-      {
-        id: "1-1",
-        slug: "cia-triad",
-        title: "The CIA Triad",
-        content:
-          "The CIA triad is the cornerstone model of information security. It defines three goals that every control ultimately serves.\n\n- Confidentiality: ensuring information is accessible only to those authorized to see it.\n- Integrity: safeguarding the accuracy and completeness of data and processing methods.\n- Availability: ensuring authorized users have reliable access to information when needed.\n\nMost real-world incidents can be framed as a failure of one or more of these properties.",
-      },
-      {
-        id: "1-2",
-        slug: "threats-vs-vulnerabilities",
-        title: "Threats vs. Vulnerabilities",
-        content:
-          "A vulnerability is a weakness that could be exploited. A threat is a potential cause of an unwanted incident. Risk is the intersection of the two together with impact.\n\nRisk = Threat x Vulnerability x Impact.\n\nUnderstanding this relationship lets you prioritize: a severe vulnerability with no credible threat may matter less than a minor one under active attack.",
-      },
-      {
-        id: "1-3",
-        slug: "defense-in-depth",
-        title: "Defense in Depth",
-        content:
-          "Defense in depth layers multiple independent controls so that the failure of any single control does not lead to compromise.\n\nTypical layers include the perimeter, the network, the host, the application, and the data itself. Each layer buys time and increases the cost of a successful attack.",
-      },
-    ],
+      "Asymmetric cryptography, digital certificates, the chain of trust, TLS certificate types, digital signatures, code signing, time stamping, and S/MIME.",
+    videos: [{ url: "https://youtu.be/0ctat6RBrFo" }],
   },
   {
     id: "2",
-    slug: "cryptography-basics",
-    title: "Cryptography Basics",
+    file: "RSA_Algorithm_StudyNotes.html",
+    slug: "rsa-algorithm",
+    title: "The RSA Algorithm",
     description:
-      "How symmetric and asymmetric cryptography keep data confidential and verifiable, and where each is used in practice.",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    topics: [
-      {
-        id: "2-1",
-        slug: "symmetric-encryption",
-        title: "Symmetric Encryption",
-        content:
-          "Symmetric encryption uses a single shared secret key for both encryption and decryption. It is fast and well-suited to bulk data.\n\nAES is the modern standard. The central challenge is key distribution: both parties must somehow share the key securely before communicating.",
-      },
-      {
-        id: "2-2",
-        slug: "asymmetric-encryption",
-        title: "Asymmetric Encryption",
-        content:
-          "Asymmetric (public-key) cryptography uses a mathematically linked key pair: a public key that can be shared freely and a private key kept secret.\n\nData encrypted with the public key can only be decrypted with the private key. This elegantly solves key distribution but is far slower than symmetric encryption, so the two are usually combined.",
-      },
-      {
-        id: "2-3",
-        slug: "hashing",
-        title: "Hashing & Integrity",
-        content:
-          "A cryptographic hash function maps arbitrary input to a fixed-size digest. Good hashes are one-way and collision-resistant.\n\nHashes verify integrity (did the data change?) and are used to store passwords safely when combined with a salt. SHA-256 is a common choice; MD5 and SHA-1 are considered broken for security use.",
-      },
+      "Public-key encryption end to end: key generation, encryption and decryption, a full worked example, the Extended Euclidean Algorithm, security, and timing attacks.",
+    videos: [
+      { url: "https://youtu.be/hm8s6FAc4pg", title: "RSA — Part 1" },
+      { url: "https://youtu.be/4zahvcJ9glg", title: "RSA — Part 2" },
+      { url: "https://youtu.be/oOcTVTpUsPQ", title: "RSA — Part 3" },
     ],
   },
   {
     id: "3",
-    slug: "network-security",
-    title: "Network Security",
+    file: "DiffieHellman_StudyNotes.html",
+    slug: "diffie-hellman",
+    title: "Diffie-Hellman Key Exchange",
     description:
-      "Securing data in transit: the controls, protocols, and architectures that protect communication across untrusted networks.",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    topics: [
+      "Sharing a secret over an open channel: the key-exchange algorithm, the discrete logarithm problem, worked examples, the man-in-the-middle attack, and real-world uses.",
+    videos: [
       {
-        id: "3-1",
-        slug: "firewalls",
-        title: "Firewalls",
-        content:
-          "A firewall enforces a policy about which traffic may pass between network zones. Packet filters inspect headers; stateful firewalls track connections; next-gen firewalls add application awareness.\n\nThe guiding principle is default-deny: permit only what is explicitly required.",
-      },
-      {
-        id: "3-2",
-        slug: "tls",
-        title: "TLS & HTTPS",
-        content:
-          "TLS provides confidentiality, integrity, and authentication for data in transit. The handshake uses asymmetric cryptography to agree on a symmetric session key, then switches to symmetric encryption for speed.\n\nCertificates, issued by trusted authorities, bind a public key to an identity and let clients verify they are talking to the right server.",
+        title: "Diffie-Hellman Key Exchange: How to Share a Secret",
+        url: "https://youtu.be/85oMrKd8afY?si=dKbcIWZ62ZtVezuc",
       },
     ],
   },
+  {
+    id: "4",
+    file: "SHA512_Hashing_StudyNotes.html",
+    slug: "sha-512",
+    title: "Hashing & SHA-512",
+    description:
+      "Why hashing exists, hash-function requirements, the SHA family, and SHA-512 step by step — padding, the message schedule, the 80-round compression, and a worked example.",
+    videos: [{ url: "https://youtu.be/b6HebMn05Kk" }],
+  },
+  {
+    id: "5",
+    file: "AES_StudyNotes_Sections.html",
+    slug: "aes",
+    title: "Advanced Encryption Standard (AES)",
+    description:
+      "The Advanced Encryption Standard, its structure, and a step-by-step walkthrough of the encryption process.",
+    videos: [{ url: "https://youtu.be/I68uBhHdnM4?si=woDjrlmOIni0_nQ7" }],
+  },
 ];
-
-/** Lookup helper used by the dynamic lecture route. */
-export function getLectureBySlug(slug: string): Lecture | undefined {
-  return lectures.find((lecture) => lecture.slug === slug);
-}

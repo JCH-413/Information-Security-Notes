@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { lectures } from "@/data/lectures";
+import { lectures } from "@/lib/content";
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
         <p className="mt-4 text-[15px] leading-7 text-muted">
           A clean, searchable reference for the course. Pick a lecture from the
           sidebar, or start with one below. Each lecture is broken into topics
-          with notes and an accompanying video.
+          with detailed notes and an accompanying video.
         </p>
       </header>
 

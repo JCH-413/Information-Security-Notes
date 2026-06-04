@@ -1,0 +1,727 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Background &amp; History</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Is Diffie-Hellman?</h3>
+    <p>The <strong>Diffie-Hellman (DH) Key Exchange</strong> is the <em>first published public-key algorithm</em>. It allows two parties who have <strong>never met before</strong> and share <strong>no prior secret</strong> to establish a shared secret key over a completely <strong>public, insecure channel</strong> — even while being eavesdropped upon.</p>
+    <p style="margin-top:8px">Once the shared key is established, it can be used to encrypt all subsequent communication using a symmetric cipher (like AES).</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">📅 Key Historical Facts</h3>
+      <ul>
+        <li>Published by <strong>Whitfield Diffie</strong> and <strong>Martin Hellman</strong> in <strong>1976</strong></li>
+        <li>Considered the <strong>foundation of public-key cryptography</strong></li>
+        <li>First publicly known work to propose the concept of a private key and corresponding public key</li>
+        <li>In 2006, Hellman suggested it be renamed <strong>Diffie-Hellman-Merkle</strong> to credit Ralph Merkle's contribution to the concept</li>
+        <li>In 1997, it was revealed that <strong>GCHQ</strong> (British intelligence) had independently discovered the same concept in 1969 — but kept it classified</li>
+        <li>The expired US patent 4200770 (1977) credits Hellman, Diffie, and Merkle as inventors</li>
+        <li>Widely used in commercial products for key exchange</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">🎯 Purpose &amp; Limitation</h3>
+      <ul>
+        <li><strong>Purpose:</strong> Enable two users to securely exchange a shared secret key that can then be used for symmetric encryption of messages</li>
+        <li><strong>Limitation:</strong> The algorithm itself is <em>limited to key exchange only</em> — it does NOT encrypt messages directly</li>
+        <li>DH is a <strong>key-agreement protocol</strong>, not an encryption algorithm</li>
+        <li>It is <strong>non-authenticated</strong> by itself — neither party proves who they are (vulnerability: MITM attack)</li>
+        <li>The security depends on the <strong>difficulty of computing discrete logarithms</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> Who invented Diffie-Hellman and when? → Whitfield Diffie and Martin Hellman, 1976</li>
+      <li><strong>Short:</strong> What is the purpose of the Diffie-Hellman algorithm?</li>
+      <li><strong>MCQ:</strong> What is the limitation of DH? → It is only for key exchange, not message encryption</li>
+      <li><strong>MCQ:</strong> What mathematical problem does DH security depend on? → Discrete logarithm problem</li>
+      <li><strong>Short:</strong> Why is DH called "non-authenticated"?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>The Problem Diffie-Hellman Solves</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Key Distribution Problem</h3>
+    <p>Before Diffie-Hellman, all encryption was <strong>symmetric</strong> — both parties needed the <em>same key</em> to encrypt and decrypt. This created a fundamental chicken-and-egg problem:</p>
+    <ul style="padding-left:20px; margin-top:8px">
+      <li>To communicate securely, you need to share a key</li>
+      <li>To share a key securely, you need to already be communicating securely</li>
+    </ul>
+    <p style="margin-top:10px">The traditional solution was physical key exchange — courier delivering paper key lists. This was <strong>impractical at internet scale</strong>. DH solved this by making it possible to establish a shared secret over a public channel without ever transmitting the key itself.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card red-left">
+      <h3 class="red">❌ Before DH — The Old Way</h3>
+      <ol style="padding-left:18px">
+        <li>Alice and Bob need to communicate</li>
+        <li>They need a shared symmetric key to encrypt</li>
+        <li>They must physically meet or use a trusted courier to exchange the key</li>
+        <li>If the courier is intercepted — everything is compromised</li>
+        <li>Completely impractical for global internet-scale communication</li>
+      </ol>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">✅ After DH — The New Way</h3>
+      <ol style="padding-left:18px">
+        <li>Alice and Bob agree on public parameters over an insecure channel (anyone can see this)</li>
+        <li>Each generates their own private secret number</li>
+        <li>They exchange <em>public values</em> derived from their secrets (not the secrets themselves)</li>
+        <li>Each independently computes the <em>same shared secret</em> using the other's public value</li>
+        <li>Eve saw all exchanges but <strong>cannot compute the shared secret</strong></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Long:</strong> Explain the key distribution problem in symmetric cryptography. How does Diffie-Hellman solve it?</li>
+      <li><strong>Short:</strong> Why was key exchange a problem before Diffie-Hellman?</li>
+      <li><strong>MCQ:</strong> What type of encryption was used before DH? → Symmetric encryption (same key for both parties)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>The Paint Colour Analogy (from the Video)</h2>
+  </div>
+
+  <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px">The YouTube video uses a brilliant colour-mixing analogy to explain DH intuitively. This is the best way to remember the concept before tackling the math.</p>
+
+  <div class="analogy-box">
+    <div class="a-title">🎨 Paint Mixing Analogy — Step by Step</div>
+    <ol style="padding-left:22px; line-height:2.2">
+      <li><strong>Public Colour Agreement:</strong> Alice and Bob both publicly agree on a common starting colour — say <strong>Yellow</strong>. Everyone (including Eve) knows this colour.</li>
+      <li><strong>Private Secrets:</strong> Alice picks her own secret colour — <strong>Red</strong>. Bob picks his own secret colour — <strong>Cyan</strong>. Neither tells anyone their secret colour.</li>
+      <li><strong>Mix with Public Colour:</strong> Alice mixes Yellow + Red → gets <strong>Orange-tan</strong>. Bob mixes Yellow + Cyan → gets <strong>Light-blue</strong>. These mixed colours are their "public keys."</li>
+      <li><strong>Exchange Mixed Colours:</strong> Alice sends Orange-tan to Bob. Bob sends Light-blue to Alice. Eve can see both mixed colours — but cannot easily separate them back into components.</li>
+      <li><strong>Final Mixing:</strong> Alice mixes Light-blue + her secret Red → gets <strong>Yellow-brown</strong>. Bob mixes Orange-tan + his secret Cyan → gets <strong>Yellow-brown</strong>. Both arrive at the <em>identical final colour</em>.</li>
+      <li><strong>Eve is Stuck:</strong> Eve saw Yellow (public), Orange-tan (Alice's mix), Light-blue (Bob's mix) — but cannot determine the final Yellow-brown without knowing the private colours. Separating mixed paint is computationally equivalent to solving the discrete log problem.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>🔁 Analogy → Math Mapping</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Paint Concept</th><th>Mathematical Equivalent</th></tr></thead>
+        <tbody>
+          <tr><td>Common Yellow paint</td><td>Public prime <strong>p</strong> and primitive root <strong>g</strong> (known to everyone)</td></tr>
+          <tr><td>Alice's secret Red paint</td><td>Alice's private key <strong>a</strong> (known only to Alice)</td></tr>
+          <tr><td>Bob's secret Cyan paint</td><td>Bob's private key <strong>b</strong> (known only to Bob)</td></tr>
+          <tr><td>Alice's Orange-tan mixture</td><td>Alice's public key <strong>A = gᵃ mod p</strong></td></tr>
+          <tr><td>Bob's Light-blue mixture</td><td>Bob's public key <strong>B = gᵇ mod p</strong></td></tr>
+          <tr><td>Final Yellow-brown secret</td><td>Shared secret <strong>s = gᵃᵇ mod p</strong></td></tr>
+          <tr><td>Mixing paint is easy, separating is hard</td><td>Computing gᵃ mod p is easy; finding <em>a</em> from gᵃ mod p is the Discrete Logarithm Problem</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>The DH Algorithm — Step by Step</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Public Parameters Required</h3>
+    <p>Two values must be agreed upon publicly (everyone including attackers can see these):</p>
+    <ul style="padding-left:20px; margin-top:6px">
+      <li><strong>q (or p):</strong> A large prime number</li>
+      <li><strong>α (or g):</strong> A primitive root of q — an integer such that α, α², α³, ..., α^(q-1) are all distinct values mod q</li>
+    </ul>
+    <p class="note">A primitive root ensures the group has maximum size — the shared secret can take any value from 1 to q-1, providing maximum security.</p>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="1">Step 1 — Public Agreement</div>
+    <h4>Both parties agree on public parameters</h4>
+    <p>Choose a large prime <strong>q</strong> and a primitive root <strong>α</strong> of q. These are published/shared openly. Anyone can see them — that is intentional.</p>
+    <div class="math-block">
+      <span class="val-public">q = large prime number</span> &nbsp;&nbsp;<span class="comment">(public)</span><br>
+      <span class="val-public">α = primitive root of q</span> &nbsp;&nbsp;<span class="comment">(public)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="2">Step 2 — Private Keys (Each Party Independently)</div>
+    <h4>Each party generates their own private key</h4>
+    <ul>
+      <li>User A selects a random integer <strong>X_A</strong> such that X_A &lt; q. This is A's <em>private key</em>.</li>
+      <li>User B independently selects a random integer <strong>X_B</strong> such that X_B &lt; q. This is B's <em>private key</em>.</li>
+      <li>Both keep their X values completely secret — never shared with anyone.</li>
+    </ul>
+    <div class="math-block">
+      <span class="val-secret">X_A = Alice's private key</span> &nbsp;&nbsp;<span class="comment">(secret, never transmitted)</span><br>
+      <span class="val-secret">X_B = Bob's private key</span> &nbsp;&nbsp;<span class="comment">(secret, never transmitted)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="3">Step 3 — Public Keys (Compute and Exchange)</div>
+    <h4>Each party computes their public key from their private key</h4>
+    <ul>
+      <li>A computes: <strong>Y_A = α^(X_A) mod q</strong> — this is A's public key</li>
+      <li>B computes: <strong>Y_B = α^(X_B) mod q</strong> — this is B's public key</li>
+      <li>They exchange Y_A and Y_B over the public channel. Eve can see these values.</li>
+    </ul>
+    <div class="math-block">
+      <span class="val-public">Y_A = α^(X_A) mod q</span> &nbsp;&nbsp;<span class="comment">(Alice's public key — sent to Bob)</span><br>
+      <span class="val-public">Y_B = α^(X_B) mod q</span> &nbsp;&nbsp;<span class="comment">(Bob's public key — sent to Alice)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="4">Step 4 — Compute Shared Secret (Each Party Independently)</div>
+    <h4>Both parties independently arrive at the same shared secret</h4>
+    <ul>
+      <li>A computes: <strong>K = (Y_B)^(X_A) mod q</strong></li>
+      <li>B computes: <strong>K = (Y_A)^(X_B) mod q</strong></li>
+      <li>Both computations produce <strong>the same result K</strong> — the shared secret key</li>
+    </ul>
+    <div class="math-block">
+      Alice: K = <span class="val-public">(Y_B)</span>^<span class="val-secret">X_A</span> mod q<br>
+      Bob:   K = <span class="val-public">(Y_A)</span>^<span class="val-secret">X_B</span> mod q<br>
+      <span class="comment">─────────────────────────────────</span><br>
+      Both equal: K = <span class="val-shared">α^(X_A × X_B) mod q</span> &nbsp;&nbsp;<span class="comment">← shared secret</span>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🧮 Why Do They Get the Same Value?</h3>
+    <p>The mathematical proof is elegant:</p>
+    <div class="math-block">
+      Alice computes: (Y_B)^X_A mod q<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= (α^X_B mod q)^X_A mod q<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= α^(X_B × X_A) mod q<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= <span class="val-shared">α^(X_A × X_B) mod q</span><br><br>
+      Bob computes:   (Y_A)^X_B mod q<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= (α^X_A mod q)^X_B mod q<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= α^(X_A × X_B) mod q<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= <span class="val-shared">α^(X_A × X_B) mod q</span><br><br>
+      <span class="comment">Multiplication is commutative: X_A × X_B = X_B × X_A</span><br>
+      <span class="comment">∴ Both parties compute the identical shared secret ✓</span>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Long:</strong> Describe all four steps of the Diffie-Hellman key exchange algorithm with formulas.</li>
+      <li><strong>Short:</strong> What is a primitive root? Why must α be a primitive root of q?</li>
+      <li><strong>Prove:</strong> Why do Alice and Bob arrive at the same shared secret key? Show mathematically.</li>
+      <li><strong>MCQ:</strong> In DH, what values are public? → q, α, Y_A, Y_B</li>
+      <li><strong>MCQ:</strong> In DH, what values are private/secret? → X_A, X_B (private keys)</li>
+      <li><strong>Formula:</strong> Write the formula for Alice's public key. → Y_A = α^(X_A) mod q</li>
+      <li><strong>Formula:</strong> Write the formula for the shared secret computed by Alice. → K = (Y_B)^(X_A) mod q</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Mathematical Deep Dive — Primitive Roots &amp; Modular Arithmetic</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Is a Primitive Root?</h3>
+    <p>For a prime number <strong>q</strong>, if <strong>α</strong> is a primitive root of q, then the powers of α produce every integer from 1 to q-1 exactly once (modulo q):</p>
+    <div class="math-block">
+      α¹ mod q, α² mod q, α³ mod q, ..., α^(q-1) mod q<br>
+      produce all distinct values {1, 2, 3, ..., q-1}<br><br>
+      <span class="comment">Example: For q=19, the primitive roots are: 2, 3, 10, 13, 14, 15</span>
+    </div>
+    <p class="note">This property is critical — it ensures the shared secret K can take any value from 1 to q-1, giving maximum entropy (unpredictability) in the generated key.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">📐 Modular Exponentiation</h3>
+      <p>Computing <code>g^a mod p</code> is called <strong>modular exponentiation</strong>. It is:</p>
+      <ul>
+        <li><strong>Easy to compute</strong> in one direction — even for very large numbers, efficient algorithms (square-and-multiply) can compute it quickly</li>
+        <li><strong>Hard to reverse</strong> — given only the result and g and p, finding <em>a</em> is the Discrete Logarithm Problem</li>
+      </ul>
+      <p class="note">This asymmetry — easy forward, hard backward — is the one-way function that makes DH secure.</p>
+    </div>
+    <div class="card purple-left">
+      <h3 class="purple">🔑 The Discrete Logarithm Problem</h3>
+      <p>Given: <code>y = g^x mod p</code></p>
+      <p>Find: <code>x</code></p>
+      <p style="margin-top:8px">This is the <strong>Discrete Logarithm Problem (DLP)</strong>. For large primes (2048+ bits), no known efficient classical algorithm can solve this in a practical amount of time — not even with modern supercomputers.</p>
+      <p class="note">Eve sees g, p, Y_A, Y_B — but to find X_A or X_B, she must solve the DLP. Computationally infeasible for large p.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔄 One-Way Function Concept</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Direction</th><th>Operation</th><th>Difficulty</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Forward (Easy)</strong></td><td>Compute gˣ mod p</td><td>Computationally easy — polynomial time</td><td>5⁶ mod 23 = 8 (simple)</td></tr>
+          <tr><td><strong>Backward (Hard)</strong></td><td>Find x given gˣ mod p</td><td>Computationally infeasible for large p</td><td>Find x where 5ˣ mod 23 = 8 → x = 6 (trivial for small p, infeasible for 2048-bit p)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">For practical security: prime p should be at least <strong>2048 bits</strong> in length. Research in 2015 showed many deployed DH implementations using only 1024-bit primes were insufficient against well-funded attackers.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Worked Example 1 — Small Values (p=23, g=5)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Setup</h3>
+    <p>This is the classic textbook example. Values are small for illustration only — in practice, p would be 2048+ bits.</p>
+    <div class="math-block">
+      <span class="val-public">Public: p = 23, g = 5</span><br>
+      <span class="comment">(g=5 is a primitive root modulo 23)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="1">Alice's Private Key &amp; Public Key</div>
+    <div class="math-block">
+      <span class="val-secret">Alice's private key: a = 6</span><br>
+      Alice's public key: A = g^a mod p<br>
+      A = 5^6 mod 23 = <span class="val-public">8</span><br>
+      <span class="comment">Alice sends A=8 to Bob (publicly)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="2">Bob's Private Key &amp; Public Key</div>
+    <div class="math-block">
+      <span class="val-secret">Bob's private key: b = 15</span><br>
+      Bob's public key: B = g^b mod p<br>
+      B = 5^15 mod 23 = <span class="val-public">19</span><br>
+      <span class="comment">Bob sends B=19 to Alice (publicly)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="3">Compute Shared Secret</div>
+    <div class="math-block">
+      Alice: s = B^a mod p = 19^6 mod 23 = <span class="val-shared">2</span><br>
+      Bob:   s = A^b mod p = 8^15 mod 23 = <span class="val-shared">2</span><br><br>
+      <span class="comment">✓ Both arrive at shared secret s = 2</span>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📊 Full Summary — Example 1</h3>
+    <div class="know-table">
+      <div class="know-col alice">
+        <div class="who">Alice</div>
+        <ul>
+          <li class="pub">p = 23</li>
+          <li class="pub">g = 5</li>
+          <li class="priv">a = 6 (secret)</li>
+          <li class="pub">A = 5⁶ mod 23 = 8</li>
+          <li class="pub">B = 19 (received)</li>
+          <li class="shared">s = 19⁶ mod 23 = 2 ✓</li>
+        </ul>
+      </div>
+      <div class="know-col bob">
+        <div class="who">Bob</div>
+        <ul>
+          <li class="pub">p = 23</li>
+          <li class="pub">g = 5</li>
+          <li class="priv">b = 15 (secret)</li>
+          <li class="pub">B = 5¹⁵ mod 23 = 19</li>
+          <li class="pub">A = 8 (received)</li>
+          <li class="shared">s = 8¹⁵ mod 23 = 2 ✓</li>
+        </ul>
+      </div>
+      <div class="know-col eve">
+        <div class="who">Eve (Attacker)</div>
+        <ul>
+          <li class="pub">p = 23</li>
+          <li class="pub">g = 5</li>
+          <li class="pub">A = 8 (intercepted)</li>
+          <li class="pub">B = 19 (intercepted)</li>
+          <li class="priv">a = ? (unknown)</li>
+          <li class="priv">s = ? (cannot compute)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Blue = public (Eve sees these). Red = secret. Green = shared secret (only Alice and Bob know).</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Worked Example 2 — Lecture Example (q=353)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Setup (from Dr. Ammar Rafiq's Slides)</h3>
+    <div class="math-block">
+      <span class="val-public">Public: q = 353, α = 3</span><br>
+      <span class="comment">(α=3 is a primitive root of 353)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="1">Private Keys (Chosen)</div>
+    <div class="math-block">
+      <span class="val-secret">A's private key: X_A = 97</span><br>
+      <span class="val-secret">B's private key: X_B = 233</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="2">Compute Public Keys</div>
+    <div class="math-block">
+      Y_A = α^(X_A) mod q = 3^97 mod 353 = <span class="val-public">40</span><br>
+      Y_B = α^(X_B) mod q = 3^233 mod 353 = <span class="val-public">248</span><br><br>
+      <span class="comment">A sends Y_A=40 to B. B sends Y_B=248 to A. (Both public)</span>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="3">Compute Shared Secret</div>
+    <div class="math-block">
+      A computes: K = (Y_B)^X_A mod q = 248^97 mod 353 = <span class="val-shared">160</span><br>
+      B computes: K = (Y_A)^X_B mod q = 40^233 mod 353 = <span class="val-shared">160</span><br><br>
+      <span class="comment">✓ Shared secret K = 160</span>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔍 What the Attacker Sees</h3>
+    <div class="math-block">
+      q = 353 &nbsp;&nbsp;<span class="comment">(public)</span><br>
+      α = 3 &nbsp;&nbsp;&nbsp;<span class="comment">(public)</span><br>
+      Y_A = 40 &nbsp;<span class="comment">(public — intercepted)</span><br>
+      Y_B = 248 <span class="comment">(public — intercepted)</span><br><br>
+      <span class="comment">To find K=160, the attacker must find X_A or X_B</span><br>
+      <span class="comment">i.e., solve: 3^X_A mod 353 = 40</span><br>
+      <span class="comment">This is the Discrete Logarithm Problem — infeasible for large q</span>
+    </div>
+    <p class="note">In this small example (q=353), brute force IS possible — that is why in practice q must be at least 2048 bits (600+ decimal digits) to be secure.</p>
+  </div>
+
+  <div class="card">
+    <h3>📊 Complete Summary — Example 2</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Public/Private</th></tr></thead>
+        <tbody>
+          <tr><td>Prime q</td><td>353</td><td>Public</td></tr>
+          <tr><td>Primitive root α</td><td>3</td><td>Public</td></tr>
+          <tr><td>A's private key X_A</td><td>97</td><td><strong>Private (A only)</strong></td></tr>
+          <tr><td>B's private key X_B</td><td>233</td><td><strong>Private (B only)</strong></td></tr>
+          <tr><td>A's public key Y_A</td><td>40</td><td>Public</td></tr>
+          <tr><td>B's public key Y_B</td><td>248</td><td>Public</td></tr>
+          <tr><td>Shared secret K (computed by A)</td><td>160</td><td><strong>Secret (A &amp; B only)</strong></td></tr>
+          <tr><td>Shared secret K (computed by B)</td><td>160</td><td><strong>Secret (A &amp; B only)</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Numerical Exam Questions</div>
+    <ul>
+      <li><strong>Must Know:</strong> Given q=353, α=3, X_A=97, X_B=233: compute Y_A, Y_B, and the shared key K.</li>
+      <li><strong>Must Know:</strong> Given p=23, g=5, a=6, b=15: compute A, B, and shared secret s.</li>
+      <li><strong>Short:</strong> In Example 2, what information would an attacker have? Can they determine K easily? Why or why not?</li>
+      <li><strong>MCQ:</strong> In both examples, what value do both Alice and Bob arrive at independently? → The same shared secret K</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Who Knows What — Alice, Bob, and Eve</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Complete Information Picture</h3>
+    <p>This is the clearest way to understand what the algorithm hides and what it reveals. During DH exchange:</p>
+  </div>
+
+  <div class="know-table">
+    <div class="know-col alice">
+      <div class="who">Alice Knows</div>
+      <ul>
+        <li class="pub">p (public prime)</li>
+        <li class="pub">g (primitive root)</li>
+        <li class="priv">a (her own private key)</li>
+        <li class="pub">A = gᵃ mod p (her public key)</li>
+        <li class="pub">B (Bob's public key — received)</li>
+        <li class="shared">s = Bᵃ mod p (shared secret)</li>
+        <li style="color:var(--text-muted)">Does NOT know: b</li>
+      </ul>
+    </div>
+    <div class="know-col bob">
+      <div class="who">Bob Knows</div>
+      <ul>
+        <li class="pub">p (public prime)</li>
+        <li class="pub">g (primitive root)</li>
+        <li class="priv">b (his own private key)</li>
+        <li class="pub">B = gᵇ mod p (his public key)</li>
+        <li class="pub">A (Alice's public key — received)</li>
+        <li class="shared">s = Aᵇ mod p (shared secret)</li>
+        <li style="color:var(--text-muted)">Does NOT know: a</li>
+      </ul>
+    </div>
+    <div class="know-col eve">
+      <div class="who">Eve (Eavesdropper)</div>
+      <ul>
+        <li class="pub">p (intercepted)</li>
+        <li class="pub">g (intercepted)</li>
+        <li class="pub">A (intercepted)</li>
+        <li class="pub">B (intercepted)</li>
+        <li class="priv">Does NOT know: a</li>
+        <li class="priv">Does NOT know: b</li>
+        <li class="priv">Cannot compute: s</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">Eve sees FOUR values (p, g, A, B) but to compute the shared secret she must solve: find a such that g^a mod p = A. This is the Discrete Logarithm Problem — computationally infeasible for large p.</div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Table Q:</strong> In DH key exchange, list all values that are public and all values that are private.</li>
+      <li><strong>Short:</strong> Why can Eve not compute the shared secret even though she sees A and B?</li>
+      <li><strong>MCQ:</strong> Which values does an eavesdropper have access to in DH? → p, g, Y_A, Y_B (all four public values)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Security — The Discrete Logarithm Problem</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Why DH Is Secure</h3>
+    <p>DH security rests on the <strong>Discrete Logarithm Problem (DLP)</strong>:</p>
+    <ul style="padding-left:20px; margin-top:6px">
+      <li>Computing <strong>gˣ mod p</strong> given g, x, p → <strong>computationally EASY</strong> (efficient algorithms exist)</li>
+      <li>Finding <strong>x</strong> given gˣ mod p, g, p → <strong>computationally HARD</strong> (no efficient algorithm for large p)</li>
+    </ul>
+    <p style="margin-top:8px">For large primes (600+ decimal digits / 2048+ bits), even the fastest modern computers running the fastest known algorithms cannot solve the DLP in a practical time frame.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">✅ Security Best Practices</h3>
+      <ul>
+        <li>Use prime <strong>p of at least 2048 bits</strong> (recommended by NIST)</li>
+        <li>Ensure p and q are of appropriate size and satisfy number-theoretic constraints</li>
+        <li>Use <strong>ephemeral keys</strong> (generate fresh key pairs for each session) → provides <em>Forward Secrecy</em></li>
+        <li>Combine with authentication (certificates) to prevent MITM attacks</li>
+        <li>Use standardized parameter groups (RFC 7919 — Finite Field DH)</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">⚠ Known Weaknesses</h3>
+      <ul>
+        <li><strong>Small primes:</strong> If p is too small (like q=353 in the lecture example), brute force is possible</li>
+        <li><strong>Logjam attack (2015):</strong> Research showed many deployed DH applications used 1024-bit primes — insufficient against nation-state attackers</li>
+        <li><strong>No authentication:</strong> DH itself does not verify identities — vulnerable to MITM (see Section 10)</li>
+        <li><strong>Quantum computers:</strong> Shor's algorithm could solve the DLP efficiently — post-quantum cryptography is being developed to address this</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚡ Forward Secrecy — Extra Concept from the Video</h3>
+    <p><strong>Forward secrecy</strong> (also called Perfect Forward Secrecy, PFS) means that even if an attacker records all encrypted traffic today and later compromises the long-term private key, they still cannot decrypt past sessions.</p>
+    <p style="margin-top:8px">DH achieves this by using <strong>ephemeral (temporary) keys</strong> — fresh DH key pairs are generated for every session and discarded afterwards. Since the session keys are never stored, there is nothing to compromise later.</p>
+    <p class="note">This is why TLS 1.3 mandates ephemeral DH (DHE or ECDHE) — older TLS versions using static RSA keys did NOT have forward secrecy.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> What is the Discrete Logarithm Problem? Why is it hard?</li>
+      <li><strong>Short:</strong> What is the minimum recommended prime size for DH? → 2048 bits</li>
+      <li><strong>Short:</strong> Why was q=353 in the lecture example said to be insecure against brute force?</li>
+      <li><strong>Short:</strong> What is Forward Secrecy? How does DH achieve it?</li>
+      <li><strong>MCQ:</strong> What attack was demonstrated in 2015 against DH with 1024-bit primes? → Logjam attack</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Man-in-the-Middle (MITM) Attack on DH</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Core Vulnerability</h3>
+    <p>DH is a <strong>non-authenticated</strong> protocol. This means Alice and Bob can establish a shared secret, but neither can <em>prove to the other</em> who they really are. This opens the door to a <strong>Man-in-the-Middle (MITM) attack</strong> where an active attacker (Mallory) intercepts and replaces the key exchange.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔴 How the MITM Attack Works</h3>
+    <ol style="padding-left:20px">
+      <li>Alice wants to exchange keys with Bob. She sends her public key <strong>Y_A</strong>.</li>
+      <li>Mallory <strong>intercepts</strong> Y_A before it reaches Bob. Mallory creates her own key pair and sends <strong>Y_M</strong> (her own public key) to Bob <em>pretending to be Alice</em>.</li>
+      <li>Bob sends his public key <strong>Y_B</strong> to Alice. Mallory intercepts Y_B and sends <strong>Y_M</strong> (a different version) to Alice, <em>pretending to be Bob</em>.</li>
+      <li>Alice computes a shared key <strong>K1</strong> with Mallory (thinking it's Bob).</li>
+      <li>Bob computes a shared key <strong>K2</strong> with Mallory (thinking it's Alice).</li>
+      <li>Mallory can now decrypt, read, and re-encrypt ALL messages between Alice and Bob. Neither Alice nor Bob knows the interception is happening.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>🔄 MITM Attack Diagram</h3>
+    <div class="flow" style="flex-wrap:wrap; gap:8px; justify-content:center">
+      <div class="flow-step" style="background:#1a3050; border-color:#2a5080; text-align:center">Alice<br><small style="color:var(--text-muted)">sends Y_A</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#2a1512; border-color:#4a2020; text-align:center">Mallory<br><small style="color:var(--accent3)">intercepts!</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#1a2e1a; border-color:#2a5a2a; text-align:center">Bob<br><small style="color:var(--text-muted)">receives Y_M</small></div>
+    </div>
+    <p style="color:var(--text-muted); font-size:13px; margin-top:12px; text-align:center">Mallory creates TWO separate DH sessions — one with Alice and one with Bob. Both think they're talking to each other.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛡 Defences Against MITM</h3>
+    <ul>
+      <li><strong>Digital Certificates (PKI):</strong> Alice and Bob present certificates signed by a trusted CA. The certificate binds their public key to their verified identity — Mallory cannot forge this without the CA's private key.</li>
+      <li><strong>Authenticated DH (Station-to-Station protocol):</strong> Both parties sign the DH exchange with their long-term private keys, proving identity.</li>
+      <li><strong>Pre-shared Key (PSK):</strong> If parties have a pre-shared secret, they can authenticate the DH exchange.</li>
+      <li><strong>Certificate Pinning:</strong> Applications hardcode the expected certificate, preventing substitution.</li>
+    </ul>
+    <p class="note">This is why TLS uses DH <em>together with</em> digital certificates — DH handles key exchange, certificates handle authentication.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Long:</strong> Explain the Man-in-the-Middle attack on Diffie-Hellman. Include all steps.</li>
+      <li><strong>Short:</strong> Why is DH vulnerable to MITM attacks? → Because DH provides no authentication</li>
+      <li><strong>Short:</strong> How can MITM attacks on DH be prevented? → Using digital certificates / PKI</li>
+      <li><strong>MCQ:</strong> What type of attack exploits DH's lack of authentication? → Man-in-the-Middle (MITM)</li>
+      <li><strong>Short:</strong> In a MITM attack on DH, how many separate shared secrets does the attacker (Mallory) establish? → Two (one with Alice, one with Bob)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Real-World Applications</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Where DH Is Used Today</h3>
+    <p>Diffie-Hellman is one of the most widely deployed cryptographic protocols on the internet. It underpins the security of most secure communications you use daily.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Protocol / System</th><th>How DH Is Used</th><th>DH Variant</th></tr></thead>
+      <tbody>
+        <tr><td><strong>TLS/HTTPS</strong></td><td>Establishes session keys for every HTTPS connection you make (browser to website)</td><td>DHE or ECDHE (ephemeral)</td></tr>
+        <tr><td><strong>SSH</strong></td><td>Key exchange at start of SSH sessions to servers</td><td>DH Group Exchange</td></tr>
+        <tr><td><strong>IPsec / VPNs</strong></td><td>Establishes tunnel keys for VPN connections</td><td>DH Group 2, 14, 19+</td></tr>
+        <tr><td><strong>Signal / WhatsApp</strong></td><td>Extended Triple DH (X3DH) for end-to-end encrypted messaging</td><td>ECDH (Elliptic Curve)</td></tr>
+        <tr><td><strong>PGP / GPG email</strong></td><td>Key agreement for encrypted emails</td><td>DH/DSS</td></tr>
+        <tr><td><strong>IKE (Internet Key Exchange)</strong></td><td>Negotiates security associations in IPsec</td><td>DH Groups</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">🔄 DH Variants</h3>
+      <ul>
+        <li><strong>Classical DH:</strong> Uses multiplicative group of integers modulo p (as covered in this lecture)</li>
+        <li><strong>ECDH (Elliptic Curve DH):</strong> Uses elliptic curve groups — much smaller key sizes for the same security level (256-bit ECDH ≈ 3072-bit DH)</li>
+        <li><strong>DHE (Ephemeral DH):</strong> Fresh keys for each session → provides Forward Secrecy</li>
+        <li><strong>ECDHE:</strong> Combines ECDH + Ephemeral keys — most efficient and secure variant; used in TLS 1.3</li>
+      </ul>
+    </div>
+    <div class="card purple-left">
+      <h3 class="purple">🔗 Connection to Other Topics</h3>
+      <ul>
+        <li><strong>Connects to RSA:</strong> RSA also uses public-key cryptography but for encryption and signatures, while DH is for key exchange only</li>
+        <li><strong>Connects to PKI:</strong> PKI certificates are used to authenticate DH exchanges, preventing MITM</li>
+        <li><strong>Connects to TLS:</strong> TLS certificates + DHE = authenticated + forward-secret HTTPS</li>
+        <li><strong>Historical connection:</strong> DH (1976) led directly to RSA (1978) — both built on modular arithmetic hardness</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li><strong>Short:</strong> Name three real-world protocols that use Diffie-Hellman.</li>
+      <li><strong>Short:</strong> What is ECDH? How does it differ from classical DH?</li>
+      <li><strong>Short:</strong> What is Forward Secrecy and which DH variant provides it?</li>
+      <li><strong>Compare:</strong> Compare DH and RSA — what is the purpose of each?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision — DH Key Facts</h2>
+  </div>
+  <div class="qr-grid">
+    <div class="qr-item"><strong>DH invented by</strong>Diffie &amp; Hellman<br>Published 1976</div>
+    <div class="qr-item"><strong>DH purpose</strong>Key exchange only<br>NOT encryption</div>
+    <div class="qr-item"><strong>Security basis</strong>Discrete Logarithm<br>Problem (DLP)</div>
+    <div class="qr-item"><strong>Public params</strong>q (prime) + α<br>(primitive root of q)</div>
+    <div class="qr-item"><strong>Private keys</strong>X_A (Alice)<br>X_B (Bob)</div>
+    <div class="qr-item"><strong>Public key formula</strong>Y = α^X mod q</div>
+    <div class="qr-item"><strong>Shared secret (A)</strong>K = (Y_B)^X_A mod q</div>
+    <div class="qr-item"><strong>Shared secret (B)</strong>K = (Y_A)^X_B mod q</div>
+    <div class="qr-item"><strong>Both equal</strong>α^(X_A × X_B) mod q</div>
+    <div class="qr-item"><strong>Easy direction</strong>Compute g^x mod p</div>
+    <div class="qr-item"><strong>Hard direction</strong>Find x from g^x mod p</div>
+    <div class="qr-item"><strong>Min prime size</strong>2048 bits (modern)</div>
+    <div class="qr-item"><strong>Example 1 secret</strong>p=23, g=5, a=6, b=15<br>s = 2</div>
+    <div class="qr-item"><strong>Example 2 secret</strong>q=353, α=3<br>X_A=97, X_B=233, K=160</div>
+    <div class="qr-item"><strong>Y_A Example 2</strong>3^97 mod 353 = 40</div>
+    <div class="qr-item"><strong>Y_B Example 2</strong>3^233 mod 353 = 248</div>
+    <div class="qr-item"><strong>Primitive root</strong>α^1 ... α^(q-1) are all<br>distinct values mod q</div>
+    <div class="qr-item"><strong>q=19 primitive roots</strong>2, 3, 10, 13, 14, 15</div>
+    <div class="qr-item"><strong>DH is NOT</strong>Authenticated<br>(vulnerable to MITM)</div>
+    <div class="qr-item"><strong>MITM defence</strong>PKI / Digital<br>Certificates</div>
+    <div class="qr-item"><strong>Forward Secrecy</strong>Ephemeral keys<br>discarded after session</div>
+    <div class="qr-item"><strong>DH in TLS</strong>DHE or ECDHE<br>(ephemeral variants)</div>
+    <div class="qr-item"><strong>ECDH advantage</strong>256-bit ≈ 3072-bit DH<br>much smaller keys</div>
+    <div class="qr-item"><strong>Paint analogy</strong>Yellow=public params<br>Private paint=secret key</div>
+    <div class="qr-item"><strong>Logjam (2015)</strong>1024-bit DH primes<br>insufficient for state actors</div>
+    <div class="qr-item"><strong>DH vs RSA</strong>DH = key exchange<br>RSA = encrypt + sign</div>
+    <div class="qr-item"><strong>Proposed rename</strong>Diffie-Hellman-Merkle<br>(Hellman, 2006)</div>
+  </div>
+</section>
