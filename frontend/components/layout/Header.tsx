@@ -18,9 +18,11 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
       </button>
 
       <Link href="/" className="flex items-center gap-2.5">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">
-          IS
-        </span>
+        <img
+          src="/favicon-no-bg.png"
+          alt="InfoSec logo"
+          className="h-7 w-7 rounded-lg object-cover"
+        />
         <span className="text-sm font-semibold tracking-tight text-ink">
           InfoSec Notes
         </span>

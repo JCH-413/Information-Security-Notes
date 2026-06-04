@@ -12,6 +12,17 @@ export const metadata: Metadata = {
     template: "%s · InfoSec Notes",
   },
   description: "Lecture notes for information security.",
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+    other: [
+      { rel: "icon", url: "/favicon-192x192.png", sizes: "192x192" },
+      { rel: "icon", url: "/favicon-256x256.png", sizes: "256x256" },
+    ],
+  }
 };
 
 export default function RootLayout({
@@ -21,6 +32,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon-32x32.png" />
+        <meta name="msapplication-TileImage" content="/favicon-192x192.png" />
+      </head>
       <body className="font-sans">
         <AppShell lectures={lectures}>{children}</AppShell>
       </body>
