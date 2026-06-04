@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* ── Design tokens ──────────────────────────────────────────────
+   Calm, warm-neutral palette. Stone greys with a restrained clay
+   accent. Tuned for long, readable technical notes.                */
+@theme {
+  --color-canvas: #faf9f7;
+  --color-surface: #ffffff;
+  --color-border: #ece9e4;
+  --color-border-strong: #ddd8d1;
+
+  --color-ink: #2a2723;
+  --color-muted: #6f6a63;
+  --color-faint: #9a948c;
+
+  --color-accent: #bd5d3a;
+  --color-accent-soft: #f4e9e3;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: 0 1px 2px rgba(40, 37, 33, 0.04),
+    0 4px 16px rgba(40, 37, 33, 0.05);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Offset anchored topics below the sticky header. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Thin, unobtrusive scrollbar for the sidebar / page. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
