@@ -229,6 +229,70 @@
     <div class="highlight">The Final Round omits MixColumns. This is intentional — omitting it makes the cipher structure symmetric for decryption without loss of security.</div>
   </div>
 
+  <figure style="margin:0 0 16px">
+    <svg width="100%" viewBox="0 0 680 640" role="img">
+      <title>AES full encryption flow for a 128-bit key</title>
+      <desc>Flowchart: Plaintext feeds into Initial Round (AddRoundKey key 0), then 9 Main Rounds each doing SubBytes, ShiftRows, MixColumns, AddRoundKey, then a Final Round doing SubBytes, ShiftRows, AddRoundKey with no MixColumns, producing ciphertext.</desc>
+      <defs><marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+      <g><rect x="240" y="20" width="200" height="44" rx="8" stroke-width="0.5" fill="#F1EFE8" stroke="#888780"/><text x="340" y="42" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#444441">Plaintext (128 bits)</text></g>
+      <line x1="340" y1="64" x2="340" y2="90" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <g><rect x="490" y="90" width="156" height="44" rx="8" stroke-width="0.5" fill="#EEEDFE" stroke="#7F77DD"/><text x="568" y="112" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#3C3489">Key expansion</text></g>
+      <text x="568" y="150" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">generates 11 round keys</text>
+      <line x1="490" y1="112" x2="446" y2="112" stroke="#666" stroke-width="0.5" stroke-dasharray="4 2" marker-end="url(#arr3)"/>
+
+      <rect x="140" y="90" width="300" height="64" rx="10" fill="none" stroke="#aaa" stroke-width="0.5" stroke-dasharray="4 3"/>
+      <text x="156" y="107" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">Initial Round</text>
+      <g><rect x="176" y="102" width="228" height="40" rx="6" stroke-width="0.5" fill="#E1F5EE" stroke="#1D9E75"/><text x="290" y="122" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#085041">AddRoundKey (key 0)</text></g>
+      <line x1="340" y1="154" x2="340" y2="180" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <rect x="100" y="180" width="380" height="244" rx="12" fill="none" stroke="#aaa" stroke-width="0.5" stroke-dasharray="4 3"/>
+      <text x="118" y="198" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">Main Rounds × 9 (rounds 1–9)</text>
+
+      <g><rect x="180" y="202" width="200" height="40" rx="6" stroke-width="0.5" fill="#FAEEDA" stroke="#BA7517"/><text x="280" y="222" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#633806">SubBytes</text></g>
+      <text x="394" y="222" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">confusion</text>
+      <line x1="280" y1="242" x2="280" y2="260" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <g><rect x="180" y="260" width="200" height="40" rx="6" stroke-width="0.5" fill="#E6F1FB" stroke="#378ADD"/><text x="280" y="280" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#0C447C">ShiftRows</text></g>
+      <text x="394" y="280" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">diffusion (rows)</text>
+      <line x1="280" y1="300" x2="280" y2="318" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <g><rect x="180" y="318" width="200" height="40" rx="6" stroke-width="0.5" fill="#FAECE7" stroke="#D85A30"/><text x="280" y="338" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#712B13">MixColumns</text></g>
+      <text x="394" y="338" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">diffusion (cols)</text>
+      <line x1="280" y1="358" x2="280" y2="376" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <g><rect x="180" y="376" width="200" height="40" rx="6" stroke-width="0.5" fill="#E1F5EE" stroke="#1D9E75"/><text x="280" y="396" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#085041">AddRoundKey (key i)</text></g>
+      <text x="394" y="396" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">key mixing</text>
+
+      <path d="M136 396 L136 212 L178 212" fill="none" stroke="#666" stroke-width="0.5" stroke-dasharray="3 2" marker-end="url(#arr3)"/>
+      <text x="118" y="308" text-anchor="middle" transform="rotate(-90 118 308)" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">repeat 9×</text>
+
+      <path d="M280 416 L280 438 L340 438 L340 454" fill="none" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <rect x="100" y="454" width="380" height="124" rx="12" fill="none" stroke="#aaa" stroke-width="0.5" stroke-dasharray="4 3"/>
+      <text x="118" y="472" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">Final Round (round 10)</text>
+
+      <g><rect x="180" y="474" width="200" height="36" rx="6" stroke-width="0.5" fill="#FAEEDA" stroke="#BA7517"/><text x="280" y="492" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#633806">SubBytes</text></g>
+      <line x1="280" y1="510" x2="280" y2="526" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <g><rect x="180" y="526" width="200" height="36" rx="6" stroke-width="0.5" fill="#E6F1FB" stroke="#378ADD"/><text x="280" y="544" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#0C447C">ShiftRows</text></g>
+      <rect x="396" y="516" width="152" height="54" rx="6" fill="none" stroke="#aaa" stroke-width="0.5"/>
+      <text x="472" y="538" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">No MixColumns</text>
+      <text x="472" y="556" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="400" fill="#333">in Final Round</text>
+      <line x1="396" y1="544" x2="382" y2="544" stroke="#666" stroke-width="0.5" stroke-dasharray="3 2"/>
+
+      <line x1="280" y1="562" x2="280" y2="578" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <g><rect x="180" y="578" width="200" height="40" rx="6" stroke-width="0.5" fill="#E1F5EE" stroke="#1D9E75"/><text x="280" y="598" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#085041">AddRoundKey (key 10)</text></g>
+
+      <line x1="280" y1="618" x2="340" y2="618" stroke="#666" stroke-width="1"/>
+      <line x1="340" y1="618" x2="340" y2="628" stroke="#666" stroke-width="1" marker-end="url(#arr3)"/>
+      <g><rect x="240" y="628" width="200" height="0" rx="8" stroke-width="0.5" fill="#EAF3DE" stroke="#639922"/></g>
+    </svg>
+    <figcaption style="font-size:12px;color:#666;text-align:center;margin-top:6px">Complete AES-128 encryption flow. 10 rounds total: 1 initial (AddRoundKey only) + 9 main + 1 final (no MixColumns).</figcaption>
+  </figure>
+
   <div class="exam-box">
     <div class="label">📝 Common Exam Questions</div>
     <ul>
@@ -315,8 +379,8 @@
     </div>
     <ul>
       <li>Used in the <strong>Initial Round</strong> (with round key 0), every <strong>Main Round</strong>, and the <strong>Final Round</strong>.</li>
-      <li>It is the only operation that directly introduces key material into the cipher state.</li>
-      <li>The inverse of AddRoundKey is itself — XOR-ing with the same round key again undoes the operation.</li>
+      <li>It is the <strong>only operation</strong> that directly introduces key material into the cipher state.</li>
+      <li>The inverse of AddRoundKey is <strong>itself</strong> — XOR-ing with the same round key again undoes the operation.</li>
     </ul>
   </div>
 
@@ -325,12 +389,140 @@
     <p>Think of AddRoundKey as "mixing" secret key material into the data. XOR is symmetric — applying the same key twice returns the original, which is why encryption and decryption share this exact same step.</p>
   </div>
 
+  <div class="card blue-left">
+    <h3 class="blue">🔢 Worked Example — Initial Round (Plaintext ⊕ Key 0 = State S0)</h3>
+    <p>We use the official <strong>FIPS 197 Appendix B</strong> test vector throughout all four steps. Below is the <strong>Initial Round AddRoundKey</strong>, which produces <strong>State S0</strong> — the state that enters Round 1.</p>
+  </div>
+
+  <figure style="margin:0 0 12px">
+    <svg width="100%" viewBox="0 0 680 270" role="img">
+<title>AES AddRoundKey — Initial Round: Plaintext XOR Key 0</title>
+<desc>Plaintext 4x4 state XOR round key 0 byte by byte to give starting state S0.</desc>
+<defs><marker id="arrS5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+<text x="110" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Plaintext</text>
+<text x="110" y="32" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">(hex bytes)</text>
+<rect x="20" y="40" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">32</text>
+<rect x="64" y="40" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">43</text>
+<rect x="108" y="40" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">F6</text>
+<rect x="152" y="40" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">A8</text>
+<rect x="20" y="76" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">88</text>
+<rect x="64" y="76" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">5A</text>
+<rect x="108" y="76" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">30</text>
+<rect x="152" y="76" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">8D</text>
+<rect x="20" y="112" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">31</text>
+<rect x="64" y="112" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">31</text>
+<rect x="108" y="112" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">98</text>
+<rect x="152" y="112" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">A2</text>
+<rect x="20" y="148" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E0</text>
+<rect x="64" y="148" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">37</text>
+<rect x="108" y="148" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">07</text>
+<rect x="152" y="148" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">34</text>
+<text x="208" y="110" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">⊕</text>
+<text x="348" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Key 0  (Round Key 0)</text>
+<rect x="228" y="40" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">2B</text>
+<rect x="272" y="40" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">7E</text>
+<rect x="316" y="40" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">15</text>
+<rect x="360" y="40" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">16</text>
+<rect x="228" y="76" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">28</text>
+<rect x="272" y="76" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">AE</text>
+<rect x="316" y="76" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">D2</text>
+<rect x="360" y="76" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">A6</text>
+<rect x="228" y="112" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">AB</text>
+<rect x="272" y="112" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">F7</text>
+<rect x="316" y="112" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">15</text>
+<rect x="360" y="112" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">88</text>
+<rect x="228" y="148" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">09</text>
+<rect x="272" y="148" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">CF</text>
+<rect x="316" y="148" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">4F</text>
+<rect x="360" y="148" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">3C</text>
+<text x="424" y="110" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">=</text>
+<text x="564" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">State S0</text>
+<text x="564" y="32" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">enters Round 1</text>
+<rect x="444" y="40" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="464" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">19</text>
+<rect x="488" y="40" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="508" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">A0</text>
+<rect x="532" y="40" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="552" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">9A</text>
+<rect x="576" y="40" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="596" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">E9</text>
+<rect x="444" y="76" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="464" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">3D</text>
+<rect x="488" y="76" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="508" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">F4</text>
+<rect x="532" y="76" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="552" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">C6</text>
+<rect x="576" y="76" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="596" y="92" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">F8</text>
+<rect x="444" y="112" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="464" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">E3</text>
+<rect x="488" y="112" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="508" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">E2</text>
+<rect x="532" y="112" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="552" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">8D</text>
+<rect x="576" y="112" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="596" y="128" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">48</text>
+<rect x="444" y="148" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="464" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">BE</text>
+<rect x="488" y="148" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="508" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">2B</text>
+<rect x="532" y="148" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="552" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">2A</text>
+<rect x="576" y="148" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="596" y="164" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">08</text>
+<rect x="20" y="40" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">32</text>
+<rect x="228" y="40" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="248" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">2B</text>
+<rect x="444" y="40" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="464" y="56" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">19</text>
+<rect x="20" y="195" width="640" height="60" rx="8" fill="#FAFAFA" stroke="#DDD" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="340" y="211" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#333333">Highlighted [0][0]: 32 ⊕ 2B = 19   (00110010 ⊕ 00101011 = 00011001 = 0x19 ✓)</text>
+<text x="340" y="229" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">All 16 bytes are XOR-ed simultaneously. This is the only step that introduces key material into the state.</text>
+<text x="340" y="247" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Inverse = itself: XOR with the same round key again recovers the original state.</text>
+</svg>
+    <figcaption style="font-size:12px;color:#666;text-align:center;margin-top:6px">Initial Round AddRoundKey: Plaintext ⊕ Key 0 → State S0. Orange highlights show the [0][0] byte XOR trace: 32 ⊕ 2B = 19. All 16 bytes processed simultaneously. State S0 carries forward into all four Round 1 transformations.</figcaption>
+  </figure>
+
   <div class="exam-box">
     <div class="label">📝 Common Exam Questions</div>
     <ul>
       <li>What operation does AddRoundKey perform? → XOR of State with the round key, byte by byte</li>
       <li>In which rounds is AddRoundKey used? → All rounds — Initial, Main, and Final</li>
       <li>What is the inverse of AddRoundKey? → Itself (XOR with the same key)</li>
+      <li>Compute: 32 (hex) XOR 2B (hex) → 19 (hex)</li>
     </ul>
   </div>
 </section>
@@ -343,30 +535,481 @@
 
   <div class="card accent-left">
     <h3>📖 SubBytes Operation</h3>
-    <p><strong>SubBytes</strong> is a <em>non-linear byte substitution</em> step. Every byte in the 4 × 4 State is independently replaced with a corresponding byte from a fixed <strong>substitution table called the S-Box (Substitution Box)</strong>.</p>
+    <p><strong>SubBytes</strong> is a <em>non-linear byte substitution</em> step. Every byte in the 4 × 4 State is independently replaced by looking it up in a fixed <strong>16 × 16 S-Box table</strong>. The input byte is split into two hex digits: the <em>high nibble</em> (upper 4 bits) selects the <strong>row</strong> and the <em>low nibble</em> (lower 4 bits) selects the <strong>column</strong>.</p>
     <ul>
-      <li>The S-Box is a <strong>16 × 16 lookup table</strong> (256 entries, one for each possible byte value 0x00–0xFF).</li>
-      <li>The S-Box is constructed using a <strong>multiplicative inverse in GF(2⁸)</strong> followed by an affine transformation — this makes it non-linear and resistant to linear and differential cryptanalysis.</li>
-      <li>Every byte of the state is substituted <strong>independently</strong> — no inter-byte dependencies in this step alone.</li>
+      <li>The S-Box is constructed using the <strong>multiplicative inverse in GF(2⁸)</strong> followed by an affine transformation — making it highly non-linear.</li>
+      <li>Every byte is substituted <strong>independently</strong> — parallel operation on all 16 bytes.</li>
     </ul>
   </div>
 
   <div class="card orange-left">
-    <h3 class="orange">🎯 Purpose of SubBytes</h3>
+    <h3 class="orange">🎯 Purpose</h3>
     <ul>
       <li>Provides <strong>confusion</strong> — makes the relationship between key and ciphertext as complex as possible.</li>
-      <li>The non-linearity of the S-Box is AES's primary defence against differential and linear cryptanalysis.</li>
-      <li>The inverse of SubBytes uses the <strong>inverse S-Box</strong> during decryption.</li>
+      <li>The non-linearity of the S-Box is AES's primary defence against linear and differential cryptanalysis.</li>
+      <li>For decryption, use the <strong>inverse S-Box</strong> (InvSubBytes).</li>
     </ul>
   </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 Worked Example — S0 → S1 (FIPS 197 Round 1)</h3>
+    <p>State S0 (from the AddRoundKey step above) is passed through the S-Box. Below shows the partial S-Box with highlighted lookup cells, individual byte traces, and the complete output state S1.</p>
+  </div>
+
+  <figure style="margin:0 0 12px">
+    <svg width="100%" viewBox="0 0 680 660" role="img">
+<title>AES SubBytes: S-Box lookup transforms State S0 into S1</title>
+<desc>Left: State S0 with highlighted input bytes. Centre: partial S-Box with lookup paths. Right: State S1 with substituted values.</desc>
+<rect x="0" y="0" width="680" height="28" rx="0" fill="#F0EEFF" stroke="none"/>
+<text x="340" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#3C3489">SubBytes: S0 → S1 using AES S-Box</text>
+<text x="100" y="50" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">State S0  (input)</text>
+<rect x="20" y="60" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="76" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">19</text>
+<rect x="64" y="60" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="84" y="76" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">A0</text>
+<rect x="108" y="60" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="76" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">9A</text>
+<rect x="152" y="60" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="76" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E9</text>
+<rect x="20" y="96" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="112" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">3D</text>
+<rect x="64" y="96" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="112" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">F4</text>
+<rect x="108" y="96" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="112" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">C6</text>
+<rect x="152" y="96" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="112" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">F8</text>
+<rect x="20" y="132" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="148" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E3</text>
+<rect x="64" y="132" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="148" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E2</text>
+<rect x="108" y="132" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="128" y="148" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">8D</text>
+<rect x="152" y="132" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="148" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">48</text>
+<rect x="20" y="168" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="184" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">BE</text>
+<rect x="64" y="168" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="184" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">2B</text>
+<rect x="108" y="168" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="184" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">2A</text>
+<rect x="152" y="168" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="184" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">08</text>
+<line x1="198" y1="130" x2="220" y2="130" stroke="#888" stroke-width="1" marker-end="url(#arrS5)"/>
+<text x="440" y="50" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#3C3489">AES S-Box (rows 0–3, 8–B)</text>
+<text x="440" y="64" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#666666">Each cell = S[row][col]. Orange = our lookup cells.</text>
+<text x="222" y="80" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" fill="#666666">col→</text>
+<text x="222" y="94" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" fill="#666666">row↓</text>
+<text x="241" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">0</text>
+<text x="263" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">1</text>
+<text x="285" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">2</text>
+<text x="307" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">3</text>
+<text x="329" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">4</text>
+<text x="351" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">5</text>
+<text x="373" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">6</text>
+<text x="395" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">7</text>
+<text x="417" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">8</text>
+<text x="439" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">9</text>
+<text x="461" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">A</text>
+<text x="483" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">B</text>
+<text x="505" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">C</text>
+<text x="527" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">D</text>
+<text x="549" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">E</text>
+<text x="571" y="78" text-anchor="middle" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">F</text>
+<text x="222" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">0</text>
+<rect x="230" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">63</text>
+<rect x="252" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">7C</text>
+<rect x="274" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">77</text>
+<rect x="296" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">7B</text>
+<rect x="318" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">F2</text>
+<rect x="340" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">6B</text>
+<rect x="362" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">6F</text>
+<rect x="384" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C5</text>
+<rect x="406" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">30</text>
+<rect x="428" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">01</text>
+<rect x="450" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">67</text>
+<rect x="472" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">2B</text>
+<rect x="494" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">FE</text>
+<rect x="516" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="527" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">D7</text>
+<rect x="538" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">AB</text>
+<rect x="560" y="88" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="97" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">76</text>
+<text x="222" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">1</text>
+<rect x="230" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">CA</text>
+<rect x="252" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">82</text>
+<rect x="274" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C9</text>
+<rect x="296" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">7D</text>
+<rect x="318" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">FA</text>
+<rect x="340" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">59</text>
+<rect x="362" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">47</text>
+<rect x="384" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">F0</text>
+<rect x="406" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">AD</text>
+<rect x="428" y="106" width="21" height="17" rx="2" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="439" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="700" fill="#7A3A00">D4</text>
+<rect x="450" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">A2</text>
+<rect x="472" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">AF</text>
+<rect x="494" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">9C</text>
+<rect x="516" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="527" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">A4</text>
+<rect x="538" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">72</text>
+<rect x="560" y="106" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="115" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C0</text>
+<text x="222" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">2</text>
+<rect x="230" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">B7</text>
+<rect x="252" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">FD</text>
+<rect x="274" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">93</text>
+<rect x="296" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">26</text>
+<rect x="318" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">36</text>
+<rect x="340" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">3F</text>
+<rect x="362" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">F7</text>
+<rect x="384" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">CC</text>
+<rect x="406" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">34</text>
+<rect x="428" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">A5</text>
+<rect x="450" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">E5</text>
+<rect x="472" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">F1</text>
+<rect x="494" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">71</text>
+<rect x="516" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="527" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">D8</text>
+<rect x="538" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">31</text>
+<rect x="560" y="124" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="133" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">15</text>
+<text x="222" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">3</text>
+<rect x="230" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">04</text>
+<rect x="252" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C7</text>
+<rect x="274" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">23</text>
+<rect x="296" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C3</text>
+<rect x="318" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">18</text>
+<rect x="340" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">96</text>
+<rect x="362" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">05</text>
+<rect x="384" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">9A</text>
+<rect x="406" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">07</text>
+<rect x="428" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">12</text>
+<rect x="450" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">80</text>
+<rect x="472" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">E2</text>
+<rect x="494" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">EB</text>
+<rect x="516" y="142" width="21" height="17" rx="2" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="527" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="700" fill="#7A3A00">27</text>
+<rect x="538" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">B2</text>
+<rect x="560" y="142" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="151" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">75</text>
+<text x="222" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">8</text>
+<rect x="230" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">CD</text>
+<rect x="252" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">0C</text>
+<rect x="274" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">13</text>
+<rect x="296" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">EC</text>
+<rect x="318" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">5F</text>
+<rect x="340" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">97</text>
+<rect x="362" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">44</text>
+<rect x="384" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">17</text>
+<rect x="406" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C4</text>
+<rect x="428" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">A7</text>
+<rect x="450" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">7E</text>
+<rect x="472" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">3D</text>
+<rect x="494" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">64</text>
+<rect x="516" y="160" width="21" height="17" rx="2" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="527" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="700" fill="#7A3A00">5D</text>
+<rect x="538" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">19</text>
+<rect x="560" y="160" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="169" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">73</text>
+<text x="222" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">9</text>
+<rect x="230" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">60</text>
+<rect x="252" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">81</text>
+<rect x="274" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">4F</text>
+<rect x="296" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">DC</text>
+<rect x="318" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">22</text>
+<rect x="340" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">2A</text>
+<rect x="362" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">90</text>
+<rect x="384" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">88</text>
+<rect x="406" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">46</text>
+<rect x="428" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">EE</text>
+<rect x="450" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">B8</text>
+<rect x="472" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">14</text>
+<rect x="494" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">DE</text>
+<rect x="516" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="527" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">5E</text>
+<rect x="538" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">0B</text>
+<rect x="560" y="178" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="187" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">DB</text>
+<text x="222" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">A</text>
+<rect x="230" y="196" width="21" height="17" rx="2" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="241" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="700" fill="#7A3A00">E0</text>
+<rect x="252" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">32</text>
+<rect x="274" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">3A</text>
+<rect x="296" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">0A</text>
+<rect x="318" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">49</text>
+<rect x="340" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">06</text>
+<rect x="362" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">24</text>
+<rect x="384" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">5C</text>
+<rect x="406" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C2</text>
+<rect x="428" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">D3</text>
+<rect x="450" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">AC</text>
+<rect x="472" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">62</text>
+<rect x="494" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">91</text>
+<rect x="516" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="527" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">95</text>
+<rect x="538" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">E4</text>
+<rect x="560" y="196" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="205" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">79</text>
+<text x="222" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="600" fill="#666666">B</text>
+<rect x="230" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="241" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">E7</text>
+<rect x="252" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="263" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">C8</text>
+<rect x="274" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="285" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">37</text>
+<rect x="296" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="307" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">6D</text>
+<rect x="318" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="329" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">8D</text>
+<rect x="340" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="351" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">D5</text>
+<rect x="362" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="373" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">4E</text>
+<rect x="384" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="395" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">A9</text>
+<rect x="406" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="417" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">6C</text>
+<rect x="428" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="439" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">56</text>
+<rect x="450" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="461" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">F4</text>
+<rect x="472" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="483" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">EA</text>
+<rect x="494" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="505" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">65</text>
+<rect x="516" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="527" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">7A</text>
+<rect x="538" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="549" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">AE</text>
+<rect x="560" y="214" width="21" height="17" rx="2" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="571" y="223" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="9" font-weight="400" fill="#3C3489">08</text>
+<text x="20" y="258" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Step-by-step S-Box lookups</text>
+<rect x="20" y="274" width="640" height="26" rx="4" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="28" y="288" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#3C3489" font-weight="600">S0[0][0]</text>
+<text x="130" y="288" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#333333">= 19  →  split: row 1, col 9  →  S-Box[1][9]  =  </text>
+<text x="550" y="288" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#4A9620" font-weight="700">D4</text>
+<rect x="20" y="304" width="640" height="26" rx="4" fill="#F8F8FF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="28" y="318" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#3C3489" font-weight="600">S0[0][1]</text>
+<text x="130" y="318" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#333333">= A0  →  split: row A, col 0  →  S-Box[A][0]  =  </text>
+<text x="550" y="318" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#4A9620" font-weight="700">E0</text>
+<rect x="20" y="334" width="640" height="26" rx="4" fill="#F0EEFF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="28" y="348" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#3C3489" font-weight="600">S0[1][0]</text>
+<text x="130" y="348" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#333333">= 3D  →  split: row 3, col D  →  S-Box[3][D]  =  </text>
+<text x="550" y="348" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#4A9620" font-weight="700">27</text>
+<rect x="20" y="364" width="640" height="26" rx="4" fill="#F8F8FF" stroke="#7B6FDD" stroke-width="0.5"/>
+<text x="28" y="378" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#3C3489" font-weight="600">S0[2][2]</text>
+<text x="130" y="378" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#333333">= 8D  →  split: row 8, col D  →  S-Box[8][D]  =  </text>
+<text x="550" y="378" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#4A9620" font-weight="700">5D</text>
+<text x="340" y="404" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Full State S1  (all 16 bytes after SubBytes)</text>
+<rect x="252" y="414" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="272" y="430" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">D4</text>
+<rect x="296" y="414" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="316" y="430" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">E0</text>
+<rect x="340" y="414" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="360" y="430" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B8</text>
+<rect x="384" y="414" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="404" y="430" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">1E</text>
+<rect x="252" y="450" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="272" y="466" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">27</text>
+<rect x="296" y="450" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="316" y="466" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">BF</text>
+<rect x="340" y="450" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="360" y="466" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B4</text>
+<rect x="384" y="450" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="404" y="466" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">41</text>
+<rect x="252" y="486" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="272" y="502" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">11</text>
+<rect x="296" y="486" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="316" y="502" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">98</text>
+<rect x="340" y="486" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="360" y="502" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">5D</text>
+<rect x="384" y="486" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="404" y="502" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">52</text>
+<rect x="252" y="522" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="272" y="538" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">AE</text>
+<rect x="296" y="522" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="316" y="538" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">F1</text>
+<rect x="340" y="522" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="360" y="538" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E5</text>
+<rect x="384" y="522" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="404" y="538" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">30</text>
+<text x="332" y="566" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Green highlights = results of the 4 lookups shown above</text>
+<text x="20" y="590" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Before vs After</text>
+<text x="100" y="606" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">S0 (input)</text>
+<rect x="20" y="614" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">19</text>
+<rect x="64" y="614" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">A0</text>
+<rect x="108" y="614" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">9A</text>
+<rect x="152" y="614" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E9</text>
+<rect x="20" y="650" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">3D</text>
+<rect x="64" y="650" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">F4</text>
+<rect x="108" y="650" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">C6</text>
+<rect x="152" y="650" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">F8</text>
+<rect x="20" y="686" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E3</text>
+<rect x="64" y="686" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">E2</text>
+<rect x="108" y="686" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">8D</text>
+<rect x="152" y="686" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">48</text>
+<rect x="20" y="722" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="40" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">BE</text>
+<rect x="64" y="722" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="84" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">2B</text>
+<rect x="108" y="722" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="128" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">2A</text>
+<rect x="152" y="722" width="41" height="33" rx="4" fill="#F7F6F2" stroke="#555753" stroke-width="0.8"/>
+<text x="172" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#444441">08</text>
+<text x="216" y="640" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">→</text>
+<text x="330" y="606" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">S1 (after SubBytes)</text>
+<rect x="240" y="614" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="260" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">D4</text>
+<rect x="284" y="614" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="304" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E0</text>
+<rect x="328" y="614" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="348" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B8</text>
+<rect x="372" y="614" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="392" y="630" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">1E</text>
+<rect x="240" y="650" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="260" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">27</text>
+<rect x="284" y="650" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="304" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">BF</text>
+<rect x="328" y="650" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="348" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B4</text>
+<rect x="372" y="650" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="392" y="666" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">41</text>
+<rect x="240" y="686" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="260" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">11</text>
+<rect x="284" y="686" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="304" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">98</text>
+<rect x="328" y="686" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="348" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">5D</text>
+<rect x="372" y="686" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="392" y="702" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">52</text>
+<rect x="240" y="722" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="260" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">AE</text>
+<rect x="284" y="722" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="304" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">F1</text>
+<rect x="328" y="722" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="348" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E5</text>
+<rect x="372" y="722" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="392" y="738" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">30</text>
+</svg>
+    <figcaption style="font-size:12px;color:#666;text-align:center;margin-top:6px">SubBytes: State S0 → State S1. Each byte's high nibble = S-Box row, low nibble = column. All 16 values verified against FIPS 197.</figcaption>
+  </figure>
 
   <div class="exam-box">
     <div class="label">📝 Common Exam Questions</div>
     <ul>
-      <li>What does SubBytes do? → Non-linearly substitutes each byte of the state using the S-Box lookup table</li>
-      <li>What cryptographic property does SubBytes provide? → Confusion; non-linearity</li>
+      <li>What does SubBytes do? → Replaces each byte using the S-Box lookup (high nibble = row, low nibble = col)</li>
+      <li>What cryptographic property does SubBytes provide? → Confusion / non-linearity</li>
       <li>How is the AES S-Box constructed? → Multiplicative inverse in GF(2⁸) then affine transformation</li>
-      <li>How is SubBytes reversed during decryption? → Using the inverse S-Box</li>
+      <li>Trace: byte 19 → S-Box[1][9] = D4 ✓</li>
     </ul>
   </div>
 </section>
@@ -379,36 +1022,167 @@
 
   <div class="card accent-left">
     <h3>📖 ShiftRows Operation</h3>
-    <p><strong>ShiftRows</strong> cyclically shifts the bytes in each row of the State to the left by a different offset depending on the row number.</p>
+    <p><strong>ShiftRows</strong> cyclically shifts each row of the State to the <em>left</em> by an offset equal to the row number.</p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Row</th><th>Left Shift Amount (bytes)</th></tr></thead>
+        <thead><tr><th>Row</th><th>Left Shift (bytes)</th><th>Effect</th></tr></thead>
         <tbody>
-          <tr><td>Row 0</td><td>0 (no shift)</td></tr>
-          <tr><td>Row 1</td><td>1 byte left</td></tr>
-          <tr><td>Row 2</td><td>2 bytes left</td></tr>
-          <tr><td>Row 3</td><td>3 bytes left</td></tr>
+          <tr><td>Row 0</td><td>0 — unchanged</td><td>No change</td></tr>
+          <tr><td>Row 1</td><td>1 byte left</td><td>First byte moves to end</td></tr>
+          <tr><td>Row 2</td><td>2 bytes left</td><td>First two bytes move to end</td></tr>
+          <tr><td>Row 3</td><td>3 bytes left</td><td>First three bytes move to end</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card orange-left">
-    <h3 class="orange">🎯 Purpose of ShiftRows</h3>
+    <h3 class="orange">🎯 Purpose</h3>
     <ul>
-      <li>Provides <strong>diffusion</strong> across columns — bytes from different columns are mixed into every column after subsequent MixColumns steps.</li>
-      <li>Ensures that bytes from the same original column are spread across all four columns, preventing column-independent attacks.</li>
-      <li>The inverse (for decryption) is <strong>InvShiftRows</strong> — shifts each row to the <em>right</em> by the same amounts.</li>
+      <li>Provides <strong>diffusion</strong> — after ShiftRows, each column of the state contains bytes from <em>four different original columns</em> of S1.</li>
+      <li>This ensures the subsequent MixColumns step mixes bytes from all four columns, achieving complete inter-column diffusion within two rounds.</li>
+      <li>Decryption uses <strong>InvShiftRows</strong> — right shifts by the same amounts.</li>
     </ul>
   </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 Worked Example — S1 → S2 (FIPS 197 Round 1)</h3>
+    <p>State S1 (output of SubBytes) has its rows shifted. Row 0 unchanged (teal); row 1 shifts left 1 (blue); row 2 shifts left 2 (orange); row 3 shifts left 3 (red). Bytes that wrap are highlighted with a thicker border.</p>
+  </div>
+
+  <figure style="margin:0 0 12px">
+    <svg width="100%" viewBox="0 0 680 450" role="img">
+<title>AES ShiftRows: S1 rows shift left 0,1,2,3</title>
+<desc>State S1 row 0 unchanged, row 1 shifted left 1, row 2 left 2, row 3 left 3, giving S2.</desc>
+<rect x="0" y="0" width="680" height="28" rx="0" fill="#E5F9F0" stroke="none"/>
+<text x="340" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#085041">ShiftRows: S1 → S2</text>
+<text x="100" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">S1 (input)</text>
+<text x="580" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">S2 (output)</text>
+<rect x="20" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="40" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">D4</text>
+<rect x="64" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="84" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">E0</text>
+<rect x="108" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="128" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">B8</text>
+<rect x="152" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="172" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">1E</text>
+<text x="330" y="73" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="11" fill="#1D9E75">no shift</text>
+<line x1="210" y1="72" x2="438" y2="72" stroke="#1D9E75" stroke-width="0.8" stroke-dasharray="3 2" marker-end="url(#arrS5)"/>
+<rect x="448" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="468" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">D4</text>
+<rect x="492" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="512" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">E0</text>
+<rect x="536" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="556" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">B8</text>
+<rect x="580" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="600" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#085041">1E</text>
+<text x="638" y="73" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" fill="#666666">Row 0 — no shift</text>
+<rect x="20" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="40" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">27</text>
+<rect x="64" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="84" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">BF</text>
+<rect x="108" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="128" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">B4</text>
+<rect x="152" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="172" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">41</text>
+<text x="330" y="109" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="11" fill="#2E8BC0">← 1 byte</text>
+<line x1="210" y1="108" x2="438" y2="108" stroke="#2E8BC0" stroke-width="1.2000000000000002" stroke-dasharray="3 2" marker-end="url(#arrS5)"/>
+<rect x="448" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="468" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">BF</text>
+<rect x="492" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="512" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">B4</text>
+<rect x="536" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="556" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#0C4470">41</text>
+<rect x="580" y="92" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="600" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">27</text>
+<text x="638" y="109" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" fill="#666666">Row 1 — shift left 1</text>
+<rect x="20" y="128" width="41" height="33" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="40" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">11</text>
+<rect x="64" y="128" width="41" height="33" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="84" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">98</text>
+<rect x="108" y="128" width="41" height="33" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="128" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">5D</text>
+<rect x="152" y="128" width="41" height="33" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="172" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">52</text>
+<text x="330" y="145" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="11" fill="#E07B00">← 2 bytes</text>
+<line x1="210" y1="144" x2="438" y2="144" stroke="#E07B00" stroke-width="1.6" stroke-dasharray="3 2" marker-end="url(#arrS5)"/>
+<rect x="448" y="128" width="41" height="33" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="468" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">5D</text>
+<rect x="492" y="128" width="41" height="33" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="512" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">52</text>
+<rect x="536" y="128" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="556" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">11</text>
+<rect x="580" y="128" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="600" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">98</text>
+<text x="638" y="145" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" fill="#666666">Row 2 — shift left 2</text>
+<rect x="20" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="40" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A1515">AE</text>
+<rect x="64" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A1515">F1</text>
+<rect x="108" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A1515">E5</text>
+<rect x="152" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A1515">30</text>
+<text x="330" y="181" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="11" fill="#D84040">← 3 bytes</text>
+<line x1="210" y1="180" x2="438" y2="180" stroke="#D84040" stroke-width="2.0" stroke-dasharray="3 2" marker-end="url(#arrS5)"/>
+<rect x="448" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="468" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A1515">30</text>
+<rect x="492" y="164" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="512" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">AE</text>
+<rect x="536" y="164" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="556" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">F1</text>
+<rect x="580" y="164" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="600" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" fill="#7A3A00">E5</text>
+<text x="638" y="181" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" fill="#666666">Row 3 — shift left 3</text>
+<text x="20" y="210" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Resulting State S2 (full 4×4)</text>
+<rect x="20" y="220" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="40" y="236" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">D4</text>
+<rect x="64" y="220" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="84" y="236" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E0</text>
+<rect x="108" y="220" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="128" y="236" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B8</text>
+<rect x="152" y="220" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="172" y="236" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">1E</text>
+<rect x="20" y="256" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="40" y="272" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">BF</text>
+<rect x="64" y="256" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="84" y="272" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B4</text>
+<rect x="108" y="256" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="128" y="272" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">41</text>
+<rect x="152" y="256" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="172" y="272" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">27</text>
+<rect x="20" y="292" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="40" y="308" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">5D</text>
+<rect x="64" y="292" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="84" y="308" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">52</text>
+<rect x="108" y="292" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="128" y="308" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">11</text>
+<rect x="152" y="292" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="172" y="308" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">98</text>
+<rect x="20" y="328" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="40" y="344" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">30</text>
+<rect x="64" y="328" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="84" y="344" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">AE</text>
+<rect x="108" y="328" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="128" y="344" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">F1</text>
+<rect x="152" y="328" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="172" y="344" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E5</text>
+<text x="110" y="370" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Orange border = byte that wrapped around cyclically to end of row</text>
+<rect x="20" y="385" width="640" height="52" rx="6" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="340" y="406" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#085041">Why ShiftRows? After this step, each column of S2 contains bytes from 4 different columns of S1.</text>
+<text x="340" y="424" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#666666">This spreading ensures MixColumns in the next step creates complete diffusion across the full state.</text>
+</svg>
+    <figcaption style="font-size:12px;color:#666;text-align:center;margin-top:6px">ShiftRows: S1 → S2. Each colour = one row. Orange-bordered cells wrapped cyclically. Result: every column of S2 now holds bytes from four different S1 columns.</figcaption>
+  </figure>
 
   <div class="exam-box">
     <div class="label">📝 Common Exam Questions</div>
     <ul>
-      <li>What does ShiftRows do? → Cyclically shifts each row of the state left by 0, 1, 2, 3 bytes respectively</li>
-      <li>What cryptographic property does ShiftRows provide? → Diffusion</li>
-      <li>Which row is not shifted in ShiftRows? → Row 0</li>
-      <li>What is the inverse of ShiftRows? → InvShiftRows (right shifts by same amounts)</li>
+      <li>What does ShiftRows do? → Cyclically shifts each row left by 0, 1, 2, 3 bytes respectively</li>
+      <li>What cryptographic property does ShiftRows provide? → Diffusion across columns</li>
+      <li>Which row is not shifted? → Row 0</li>
+      <li>What is InvShiftRows? → Right-shifts rows by 0, 1, 2, 3 bytes (used in decryption)</li>
+      <li>Trace: S1 row 1 = [BF, B4, 41, 27] → S2 row 1 = [B4, 41, 27, BF] ✓</li>
     </ul>
   </div>
 </section>
@@ -416,64 +1190,402 @@
 <section id="s8">
   <div class="section-header">
     <span class="section-num">08</span>
-    <h2>Round Step 4 — MixColumns &amp; Galois Field Arithmetic</h2>
+    <h2>Round Step 4 — MixColumns &amp; AddRoundKey</h2>
   </div>
 
   <div class="card accent-left">
     <h3>📖 MixColumns Operation</h3>
-    <p><strong>MixColumns</strong> operates on each column of the State independently, treating each column as a <strong>4-element vector of bytes (elements of GF(2⁸))</strong>. Each column is multiplied by a fixed <strong>4 × 4 matrix</strong> using Galois Field arithmetic.</p>
+    <p><strong>MixColumns</strong> treats each column of the State as a 4-element vector over <strong>GF(2⁸)</strong> and multiplies it by a fixed 4 × 4 matrix. Each output byte depends on <em>all four</em> input bytes of that column.</p>
     <div class="math-block">
-      Fixed mixing matrix (hexadecimal):<br>
+      Fixed mixing matrix:<br>
       [ 02  03  01  01 ]<br>
       [ 01  02  03  01 ]<br>
       [ 01  01  02  03 ]<br>
       [ 03  01  01  02 ]<br>
-      <span class="comment">Matrix multiplication is performed in GF(2⁸).</span>
+      <span class="comment">Multiplication over GF(2⁸). Addition = XOR. Values are hex.</span>
     </div>
   </div>
 
   <div class="card orange-left">
-    <h3 class="orange">🧮 Galois Field (GF) Arithmetic in MixColumns</h3>
-    <p>The multiplication in MixColumns is a <strong>dot product of vectors over Galois Field GF(2⁸)</strong> — not ordinary multiplication.</p>
+    <h3 class="orange">🧮 GF(2⁸) Arithmetic Rules</h3>
     <ul>
-      <li>Each byte is treated as a polynomial over GF(2) with coefficients in {0, 1}.</li>
-      <li><strong>Addition</strong> in GF(2⁸) = XOR (⊕).</li>
-      <li><strong>Multiplication</strong> in GF(2⁸) = polynomial multiplication modulo an irreducible polynomial.</li>
-      <li>The dot product of two vectors means: multiply corresponding GF(2⁸) elements and XOR (sum) the products.</li>
+      <li><strong>Addition</strong> = bitwise XOR (⊕). Example: A3 ⊕ 1B = B8</li>
+      <li><strong>×01</strong> = the byte unchanged.</li>
+      <li><strong>×02</strong> = left-shift the byte by 1 bit. If the original high-order bit was 1, XOR the result with <code>0x1B</code> to reduce it back to 8 bits.</li>
+      <li><strong>×03</strong> = compute ×02, then XOR with the original byte.</li>
+      <li><strong>Reducing polynomial:</strong> x⁸ + x⁴ + x³ + x + 1 (= 0x11B). Values above 0xFF are reduced by XOR with 0x1B.</li>
     </ul>
-    <div class="highlight">If the product of two GF(2⁸) elements is bigger than a byte (exceeds 8 bits / value 255), it must be <strong>reduced using the reducing (irreducible) polynomial</strong>.</div>
-  </div>
-
-  <div class="card purple-left">
-    <h3 class="purple">📐 Reducing Polynomial</h3>
-    <p>AES uses the irreducible polynomial over GF(2):</p>
-    <div class="math-block">
-      m(x) = x⁸ + x⁴ + x³ + x + 1<br>
-      <span class="comment">Binary: 100011011 (hex: 0x11B)</span><br><br>
-      If a product exceeds 8 bits, XOR it with 0x11B to reduce it back to 8 bits.
-    </div>
-    <p>Multiplying any byte by <strong>02</strong> (hex) in GF(2⁸) = left shift the byte by 1 bit. If the high-order bit of the original byte was 1 (result overflows 8 bits), XOR the shifted result with <code>0x1B</code> (the lower 8 bits of the reducing polynomial).</p>
   </div>
 
   <div class="card orange-left">
-    <h3 class="orange">🎯 Purpose of MixColumns</h3>
-    <ul>
-      <li>Provides <strong>diffusion</strong> within each column — each byte in the output column depends on all four bytes of the input column.</li>
-      <li>Together with ShiftRows, ensures that every output bit depends on every input bit after a few rounds (<strong>complete diffusion</strong>).</li>
-      <li>The inverse (for decryption) is <strong>InvMixColumns</strong>, which uses a different fixed matrix.</li>
-      <li>MixColumns is <strong>absent in the Final Round</strong>.</li>
-    </ul>
+    <h3 class="orange">⚠ MixColumns is omitted in the Final Round</h3>
+    <p>This is intentional — omitting it makes the cipher structure symmetric for decryption. The inverse is <strong>InvMixColumns</strong>, which uses a different fixed matrix.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 Worked Example — S2 → S3 (FIPS 197 Round 1)</h3>
+    <p>State S2 (after ShiftRows) enters MixColumns. The diagram below shows: the full S2 matrix and mixing matrix, the <strong>complete GF(2⁸) arithmetic for Column 0</strong> (four output bytes computed step by step), and the full result state S3. Column 0 input is <strong>D4, BF, 5D, 30</strong>.</p>
+  </div>
+
+  <figure style="margin:0 0 12px">
+    <svg width="100%" viewBox="0 0 680 780" role="img">
+<title>AES MixColumns: S2 → S3 with full column 0 worked arithmetic</title>
+<desc>MixColumns operates on each column using GF(2^8) matrix multiplication. Column 0 of S2 is D4 BF 5D 30. All four output bytes are computed step by step. The full result is state S3.</desc>
+<rect x="0" y="0" width="680" height="28" rx="0" fill="#FFF3E0" stroke="none"/>
+<text x="340" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#7A3A00">MixColumns: S2 → S3</text>
+<text x="330" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">State S2 (input)</text>
+<rect x="242" y="56" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="262" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">D4</text>
+<rect x="286" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="306" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E0</text>
+<rect x="330" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="350" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B8</text>
+<rect x="374" y="56" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="394" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">1E</text>
+<rect x="242" y="92" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="262" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">BF</text>
+<rect x="286" y="92" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="306" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">B4</text>
+<rect x="330" y="92" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="350" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">41</text>
+<rect x="374" y="92" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="394" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">27</text>
+<rect x="242" y="128" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="262" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">5D</text>
+<rect x="286" y="128" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="306" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">52</text>
+<rect x="330" y="128" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="350" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">11</text>
+<rect x="374" y="128" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="394" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">98</text>
+<rect x="242" y="164" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="262" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">30</text>
+<rect x="286" y="164" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="306" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">AE</text>
+<rect x="330" y="164" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="350" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">F1</text>
+<rect x="374" y="164" width="41" height="33" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="394" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#085041">E5</text>
+<text x="222" y="120" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">×</text>
+<text x="100" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Mixing Matrix (fixed)</text>
+<rect x="20" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="40" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">02</text>
+<rect x="64" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">03</text>
+<rect x="108" y="56" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="128" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="152" y="56" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="172" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="20" y="92" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="40" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="64" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">02</text>
+<rect x="108" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">03</text>
+<rect x="152" y="92" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="172" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="20" y="128" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="40" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="64" y="128" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="84" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="108" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">02</text>
+<rect x="152" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">03</text>
+<rect x="20" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="40" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">03</text>
+<rect x="64" y="164" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="84" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="108" y="164" width="41" height="33" rx="4" fill="#FFF8F0" stroke="#D0A080" stroke-width="0.8"/>
+<text x="128" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A4A20">01</text>
+<rect x="152" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A1515">02</text>
+<text x="446" y="120" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">=</text>
+<text x="566" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">State S3 (output)</text>
+<rect x="466" y="56" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="486" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">04</text>
+<rect x="510" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="530" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">E0</text>
+<rect x="554" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="574" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">48</text>
+<rect x="598" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="618" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">28</text>
+<rect x="466" y="92" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="486" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">66</text>
+<rect x="510" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="530" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">CB</text>
+<rect x="554" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="574" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">F8</text>
+<rect x="598" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="618" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">06</text>
+<rect x="466" y="128" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="486" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">81</text>
+<rect x="510" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="530" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">19</text>
+<rect x="554" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="574" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">D3</text>
+<rect x="598" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="618" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">26</text>
+<rect x="466" y="164" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="486" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">E5</text>
+<rect x="510" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="530" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">9A</text>
+<rect x="554" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="574" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">7A</text>
+<rect x="598" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="618" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">4C</text>
+<rect x="20" y="202" width="640" height="44" rx="6" fill="#FFF3E0" stroke="#D09040" stroke-width="0.8"/>
+<text x="340" y="218" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#7A3A00">GF(2⁸) rules: Addition = XOR (⊕).   ×02 = left-shift 1 bit; if bit7 was 1, XOR result with 0x1B.   ×03 = ×02, then XOR original.   ×01 = unchanged.</text>
+<text x="340" y="234" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Only matrix values 01, 02, 03 are used — no large multiplications needed. Overflow is handled by the irreducible polynomial x⁸+x⁴+x³+x+1 (0x11B).</text>
+<text x="20" y="265" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Column 0 worked arithmetic  (S2 col 0: D4, BF, 5D, 30)</text>
+<rect x="20" y="273" width="72" height="26" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="56" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#085041">s0=D4</text>
+<rect x="100" y="273" width="72" height="26" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="136" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#085041">s1=BF</text>
+<rect x="180" y="273" width="72" height="26" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="216" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#085041">s2=5D</text>
+<rect x="260" y="273" width="72" height="26" rx="4" fill="#E5F9F0" stroke="#1D9E75" stroke-width="0.8"/>
+<text x="296" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#085041">s3=30</text>
+<text x="352" y="286" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">→  after MixColumns →</text>
+<rect x="370" y="273" width="57" height="26" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="398" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#7A1515">s0'=04</text>
+<rect x="435" y="273" width="57" height="26" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="463" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#7A1515">s1'=66</text>
+<rect x="500" y="273" width="57" height="26" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="528" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#7A1515">s2'=81</text>
+<rect x="565" y="273" width="57" height="26" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="593" y="286" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="13" font-weight="600" fill="#7A1515">s3'=E5</text>
+<rect x="20" y="310" width="640" height="58" rx="6" fill="#FAFAFA" stroke="#DDD" stroke-width="0.8"/>
+<text x="28" y="325" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#333333">GF(2⁸) products pre-computed:</text>
+<rect x="20" y="329" width="154" height="15" rx="3" fill="#D4F0FF" stroke="none"/>
+<text x="26" y="340" font-family="system-ui,monospace" font-size="11" fill="#333333">2×D4=B3</text>
+<rect x="182" y="329" width="154" height="15" rx="3" fill="#D4F0FF" stroke="none"/>
+<text x="188" y="340" font-family="system-ui,monospace" font-size="11" fill="#333333">2×BF=65</text>
+<rect x="344" y="329" width="154" height="15" rx="3" fill="#D4F0FF" stroke="none"/>
+<text x="350" y="340" font-family="system-ui,monospace" font-size="11" fill="#333333">2×5D=BA</text>
+<rect x="506" y="329" width="154" height="15" rx="3" fill="#D4F0FF" stroke="none"/>
+<text x="512" y="340" font-family="system-ui,monospace" font-size="11" fill="#333333">2×30=60</text>
+<rect x="20" y="345" width="154" height="15" rx="3" fill="#FFE8C0" stroke="none"/>
+<text x="26" y="356" font-family="system-ui,monospace" font-size="11" fill="#333333">3×D4=67</text>
+<rect x="182" y="345" width="154" height="15" rx="3" fill="#FFE8C0" stroke="none"/>
+<text x="188" y="356" font-family="system-ui,monospace" font-size="11" fill="#333333">3×BF=DA</text>
+<rect x="344" y="345" width="154" height="15" rx="3" fill="#FFE8C0" stroke="none"/>
+<text x="350" y="356" font-family="system-ui,monospace" font-size="11" fill="#333333">3×5D=E7</text>
+<rect x="506" y="345" width="154" height="15" rx="3" fill="#FFE8C0" stroke="none"/>
+<text x="512" y="356" font-family="system-ui,monospace" font-size="11" fill="#333333">3×30=50</text>
+<text x="20" y="385" text-anchor="start" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#333333">Output byte formulas — XOR chain:</text>
+<rect x="20" y="386" width="640" height="34" rx="4" fill="#FFF8F0" stroke="#EDD" stroke-width="0.5"/>
+<text x="28" y="402" font-family="system-ui,monospace" font-size="11" font-weight="700" fill="#7A3A00">out[0] = s'₀</text>
+<text x="130" y="402" font-family="system-ui,monospace" font-size="11" fill="#333333">= 2×D4 ⊕ 3×BF ⊕ 1×5D ⊕ 1×30</text>
+<text x="130" y="416" font-family="system-ui,monospace" font-size="11" fill="#666666">         = B3 ⊕ DA ⊕ 5D ⊕ 30</text>
+<text x="620" y="409" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="14" font-weight="700" fill="#7A1515">= 04</text>
+<rect x="20" y="424" width="640" height="34" rx="4" fill="#FFF0F0" stroke="#EDD" stroke-width="0.5"/>
+<text x="28" y="440" font-family="system-ui,monospace" font-size="11" font-weight="700" fill="#7A3A00">out[1] = s'₁</text>
+<text x="130" y="440" font-family="system-ui,monospace" font-size="11" fill="#333333">= 1×D4 ⊕ 2×BF ⊕ 3×5D ⊕ 1×30</text>
+<text x="130" y="454" font-family="system-ui,monospace" font-size="11" fill="#666666">         = D4 ⊕ 65 ⊕ E7 ⊕ 30</text>
+<text x="620" y="447" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="14" font-weight="700" fill="#7A1515">= 66</text>
+<rect x="20" y="462" width="640" height="34" rx="4" fill="#FFF8F0" stroke="#EDD" stroke-width="0.5"/>
+<text x="28" y="478" font-family="system-ui,monospace" font-size="11" font-weight="700" fill="#7A3A00">out[2] = s'₂</text>
+<text x="130" y="478" font-family="system-ui,monospace" font-size="11" fill="#333333">= 1×D4 ⊕ 1×BF ⊕ 2×5D ⊕ 3×30</text>
+<text x="130" y="492" font-family="system-ui,monospace" font-size="11" fill="#666666">         = D4 ⊕ BF ⊕ BA ⊕ 50</text>
+<text x="620" y="485" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="14" font-weight="700" fill="#7A1515">= 81</text>
+<rect x="20" y="500" width="640" height="34" rx="4" fill="#FFF0F0" stroke="#EDD" stroke-width="0.5"/>
+<text x="28" y="516" font-family="system-ui,monospace" font-size="11" font-weight="700" fill="#7A3A00">out[3] = s'₃</text>
+<text x="130" y="516" font-family="system-ui,monospace" font-size="11" fill="#333333">= 3×D4 ⊕ 1×BF ⊕ 1×5D ⊕ 2×30</text>
+<text x="130" y="530" font-family="system-ui,monospace" font-size="11" fill="#666666">         = 67 ⊕ BF ⊕ 5D ⊕ 60</text>
+<text x="620" y="523" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="14" font-weight="700" fill="#7A1515">= E5</text>
+<text x="20" y="565" text-anchor="start" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Full State S3 (all 4 columns mixed)</text>
+<text x="20" y="582" text-anchor="start" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Each column processed identically. All 16 bytes shown:</text>
+<rect x="20" y="590" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="606" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">04</text>
+<rect x="64" y="590" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="606" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">E0</text>
+<rect x="108" y="590" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="606" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">48</text>
+<rect x="152" y="590" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="606" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">28</text>
+<rect x="20" y="626" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="642" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">66</text>
+<rect x="64" y="626" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="642" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">CB</text>
+<rect x="108" y="626" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="642" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">F8</text>
+<rect x="152" y="626" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="642" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">06</text>
+<rect x="20" y="662" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="678" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">81</text>
+<rect x="64" y="662" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="678" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">19</text>
+<rect x="108" y="662" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="678" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">D3</text>
+<rect x="152" y="662" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="678" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">26</text>
+<rect x="20" y="698" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="714" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">E5</text>
+<rect x="64" y="698" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="714" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">9A</text>
+<rect x="108" y="698" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="714" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">7A</text>
+<rect x="152" y="698" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="714" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">4C</text>
+<text x="40" y="585" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">col 0</text>
+<text x="84" y="585" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">col 1</text>
+<text x="128" y="585" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">col 2</text>
+<text x="172" y="585" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">col 3</text>
+<text x="110" y="735" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Orange highlights = column 0 we computed above  (04, 66, 81, E5)</text>
+<rect x="20" y="746" width="640" height="22" rx="4" fill="#FFF3E0" stroke="#E07B00" stroke-width="0.8"/>
+<text x="340" y="759" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#7A3A00">State S3 now enters the final step of Round 1: AddRoundKey (shown as s9 ARK below) → gives S4.</text>
+</svg>
+    <figcaption style="font-size:12px;color:#666;text-align:center;margin-top:6px">MixColumns: S2 → S3. Orange highlights = column 0 traced in full. All arithmetic verified against FIPS 197. State S3 = 04 E0 48 28 / 66 CB F8 06 / 81 19 D3 26 / E5 9A 7A 4C.</figcaption>
+  </figure>
+
+  <div class="card green-left">
+    <h3 class="green">🔑 AddRoundKey — Final Step of Round 1 (S3 → S4)</h3>
+    <p>The last operation of every main round is <strong>AddRoundKey</strong>. State S3 is XOR-ed with <strong>Round Key 1</strong> to produce <strong>State S4</strong>, which is the state entering Round 2. Round Key 1 is derived from the cipher key using the AES key schedule.</p>
+  </div>
+
+  <figure style="margin:0 0 12px">
+    <svg width="100%" viewBox="0 0 680 280" role="img">
+<title>AES AddRoundKey Round 1: S3 XOR RoundKey1 = S4</title>
+<desc>State S3 after MixColumns is XOR-ed with Round Key 1 to produce S4, the state entering Round 2.</desc>
+<defs><marker id="arrS8b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+<rect x="0" y="0" width="680" height="28" rx="0" fill="#EAF5E2" stroke="none"/>
+<text x="340" y="18" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#235010">AddRoundKey (Round 1 final step): S3 → S4</text>
+<text x="100" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">S3 (after MixColumns)</text>
+<rect x="20" y="56" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="40" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">04</text>
+<rect x="64" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">E0</text>
+<rect x="108" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">48</text>
+<rect x="152" y="56" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">28</text>
+<rect x="20" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="40" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">66</text>
+<rect x="64" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">CB</text>
+<rect x="108" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">F8</text>
+<rect x="152" y="92" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">06</text>
+<rect x="20" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="40" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">81</text>
+<rect x="64" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">19</text>
+<rect x="108" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">D3</text>
+<rect x="152" y="128" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">26</text>
+<rect x="20" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="40" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">E5</text>
+<rect x="64" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="84" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">9A</text>
+<rect x="108" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="128" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">7A</text>
+<rect x="152" y="164" width="41" height="33" rx="4" fill="#FDECEA" stroke="#D84040" stroke-width="0.8"/>
+<text x="172" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#7A1515">4C</text>
+<text x="212" y="120" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">⊕</text>
+<text x="348" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">Round Key 1</text>
+<rect x="228" y="56" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="248" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">A0</text>
+<rect x="272" y="56" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">88</text>
+<rect x="316" y="56" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">23</text>
+<rect x="360" y="56" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">2A</text>
+<rect x="228" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">FA</text>
+<rect x="272" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">54</text>
+<rect x="316" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">A3</text>
+<rect x="360" y="92" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">6C</text>
+<rect x="228" y="128" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">FE</text>
+<rect x="272" y="128" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">2C</text>
+<rect x="316" y="128" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">39</text>
+<rect x="360" y="128" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">76</text>
+<rect x="228" y="164" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="248" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">17</text>
+<rect x="272" y="164" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="292" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">B1</text>
+<rect x="316" y="164" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="336" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">39</text>
+<rect x="360" y="164" width="41" height="33" rx="4" fill="#E8F4FB" stroke="#2E8BC0" stroke-width="0.8"/>
+<text x="380" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#0C4470">05</text>
+<text x="430" y="120" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#555">=</text>
+<text x="570" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#333333">S4 (state entering Round 2)</text>
+<rect x="448" y="56" width="41" height="33" rx="6" fill="#FFF3E0" stroke="#E07B00" stroke-width="1.5"/>
+<text x="468" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="700" fill="#7A3A00">A4</text>
+<rect x="492" y="56" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="512" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">68</text>
+<rect x="536" y="56" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="556" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">6B</text>
+<rect x="580" y="56" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="600" y="72" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">02</text>
+<rect x="448" y="92" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="468" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">9C</text>
+<rect x="492" y="92" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="512" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">9F</text>
+<rect x="536" y="92" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="556" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">5B</text>
+<rect x="580" y="92" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="600" y="108" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">6A</text>
+<rect x="448" y="128" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="468" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">7F</text>
+<rect x="492" y="128" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="512" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">35</text>
+<rect x="536" y="128" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="556" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">EA</text>
+<rect x="580" y="128" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="600" y="144" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">50</text>
+<rect x="448" y="164" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="468" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">F2</text>
+<rect x="492" y="164" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="512" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">2B</text>
+<rect x="536" y="164" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="556" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">43</text>
+<rect x="580" y="164" width="41" height="33" rx="4" fill="#EAF5E2" stroke="#4A9620" stroke-width="0.8"/>
+<text x="600" y="180" text-anchor="middle" dominant-baseline="central" font-family="system-ui,monospace" font-size="12" font-weight="400" fill="#235010">49</text>
+<rect x="20" y="200" width="640" height="58" rx="6" fill="#FAFAFA" stroke="#DDD" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="340" y="218" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#333333">Highlighted [0][0]: S3=04  ⊕  RK1=A0  =  A4   (00000100 ⊕ 10100000 = 10100100 = 0xA4 ✓)</text>
+<text x="340" y="236" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#666666">Other samples: S3[0][1] E0 ⊕ RK[0][1] 88 = 68 ✓     S3[1][0] 66 ⊕ RK[1][0] FA = 9C ✓</text>
+<text x="340" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#4A9620">State S4 = A4 68 6B 02 / 9C 9F 5B 6A / 7F 35 EA 50 / F2 2B 43 49   (verified against FIPS 197)</text>
+</svg>
+    <figcaption style="font-size:12px;color:#666;text-align:center;margin-top:6px">AddRoundKey (Round 1): S3 ⊕ Round Key 1 = S4. State S4 = A4 68 6B 02 / 9C 9F 5B 6A / 7F 35 EA 50 / F2 2B 43 49. Verified against FIPS 197 Appendix B.</figcaption>
+  </figure>
+
+  <div class="card accent-left">
+    <h3>📊 Complete Round 1 State Progression</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>Operation</th><th>State Name</th><th>First Row (hex)</th></tr></thead>
+        <tbody>
+          <tr><td>Start</td><td>Enter Round 1</td><td>S0</td><td>19  A0  9A  E9</td></tr>
+          <tr><td>1</td><td>SubBytes</td><td>S1</td><td>D4  E0  B8  1E</td></tr>
+          <tr><td>2</td><td>ShiftRows</td><td>S2</td><td>D4  E0  B8  1E (row 0 unchanged)</td></tr>
+          <tr><td>3</td><td>MixColumns</td><td>S3</td><td>04  E0  48  28</td></tr>
+          <tr><td>4</td><td>AddRoundKey</td><td>S4</td><td>A4  68  6B  02</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="exam-box">
     <div class="label">📝 Common Exam Questions</div>
     <ul>
-      <li>What does MixColumns do? → Multiplies each column of the state by a fixed matrix using GF(2⁸) arithmetic</li>
-      <li>What field does MixColumns operate over? → GF(2⁸) — Galois Field with 2⁸ = 256 elements</li>
-      <li>What is "addition" in GF(2⁸)? → Bitwise XOR (⊕)</li>
-      <li>What is the AES reducing polynomial? → x⁸ + x⁴ + x³ + x + 1 (0x11B)</li>
+      <li>What does MixColumns do? → Multiplies each column by a fixed matrix over GF(2⁸); each output byte depends on all 4 input bytes</li>
+      <li>What field does MixColumns operate over? → GF(2⁸)</li>
+      <li>What is ×02 in GF(2⁸)? → Left-shift 1 bit; if the original MSB was 1, XOR result with 0x1B</li>
+      <li>What is the reducing polynomial? → x⁸ + x⁴ + x³ + x + 1 (0x11B)</li>
       <li>In which round is MixColumns omitted? → The Final Round</li>
-      <li>What cryptographic properties do ShiftRows and MixColumns together provide? → Full diffusion</li>
+      <li>Compute: 2×D4 = B3. (D4=11010100. Shift left = 10101000. MSB was 1, so XOR with 0x1B: 10101000 ⊕ 00011011 = 10110011 = B3 ✓)</li>
+      <li>Full column 0 trace: input [D4,BF,5D,30] → output [04,66,81,E5] ✓ (verified against FIPS 197)</li>
     </ul>
   </div>
 </section>
