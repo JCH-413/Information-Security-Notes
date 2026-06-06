@@ -1,0 +1,701 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Block Ciphers &amp; What DES Is</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Symmetric Block Encryption Algorithms</h3>
+    <p>A <strong>block cipher</strong> processes the plaintext input in <strong>fixed-size blocks</strong> and produces a block of ciphertext of <strong>equal size</strong> for each plaintext block. The same secret key is used for both encryption and decryption (symmetric).</p>
+    <ul>
+      <li><strong>DES</strong> — Data Encryption Standard (the focus of this lecture)</li>
+      <li><strong>Triple DES</strong> (3DES)</li>
+      <li><strong>AES</strong>, etc.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🏛️ The Data Encryption Standard (DES)</h3>
+    <ul>
+      <li>Designed by <strong>IBM</strong>.</li>
+      <li>It is a <strong>block cipher</strong>.</li>
+      <li>Adopted in <strong>1977</strong> by the National Bureau of Standards (NBS) — now the <strong>National Institute of Standards and Technology (NIST)</strong> — as <strong>Federal Information Processing Standard (FIPS) 46</strong>.</li>
+      <li>It was <strong>unbroken for more than 10 years</strong> after publication. Some aspects of its design were kept secret by IBM at the request of the US <strong>National Security Agency (NSA)</strong>.</li>
+      <li>Some people believed IBM and NSA had hidden a <strong>trapdoor</strong> in DES that only they knew about (which they could use to crack DES).</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 DES Parameters — memorize these</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cipher type</td><td>Block cipher (Feistel structure)</td></tr>
+          <tr><td>Block size</td><td>64 bits</td></tr>
+          <tr><td>Total rounds</td><td>16</td></tr>
+          <tr><td>Key size (input)</td><td>64 bits</td></tr>
+          <tr><td>Effective key size</td><td>56 bits (8 parity bits dropped)</td></tr>
+          <tr><td>Number of subkeys</td><td>16</td></tr>
+          <tr><td>Subkey size</td><td>48 bits</td></tr>
+          <tr><td>Ciphertext size</td><td>64 bits</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card red-left">
+      <h3 class="red">⚠️ DES Criticism (before adoption)</h3>
+      <p>Before being adopted as a standard, DES drew intense criticism on two fronts:</p>
+      <ul>
+        <li><strong>First</strong> — an enormous reduction in the key, leaving it <strong>too short to withstand a brute-force attack</strong>.</li>
+        <li><strong>Second</strong> — the internal structure of the <strong>S-boxes was classified</strong> (kept secret).</li>
+      </ul>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">📈 DES Wide Use</h3>
+      <ul>
+        <li>DES flourished in <strong>financial applications</strong>.</li>
+        <li>In <strong>1994</strong>, NIST reaffirmed its use for another 5 years.</li>
+        <li>In <strong>1999</strong>, NIST issued a new version of its standard — <strong>Triple DES</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔁 High-Level Overview</h3>
+    <p>DES encryption takes a 64-bit plaintext (P.T) and a 56-bit key to produce a 64-bit ciphertext (C.T). Decryption is the <strong>reverse cipher</strong> using the same key:</p>
+    <div class="flow">
+      <div class="flow-step">64-bit P.T</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">DES Cipher (56-bit key)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">64-bit C.T</div>
+    </div>
+    <div class="flow">
+      <div class="flow-step">64-bit C.T</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">DES Rev. Cipher (56-bit key)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">64-bit P.T</div>
+    </div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>General Structure of DES</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Three-Stage Pipeline</h3>
+    <p>The full DES encryption has three phases applied to the 64-bit plaintext, while the 56-bit cipher key feeds a separate <a href="#s6">round-key generator</a>:</p>
+    <ol>
+      <li><strong>Initial Permutation (IP)</strong> — rearranges the 64 input bits once.</li>
+      <li><strong>16 rounds</strong> — each a Feistel round driven by its own 48-bit subkey (K1 … K16).</li>
+      <li><strong>Final Permutation (FP / IP⁻¹)</strong> — the inverse of IP, applied once at the end.</li>
+    </ol>
+  </div>
+
+  <p>The overall data path looks like this — plaintext enters at the top, each round mixes in a 48-bit subkey from the key generator on the right, and the final permutation yields the ciphertext:</p>
+
+  <div class="card accent-left">
+    <h3>🗺️ DES General Structure (diagram)</h3>
+    <p>Reading top-to-bottom on the left, and right-to-left for the keys:</p>
+    <ul>
+      <li><strong>64-bit P.T</strong> → <strong>Initial Permutation</strong> → <strong>Round 1</strong> (fed by <strong>K1, 48-bit</strong>) → … (dashed) … → <strong>Round 16</strong> (fed by <strong>K16, 48-bit</strong>) → <strong>Final Permutation</strong> → <strong>64-bit C.T</strong>.</li>
+      <li>On the right, the <strong>Round-key generator</strong> takes the <strong>56-bit cipher key</strong> and produces each round's 48-bit subkey.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔧 Initial &amp; Final Permutation</h3>
+    <ul>
+      <li><strong>Initial Permutation (IP)</strong> — occurs <em>only once</em>, before the first round.</li>
+      <li><strong>Final Permutation (FP)</strong> — occurs once, after the last round.</li>
+      <li>Both IP and FP are <strong>straight P-boxes that are inverses of each other</strong>. They are predefined tables and have <strong>no cryptographic significance</strong> in DES (they don't add security; they're a hardware-era artifact).</li>
+    </ul>
+  </div>
+
+  <div class="analogy-box">
+    <div class="a-title">Analogy — A Feistel Round</div>
+    <p>Think of each round like shuffling a two-handed deck. You keep the <strong>left half</strong> aside, scramble the <strong>right half</strong> with a secret recipe (the round function and subkey), then mix that scramble into the left half by XOR. Finally you <strong>swap hands</strong> so the scrambled side becomes the side you keep next time. Because the swap and XOR are reversible, the very same machine run backwards undoes everything — which is why decryption reuses the encryption circuitry.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Initial &amp; Final Permutation (with the real tables)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Permutation Concept</h3>
+    <p>A permutation simply <strong>rearranges</strong> the bits of a block — no bit is added or removed in a <em>straight</em> permutation. The mapping is fixed and public (a "predefined table"). IP runs before the 16 rounds; FP runs after them, and FP is exactly the inverse of IP.</p>
+    <p class="note">Reading a permutation table: the table lists, for each output position, <em>which input bit goes there</em>. So in IP, output bit 1 = input bit 58, output bit 2 = input bit 50, and so on.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔢 Initial Permutation (IP) Table</h3>
+    <p>The 64-bit input block is permuted using this table (output position reads its source input bit):</p>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>58</td><td>50</td><td>42</td><td>34</td><td>26</td><td>18</td><td>10</td><td>2</td></tr>
+          <tr><td>60</td><td>52</td><td>44</td><td>36</td><td>28</td><td>20</td><td>12</td><td>4</td></tr>
+          <tr><td>62</td><td>54</td><td>46</td><td>38</td><td>30</td><td>22</td><td>14</td><td>6</td></tr>
+          <tr><td>64</td><td>56</td><td>48</td><td>40</td><td>32</td><td>24</td><td>16</td><td>8</td></tr>
+          <tr><td>57</td><td>49</td><td>41</td><td>33</td><td>25</td><td>17</td><td>9</td><td>1</td></tr>
+          <tr><td>59</td><td>51</td><td>43</td><td>35</td><td>27</td><td>19</td><td>11</td><td>3</td></tr>
+          <tr><td>61</td><td>53</td><td>45</td><td>37</td><td>29</td><td>21</td><td>13</td><td>5</td></tr>
+          <tr><td>63</td><td>55</td><td>47</td><td>39</td><td>31</td><td>23</td><td>15</td><td>7</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Example from the slides: the 35th bit of the input block becomes the 44th bit of the output block.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔢 Final Permutation (FP = IP⁻¹) Table</h3>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>40</td><td>8</td><td>48</td><td>16</td><td>56</td><td>24</td><td>64</td><td>32</td></tr>
+          <tr><td>39</td><td>7</td><td>47</td><td>15</td><td>55</td><td>23</td><td>63</td><td>31</td></tr>
+          <tr><td>38</td><td>6</td><td>46</td><td>14</td><td>54</td><td>22</td><td>62</td><td>30</td></tr>
+          <tr><td>37</td><td>5</td><td>45</td><td>13</td><td>53</td><td>21</td><td>61</td><td>29</td></tr>
+          <tr><td>36</td><td>4</td><td>44</td><td>12</td><td>52</td><td>20</td><td>60</td><td>28</td></tr>
+          <tr><td>35</td><td>3</td><td>43</td><td>11</td><td>51</td><td>19</td><td>59</td><td>27</td></tr>
+          <tr><td>34</td><td>2</td><td>42</td><td>10</td><td>50</td><td>18</td><td>58</td><td>26</td></tr>
+          <tr><td>33</td><td>1</td><td>41</td><td>9</td><td>49</td><td>17</td><td>57</td><td>25</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Example from the slides: the 44th bit of the input block becomes the 35th bit of the output block — exactly the reverse of the IP example, confirming FP undoes IP.</p>
+  </div>
+
+  <div class="highlight">Key exam point: IP and FP are <strong>inverses</strong> and have <strong>no cryptographic value</strong>. If you apply IP then immediately FP (with no rounds between), you get the original block back.</div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Inside a Single Round &amp; the DES Function f</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Single Round (Feistel)</h3>
+    <p>Each 64-bit value entering a round is treated as two 32-bit halves: <strong>L</strong> (left) and <strong>R</strong> (right). The round key <strong>Kᵢ is 48 bits</strong>; the R input is 32 bits.</p>
+    <ul>
+      <li>The R input is first <strong>expanded to 48 bits</strong> using a table that duplicates 16 of the R bits.</li>
+      <li>The resulting 48 bits are <strong>XORed with Kᵢ</strong>.</li>
+      <li>This 48-bit result passes through the <strong>substitution function (S-boxes)</strong>, producing a 32-bit output.</li>
+      <li>That 32-bit output is then <strong>permuted</strong> (the straight P-box).</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ The Feistel Round Equations</h3>
+    <div class="math-block">
+      L<sub>i</sub> = R<sub>i-1</sub><br>
+      R<sub>i</sub> = L<sub>i-1</sub> ⊕ f(R<sub>i-1</sub>, K<sub>i</sub>)<br>
+      <span class="comment">the left half just copies the previous right half; the new right half is the old left XOR the round function</span>
+    </div>
+    <p>Inside the function <strong>f(R, K)</strong>, the order of operations is:</p>
+    <div class="flow">
+      <div class="flow-step">R (32)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Expansion P-Box (48)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">XOR Kᵢ (Whitener)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">8 S-Boxes (32)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Straight P-Box (32)</div>
+    </div>
+    <p class="note">The four components of the DES function are therefore: <strong>Expansion P-Box → Whitener (XOR with key) → Group of S-Boxes → Straight P-Box</strong>.</p>
+  </div>
+
+  <p>Here is the structure of one round side-by-side with the internals of f, so you can see where the 32→48→32 bit-width changes happen:</p>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Expansion, S-Boxes &amp; the Straight P-Box</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Expansion Permutation (E)</h3>
+    <p>The expansion permutation acts on the 32-bit input to the cipher function. It <strong>expands 32 bits to 48 bits</strong> by <em>duplicating</em> some input bits at specified positions. (This is what lets a 32-bit half be XORed against a 48-bit subkey.)</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔢 Expansion (E) Table</h3>
+    <p>Read row by row; each entry is the source bit (from the 32-bit input) placed at that output position. Note how the first and last columns reach back to the neighbouring group — that is the duplication:</p>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td class="match">32</td><td>1</td><td>2</td><td>3</td><td>4</td><td class="match">5</td></tr>
+          <tr><td class="match">4</td><td>5</td><td>6</td><td>7</td><td>8</td><td class="match">9</td></tr>
+          <tr><td class="match">8</td><td>9</td><td>10</td><td>11</td><td>12</td><td class="match">13</td></tr>
+          <tr><td class="match">12</td><td>13</td><td>14</td><td>15</td><td>16</td><td class="match">17</td></tr>
+          <tr><td class="match">16</td><td>17</td><td>18</td><td>19</td><td>20</td><td class="match">21</td></tr>
+          <tr><td class="match">20</td><td>21</td><td>22</td><td>23</td><td>24</td><td class="match">25</td></tr>
+          <tr><td class="match">24</td><td>25</td><td>26</td><td>27</td><td>28</td><td class="match">29</td></tr>
+          <tr><td class="match">28</td><td>29</td><td>30</td><td>31</td><td>32</td><td class="match">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Example from the slides: the 46th bit of the output block (counting from left, bit 1) equals the 31st bit of the input block. The highlighted first/last columns are the duplicated bits.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Substitution Boxes (S-Boxes)</h3>
+    <p>The S-boxes are the <strong>heart of DES security</strong> — the only non-linear step.</p>
+    <ul>
+      <li>Each S-box maps a <strong>6-bit input</strong> block to a <strong>4-bit output</strong> block.</li>
+      <li>There are <strong>8 S-boxes</strong>, so the 48-bit input (8 × 6) is mapped to a <strong>32-bit output</strong> (8 × 4).</li>
+    </ul>
+    <p>How the 6 bits address the table:</p>
+    <div class="math-block">
+      row = bit&#8321; bit&#8326; <span class="comment">(the outer/first &amp; sixth bits → 2-bit row index, 0–3)</span><br>
+      column = bit&#8322; bit&#8323; bit&#8324; bit&#8325; <span class="comment">(the middle four bits → 4-bit column index, 0–15)</span>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 S-box 1 (Table 6.3)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th></tr></thead>
+        <tbody>
+          <tr><td><strong>0</strong></td><td>14</td><td>4</td><td>13</td><td>1</td><td>2</td><td>15</td><td>11</td><td>8</td><td>3</td><td>10</td><td>6</td><td>12</td><td>5</td><td>9</td><td>0</td><td>7</td></tr>
+          <tr><td><strong>1</strong></td><td>0</td><td>15</td><td>7</td><td>4</td><td>14</td><td>2</td><td>13</td><td>10</td><td>3</td><td>6</td><td>12</td><td>11</td><td>9</td><td>5</td><td>3</td><td>8</td></tr>
+          <tr><td><strong>2</strong></td><td>4</td><td>1</td><td>14</td><td>8</td><td>13</td><td>6</td><td>2</td><td>11</td><td>15</td><td>12</td><td>9</td><td>7</td><td>3</td><td>10</td><td>5</td><td>0</td></tr>
+          <tr><td><strong>3</strong></td><td>15</td><td class="diff">12</td><td>8</td><td>2</td><td>4</td><td>9</td><td>1</td><td>7</td><td>5</td><td>11</td><td>3</td><td>14</td><td>10</td><td>0</td><td>6</td><td>13</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 S-box 8 (Table 6.10)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th></tr></thead>
+        <tbody>
+          <tr><td><strong>0</strong></td><td class="diff">13</td><td>2</td><td>8</td><td>4</td><td>6</td><td>15</td><td>11</td><td>1</td><td>10</td><td>9</td><td>3</td><td>14</td><td>5</td><td>0</td><td>12</td><td>7</td></tr>
+          <tr><td><strong>1</strong></td><td>1</td><td>15</td><td>13</td><td>8</td><td>10</td><td>3</td><td>7</td><td>4</td><td>12</td><td>5</td><td>6</td><td>11</td><td>10</td><td>14</td><td>9</td><td>2</td></tr>
+          <tr><td><strong>2</strong></td><td>7</td><td>11</td><td>4</td><td>1</td><td>9</td><td>12</td><td>14</td><td>2</td><td>0</td><td>6</td><td>10</td><td>10</td><td>15</td><td>3</td><td>5</td><td>8</td></tr>
+          <tr><td><strong>3</strong></td><td>2</td><td>1</td><td>14</td><td>7</td><td>4</td><td>10</td><td>8</td><td>13</td><td>15</td><td>12</td><td>9</td><td>9</td><td>3</td><td>5</td><td>6</td><td>11</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">These are the only two S-boxes given in full in the lecture (S-box 1 and S-box 8). The remaining S2–S7 follow the same 4×16 format. The two worked examples in <a href="#s8">Section 08</a> use exactly these two tables.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Straight Permutation (P)</h3>
+    <p>The 32-bit output of the S-boxes is bitwise permuted (rearranged) using this table — the final step of the function f:</p>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>16</td><td>7</td><td>20</td><td>21</td><td>29</td><td>12</td><td>28</td><td>17</td></tr>
+          <tr><td>1</td><td>15</td><td>23</td><td>26</td><td>5</td><td>18</td><td>31</td><td>10</td></tr>
+          <tr><td>2</td><td>8</td><td>24</td><td>14</td><td>32</td><td>27</td><td>3</td><td>9</td></tr>
+          <tr><td>19</td><td>13</td><td>30</td><td>6</td><td>22</td><td>11</td><td>4</td><td>25</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Example from the slides: the 25th bit of the output block equals the 19th bit of the input block.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Key Generation (The Key Schedule)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Round-Key Generator</h3>
+    <p>The round-key generator creates <strong>sixteen 48-bit subkeys</strong> out of a <strong>56-bit cipher key</strong>. The actual key supplied is <strong>64 bits</strong>, from which <strong>8 parity bits are dropped</strong>.</p>
+    <ul>
+      <li><strong>Parity Drop positions</strong> (the bits removed): <strong>8, 16, 24, 32, 40, 48, 56, 64</strong>.</li>
+      <li>The schedule uses two fixed permutation tables — <strong>PC1</strong> (Permuted Choice One) and <strong>PC2</strong> (Permuted Choice Two) — and a table of <strong>shifts (LS)</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔄 The Shift Schedule (LS)</h3>
+    <p>At each round the two 28-bit halves are circularly left-shifted (rotated):</p>
+    <div class="math-block">
+      Rounds 1, 2, 9, 16 → shift by <span class="val-shared">1 bit</span><br>
+      All other rounds → shift by <span class="val-secret">2 bits</span><br>
+      <span class="comment">total shifts across 16 rounds = 28, which returns C/D to start</span>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ Key Schedule — Step by Step</h3>
+    <ol>
+      <li>The 64-bit key is the input. It is first subjected to permutation <strong>PC1 (Permuted Choice One)</strong>, which also drops the parity bits.</li>
+      <li>The resulting <strong>56-bit key</strong> is treated as two 28-bit halves, <strong>C₀</strong> and <strong>D₀</strong>.</li>
+      <li>At each round, <strong>Cᵢ₋₁</strong> and <strong>Dᵢ₋₁</strong> are <em>separately</em> circularly left-shifted (1 or 2 bits per the LS table). These shifted values feed the next round.</li>
+      <li>They also feed <strong>PC2 (Permuted Choice Two)</strong>, which produces the <strong>48-bit output</strong> subkey Kᵢ used inside the round function f(Rᵢ₋₁, Kᵢ).</li>
+    </ol>
+    <p class="note">The permutation function is the same each round, but a <strong>different subkey results</strong> because of the accumulated repeated shifts of the key bits.</p>
+  </div>
+
+  <p>The control flow of the schedule — generate one 48-bit subkey per round, loop until round 16:</p>
+
+  <div class="step-box">
+    <div class="step-num" data-n="1">Step 1</div>
+    <h4>Key (64) → PC1 → Effective Key (56)</h4>
+    <p>Drop the 8 parity bits and permute via PC1, giving the 56-bit effective key, split into C₀ and D₀ (28 bits each).</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="2">Step 2</div>
+    <h4>Set round number = 1</h4>
+    <p>Begin the loop that will produce K1 … K16.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="3">Step 3</div>
+    <h4>Circular left shift (LS) of both halves</h4>
+    <p>Shift Cᵢ₋₁ and Dᵢ₋₁ independently by 1 or 2 bits according to the round number.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="4">Step 4</div>
+    <h4>PC2 → Subkey (48)</h4>
+    <p>Apply Permuted Choice Two to the joined 56 bits to select the 48-bit subkey Kᵢ.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="5">Step 5</div>
+    <h4>Is round number = 16?</h4>
+    <p>If <strong>No</strong> → increment the round number and loop back to Step 3. If <strong>Yes</strong> → <strong>End</strong>; all 16 subkeys are ready.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Full Encryption &amp; Decryption Flow</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 DES Encryption — the data side</h3>
+    <p>There are two inputs to the encryption function: <strong>plaintext</strong> and <strong>key</strong>. The plaintext must be <strong>64 bits</strong> and the key is <strong>56 bits</strong> effective. Processing the plaintext proceeds in these phases:</p>
+    <ol>
+      <li>The 64-bit plaintext passes through an <strong>initial permutation (IP)</strong> that rearranges the bits to produce the <em>permuted input</em>.</li>
+      <li>This is followed by <strong>16 rounds</strong> of the same function, involving substitution and permutation.</li>
+      <li>The output of the 16th round is 64 bits that are a function of the input plaintext and the key.</li>
+      <li>The left and right halves of that output are <strong>swapped</strong> to produce the <em>preoutput</em>.</li>
+      <li>Finally the preoutput passes through <strong>IP⁻¹ (the final permutation)</strong> to produce the 64-bit ciphertext.</li>
+    </ol>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔑 DES Encryption — the key side</h3>
+    <p>The right-hand portion of the schematic shows how the 56-bit key is used:</p>
+    <ul>
+      <li>Initially the key is passed through a <strong>permutation function</strong> (PC1).</li>
+      <li>For each of the 16 rounds, a subkey <strong>Kᵢ</strong> is produced by a combination of a <strong>left circular shift</strong> and a <strong>permutation</strong> (PC2).</li>
+      <li>The permutation function is the <strong>same each round</strong>, but a <strong>different subkey</strong> is produced because of the repeated shifts of the key bits.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🔓 DES Decryption</h3>
+    <p>Decryption uses the <strong>same algorithm</strong> as encryption — <em>except the subkeys are applied in reverse order</em> (K16 first, down to K1). This is the elegant payoff of the Feistel structure: one circuit does both directions.</p>
+    <div class="math-block">
+      Encrypt: apply K<sub>1</sub>, K<sub>2</sub>, …, K<sub>16</sub><br>
+      Decrypt: apply K<sub>16</sub>, K<sub>15</sub>, …, K<sub>1</sub>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Worked Examples (The Maths, Step by Step)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Two Examples We Will Trace</h3>
+    <p>To make the maths concrete we work two examples using the <em>exact</em> tables from this lecture:</p>
+    <ul>
+      <li><strong>Example A</strong> — push a full 64-bit plaintext through the <a href="#s3">Initial Permutation</a> and the start of the function f (<a href="#s5">expansion</a>), so you can see the 64→split→32→48 bit-widths in action.</li>
+      <li><strong>Example B</strong> — the two S-box lookups from the lecture: input <code>100011</code> into S-box 1, and input <code>000000</code> into S-box 8.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧮 Example A — Initial Permutation &amp; Expansion</h3>
+    <p>Take the standard textbook plaintext block (hex) <code>0123456789ABCDEF</code>. We feed it through IP, split into halves, and expand the right half. The diagram below traces every transformation:</p>
+
+    <svg viewBox="0 0 720 540" xmlns="http://www.w3.org/2000/svg" font-family="monospace" role="img" aria-label="DES initial permutation and expansion worked example">
+      <!-- Step 1: plaintext -->
+      <rect x="160" y="14" width="400" height="40" rx="6" fill="#1d2433" stroke="#3a4760"/>
+      <text x="360" y="32" fill="#9fb0c8" font-size="12" text-anchor="middle" font-family="sans-serif">64-bit PLAINTEXT (hex)</text>
+      <text x="360" y="48" fill="#e8edf5" font-size="16" text-anchor="middle" font-weight="bold">01 23 45 67 89 AB CD EF</text>
+
+      <line x1="360" y1="54" x2="360" y2="84" stroke="#6b7a94" stroke-width="2"/>
+      <polygon points="360,90 355,80 365,80" fill="#6b7a94"/>
+      <text x="378" y="76" fill="#c98a3a" font-size="12" font-family="sans-serif">apply IP table</text>
+
+      <!-- Step 2: after IP -->
+      <rect x="120" y="92" width="480" height="44" rx="6" fill="#16241c" stroke="#2f5d3a"/>
+      <text x="360" y="110" fill="#7fae8a" font-size="12" text-anchor="middle" font-family="sans-serif">PERMUTED INPUT  (after IP)  =  CC 00 CC FF F0 AA F0 AA</text>
+      <text x="360" y="128" fill="#bfe6c6" font-size="13" text-anchor="middle">11001100 00000000 11001100 11111111 | 11110000 10101010 11110000 10101010</text>
+
+      <line x1="240" y1="136" x2="240" y2="166" stroke="#6b7a94" stroke-width="2"/>
+      <polygon points="240,172 235,162 245,162" fill="#6b7a94"/>
+      <line x1="480" y1="136" x2="480" y2="166" stroke="#6b7a94" stroke-width="2"/>
+      <polygon points="480,172 475,162 485,162" fill="#6b7a94"/>
+      <text x="360" y="158" fill="#9fb0c8" font-size="11" text-anchor="middle" font-family="sans-serif">split into two 32-bit halves</text>
+
+      <!-- Step 3: L0 and R0 -->
+      <rect x="100" y="174" width="280" height="46" rx="6" fill="#1d2433" stroke="#3a4760"/>
+      <text x="240" y="192" fill="#9fb0c8" font-size="12" text-anchor="middle" font-family="sans-serif">L0 (left 32) = CC00CCFF</text>
+      <text x="240" y="210" fill="#e8edf5" font-size="12" text-anchor="middle">1100 1100 0000 0000 1100 1100 1111 1111</text>
+
+      <rect x="400" y="174" width="280" height="46" rx="6" fill="#2a1d1d" stroke="#5d3a3a"/>
+      <text x="540" y="192" fill="#d49a9a" font-size="12" text-anchor="middle" font-family="sans-serif">R0 (right 32) = F0AAF0AA</text>
+      <text x="540" y="210" fill="#f0cccc" font-size="12" text-anchor="middle">1111 0000 1010 1010 1111 0000 1010 1010</text>
+
+      <line x1="540" y1="220" x2="540" y2="250" stroke="#6b7a94" stroke-width="2"/>
+      <polygon points="540,256 535,246 545,246" fill="#6b7a94"/>
+      <text x="558" y="242" fill="#c98a3a" font-size="12" font-family="sans-serif">Expansion E: 32 → 48</text>
+
+      <!-- Step 4: E(R0) -->
+      <rect x="120" y="258" width="560" height="58" rx="6" fill="#241f2e" stroke="#4a3a5d"/>
+      <text x="400" y="276" fill="#b89ad4" font-size="12" text-anchor="middle" font-family="sans-serif">E(R0) — 48 bits, in eight 6-bit groups (one per S-box)</text>
+      <text x="400" y="298" fill="#dcc9f0" font-size="13" text-anchor="middle">011110 100001 010101 010101 011110 100001 010101 010101</text>
+      <text x="400" y="311" fill="#8a7aa0" font-size="10" text-anchor="middle" font-family="sans-serif">↑ first &amp; last bit of each group are duplicated neighbours (the "expansion")</text>
+
+      <!-- explanation of duplication -->
+      <rect x="160" y="332" width="400" height="92" rx="6" fill="#1d2433" stroke="#3a4760"/>
+      <text x="360" y="352" fill="#c98a3a" font-size="12" text-anchor="middle" font-family="sans-serif" font-weight="bold">Why 48 and not 32?</text>
+      <text x="180" y="372" fill="#cdd7e6" font-size="11" font-family="sans-serif">R0 has 32 bits. The E-table lists 48 source</text>
+      <text x="180" y="388" fill="#cdd7e6" font-size="11" font-family="sans-serif">positions, repeating 16 of the 32 bits, so the</text>
+      <text x="180" y="404" fill="#cdd7e6" font-size="11" font-family="sans-serif">result can be XORed against the 48-bit subkey Kᵢ.</text>
+
+      <!-- next-step arrow -->
+      <line x1="360" y1="424" x2="360" y2="452" stroke="#6b7a94" stroke-width="2"/>
+      <polygon points="360,458 355,448 365,448" fill="#6b7a94"/>
+      <rect x="150" y="460" width="420" height="62" rx="6" fill="#16241c" stroke="#2f5d3a"/>
+      <text x="360" y="480" fill="#7fae8a" font-size="12" text-anchor="middle" font-family="sans-serif" font-weight="bold">Next in f(R, K):  XOR with K1 → 8 S-boxes → straight P</text>
+      <text x="360" y="500" fill="#bfe6c6" font-size="11" text-anchor="middle" font-family="sans-serif">Each 6-bit group becomes the input to one S-box (see Example B</text>
+      <text x="360" y="515" fill="#bfe6c6" font-size="11" text-anchor="middle" font-family="sans-serif">for exactly how a 6-bit group is looked up).</text>
+    </svg>
+    <p class="note">All values above are computed with the real IP and E tables from <a href="#s3">Section 03</a> and <a href="#s5">Section 05</a>. The 48-bit E(R0) is the input that next gets XORed with the round subkey before hitting the S-boxes.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧮 Example B — Two S-Box Lookups</h3>
+    <p>The S-box is the only non-linear step, so it is the most exam-tested. Here are the two lookups from the lecture, fully drawn out. Remember: <strong>outer bits (1st &amp; 6th) → row</strong>, <strong>middle four bits → column</strong>.</p>
+
+    <svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg" font-family="monospace" role="img" aria-label="DES S-box lookup worked examples">
+      <!-- ===== Example B1: S-box 1, input 100011 ===== -->
+      <text x="20" y="26" fill="#c98a3a" font-size="14" font-family="sans-serif" font-weight="bold">B1 ·  S-box 1  ·  input = 1 0 0 0 1 1</text>
+
+      <!-- six bit cells -->
+      <g font-size="18" text-anchor="middle">
+        <rect x="40"  y="40" width="40" height="44" rx="4" fill="#2a1d2e" stroke="#a05dd0"/>
+        <text x="60"  y="68" fill="#e0b0f0">1</text>
+        <rect x="84"  y="40" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="104" y="68" fill="#cdd7e6">0</text>
+        <rect x="128" y="40" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="148" y="68" fill="#cdd7e6">0</text>
+        <rect x="172" y="40" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="192" y="68" fill="#cdd7e6">0</text>
+        <rect x="216" y="40" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="236" y="68" fill="#cdd7e6">1</text>
+        <rect x="260" y="40" width="40" height="44" rx="4" fill="#2a1d2e" stroke="#a05dd0"/>
+        <text x="280" y="68" fill="#e0b0f0">1</text>
+      </g>
+      <text x="60"  y="100" fill="#a05dd0" font-size="10" text-anchor="middle" font-family="sans-serif">bit 1</text>
+      <text x="280" y="100" fill="#a05dd0" font-size="10" text-anchor="middle" font-family="sans-serif">bit 6</text>
+      <text x="170" y="100" fill="#6b7a94" font-size="10" text-anchor="middle" font-family="sans-serif">bits 2–5</text>
+
+      <!-- row computation -->
+      <text x="360" y="56" fill="#cdd7e6" font-size="12" font-family="sans-serif">row = bit1·bit6 = <tspan fill="#e0b0f0" font-weight="bold">1 1</tspan>₂ = 3</text>
+      <text x="360" y="78" fill="#cdd7e6" font-size="12" font-family="sans-serif">col = bits 2-5 = <tspan fill="#9fb0c8" font-weight="bold">0001</tspan>₂ = 1</text>
+
+      <!-- mini table highlight row3 col1 -->
+      <text x="40" y="130" fill="#7fae8a" font-size="11" font-family="sans-serif">Look up S-box 1, row 3, column 1:</text>
+      <g font-size="12" text-anchor="middle" font-family="sans-serif">
+        <rect x="40" y="140" width="50" height="24" fill="#222b3a" stroke="#3a4760"/><text x="65" y="156" fill="#7a8aa0">r\c</text>
+        <rect x="90" y="140" width="40" height="24" fill="#222b3a" stroke="#3a4760"/><text x="110" y="156" fill="#7a8aa0">0</text>
+        <rect x="130" y="140" width="40" height="24" fill="#3a2f16" stroke="#c98a3a"/><text x="150" y="156" fill="#e8c98a">1</text>
+        <rect x="170" y="140" width="40" height="24" fill="#222b3a" stroke="#3a4760"/><text x="190" y="156" fill="#7a8aa0">2</text>
+        <rect x="210" y="140" width="40" height="24" fill="#222b3a" stroke="#3a4760"/><text x="230" y="156" fill="#7a8aa0">…</text>
+      </g>
+      <g font-size="12" text-anchor="middle">
+        <rect x="40" y="164" width="50" height="24" fill="#222b3a" stroke="#3a4760"/><text x="65" y="180" fill="#7a8aa0" font-family="sans-serif">3</text>
+        <rect x="90" y="164" width="40" height="24" fill="#1d2433" stroke="#3a4760"/><text x="110" y="180" fill="#cdd7e6">15</text>
+        <rect x="130" y="164" width="40" height="24" fill="#163a22" stroke="#2f5d3a" stroke-width="2"/><text x="150" y="180" fill="#7fff9f" font-weight="bold">12</text>
+        <rect x="170" y="164" width="40" height="24" fill="#1d2433" stroke="#3a4760"/><text x="190" y="180" fill="#cdd7e6">8</text>
+        <rect x="210" y="164" width="40" height="24" fill="#1d2433" stroke="#3a4760"/><text x="230" y="180" fill="#cdd7e6">…</text>
+      </g>
+
+      <!-- result -->
+      <rect x="300" y="140" width="360" height="48" rx="6" fill="#16241c" stroke="#2f5d3a"/>
+      <text x="480" y="160" fill="#7fae8a" font-size="12" text-anchor="middle" font-family="sans-serif">value = 12 (decimal)</text>
+      <text x="480" y="180" fill="#bfe6c6" font-size="15" text-anchor="middle" font-weight="bold">→ output = 1100</text>
+
+      <!-- divider -->
+      <line x1="20" y1="214" x2="700" y2="214" stroke="#3a4760" stroke-width="1" stroke-dasharray="4 4"/>
+
+      <!-- ===== Example B2: S-box 8, input 000000 ===== -->
+      <text x="20" y="248" fill="#c98a3a" font-size="14" font-family="sans-serif" font-weight="bold">B2 ·  S-box 8  ·  input = 0 0 0 0 0 0</text>
+
+      <g font-size="18" text-anchor="middle">
+        <rect x="40"  y="262" width="40" height="44" rx="4" fill="#2a1d2e" stroke="#a05dd0"/>
+        <text x="60"  y="290" fill="#e0b0f0">0</text>
+        <rect x="84"  y="262" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="104" y="290" fill="#cdd7e6">0</text>
+        <rect x="128" y="262" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="148" y="290" fill="#cdd7e6">0</text>
+        <rect x="172" y="262" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="192" y="290" fill="#cdd7e6">0</text>
+        <rect x="216" y="262" width="40" height="44" rx="4" fill="#1d2433" stroke="#3a4760"/>
+        <text x="236" y="290" fill="#cdd7e6">0</text>
+        <rect x="260" y="262" width="40" height="44" rx="4" fill="#2a1d2e" stroke="#a05dd0"/>
+        <text x="280" y="290" fill="#e0b0f0">0</text>
+      </g>
+      <text x="60"  y="322" fill="#a05dd0" font-size="10" text-anchor="middle" font-family="sans-serif">bit 1</text>
+      <text x="280" y="322" fill="#a05dd0" font-size="10" text-anchor="middle" font-family="sans-serif">bit 6</text>
+      <text x="170" y="322" fill="#6b7a94" font-size="10" text-anchor="middle" font-family="sans-serif">bits 2–5</text>
+
+      <text x="360" y="278" fill="#cdd7e6" font-size="12" font-family="sans-serif">row = bit1·bit6 = <tspan fill="#e0b0f0" font-weight="bold">0 0</tspan>₂ = 0</text>
+      <text x="360" y="300" fill="#cdd7e6" font-size="12" font-family="sans-serif">col = bits 2-5 = <tspan fill="#9fb0c8" font-weight="bold">0000</tspan>₂ = 0</text>
+
+      <text x="40" y="352" fill="#7fae8a" font-size="11" font-family="sans-serif">Look up S-box 8, row 0, column 0:</text>
+      <g font-size="12" text-anchor="middle" font-family="sans-serif">
+        <rect x="40" y="362" width="50" height="24" fill="#222b3a" stroke="#3a4760"/><text x="65" y="378" fill="#7a8aa0">r\c</text>
+        <rect x="90" y="362" width="40" height="24" fill="#3a2f16" stroke="#c98a3a"/><text x="110" y="378" fill="#e8c98a">0</text>
+        <rect x="130" y="362" width="40" height="24" fill="#222b3a" stroke="#3a4760"/><text x="150" y="378" fill="#7a8aa0">1</text>
+        <rect x="170" y="362" width="40" height="24" fill="#222b3a" stroke="#3a4760"/><text x="190" y="378" fill="#7a8aa0">…</text>
+      </g>
+      <g font-size="12" text-anchor="middle">
+        <rect x="40" y="386" width="50" height="24" fill="#3a2f16" stroke="#c98a3a"/><text x="65" y="402" fill="#e8c98a" font-family="sans-serif">0</text>
+        <rect x="90" y="386" width="40" height="24" fill="#163a22" stroke="#2f5d3a" stroke-width="2"/><text x="110" y="402" fill="#7fff9f" font-weight="bold">13</text>
+        <rect x="130" y="386" width="40" height="24" fill="#1d2433" stroke="#3a4760"/><text x="150" y="402" fill="#cdd7e6">2</text>
+        <rect x="170" y="386" width="40" height="24" fill="#1d2433" stroke="#3a4760"/><text x="190" y="402" fill="#cdd7e6">…</text>
+      </g>
+
+      <rect x="300" y="362" width="360" height="48" rx="6" fill="#16241c" stroke="#2f5d3a"/>
+      <text x="480" y="382" fill="#7fae8a" font-size="12" text-anchor="middle" font-family="sans-serif">value = 13 (decimal)</text>
+      <text x="480" y="402" fill="#bfe6c6" font-size="15" text-anchor="middle" font-weight="bold">→ output = 1101</text>
+
+      <!-- summary line -->
+      <rect x="40" y="436" width="620" height="60" rx="6" fill="#1d2433" stroke="#3a4760"/>
+      <text x="350" y="458" fill="#c98a3a" font-size="12" text-anchor="middle" font-family="sans-serif" font-weight="bold">Takeaway</text>
+      <text x="350" y="478" fill="#cdd7e6" font-size="11" text-anchor="middle" font-family="sans-serif">6 bits in → 4 bits out, every time. Eight S-boxes run in parallel, turning the</text>
+      <text x="350" y="492" fill="#cdd7e6" font-size="11" text-anchor="middle" font-family="sans-serif">48-bit XOR result back into 32 bits, which then go through the straight P-box.</text>
+    </svg>
+    <p class="note">Both results match the lecture exactly: <code>100011</code> → S1 → <code>1100</code>, and <code>000000</code> → S8 → <code>1101</code>. Practising a few of these by hand is the single best way to lock in the S-box step for the exam.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>The Strength &amp; Breaking of DES</h2>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">💪 The Strength of DES (key space)</h3>
+    <ul>
+      <li>The key length is <strong>56 bits</strong>, so there are <strong>2⁵⁶ possible keys</strong> ≈ <strong>7.2 × 10¹⁶</strong> keys — enough that a naïve brute-force attack was once impractical.</li>
+      <li>Assuming on average <strong>half the key space</strong> must be searched, a single machine doing one DES encryption per microsecond would take <strong>more than 1000 years</strong> to break the cipher.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📜 The Diffie–Hellman Prediction (1977)</h3>
+    <p>In 1977, Diffie &amp; Hellman postulated that the technology existed to build a <strong>parallel machine with 1 million encryption devices</strong>, each performing one encryption per microsecond.</p>
+    <div class="math-block">
+      search time ≈ <span class="val-public">10 hours</span><br>
+      estimated cost ≈ <span class="val-secret">$20 million</span>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">💥 DES Proved Insecure (1998)</h3>
+    <p>DES was finally proved insecure in <strong>July 1998</strong>, when the <strong>Electronic Frontier Foundation (EFF)</strong> declared DES broken using a purpose-built <strong>"DES cracker"</strong> costing about <strong>$250,000</strong>.</p>
+    <p>The EFF published the description of the cracker, enabling others to build their own. With the steady <strong>decrease in hardware price</strong> and <strong>increase in speed</strong>, this made plain DES <strong>worthless</strong> for serious security — which is why the field moved to Triple DES and then AES.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>How many possible DES keys are there? → 2⁵⁶ ≈ 7.2 × 10¹⁶.</li>
+      <li>Why was the key criticized? → 56 bits is too short to withstand brute force.</li>
+      <li>Who broke DES and when? → The EFF, July 1998, with a ~$250,000 "DES cracker".</li>
+      <li>What replaced DES? → Triple DES (1999), then AES.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Lecture Summary</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What This Lecture Covered</h3>
+    <ul>
+      <li>Types of cryptography — <strong>Asymmetric</strong> (public-key) vs <strong>Symmetric</strong> (secret-key) cryptography.</li>
+      <li>Requirements for secure symmetric encryption.</li>
+      <li>Approaches for attacking a symmetric encryption scheme.</li>
+      <li><strong>Block ciphers vs. stream ciphers</strong> (DES is a block cipher).</li>
+      <li>The <strong>Data Encryption Standard (DES)</strong> — structure, IP/FP, the function f (expansion, XOR/whitener, S-boxes, straight P-box), and the key schedule (PC1, LS, PC2).</li>
+      <li><strong>DES encryption / decryption</strong> — identical algorithm, subkeys reversed for decryption.</li>
+      <li><strong>Strength / weakness of DES</strong> — large-but-finite 2⁵⁶ key space; broken by brute force in 1998.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Designed by</strong>IBM; adopted 1977 by NBS/NIST as FIPS 46</div>
+    <div class="qr-item"><strong>Cipher type</strong>Symmetric block cipher, Feistel structure</div>
+    <div class="qr-item"><strong>Block size</strong>64 bits in → 64 bits out</div>
+    <div class="qr-item"><strong>Rounds</strong>16</div>
+    <div class="qr-item"><strong>Key sizes</strong>64-bit input → 56-bit effective (8 parity dropped)</div>
+    <div class="qr-item"><strong>Subkeys</strong>16 subkeys, each 48 bits</div>
+    <div class="qr-item"><strong>Parity-drop bits</strong>8, 16, 24, 32, 40, 48, 56, 64</div>
+    <div class="qr-item"><strong>Pipeline</strong>IP → 16 rounds → swap → FP (IP⁻¹)</div>
+    <div class="qr-item"><strong>IP &amp; FP</strong>Straight P-boxes, mutual inverses, no crypto value</div>
+    <div class="qr-item"><strong>Feistel round</strong>Lᵢ = Rᵢ₋₁ ; Rᵢ = Lᵢ₋₁ ⊕ f(Rᵢ₋₁, Kᵢ)</div>
+    <div class="qr-item"><strong>Function f order</strong>Expansion → XOR Kᵢ (whitener) → S-boxes → straight P</div>
+    <div class="qr-item"><strong>Expansion (E)</strong>32 bits → 48 bits by duplicating bits</div>
+    <div class="qr-item"><strong>S-boxes</strong>8 boxes; each 6-bit in → 4-bit out (48 → 32)</div>
+    <div class="qr-item"><strong>S-box addressing</strong>row = bit1·bit6 ; column = bits 2-3-4-5</div>
+    <div class="qr-item"><strong>S1 example</strong>100011 → row 3, col 1 → 12 → 1100</div>
+    <div class="qr-item"><strong>S8 example</strong>000000 → row 0, col 0 → 13 → 1101</div>
+    <div class="qr-item"><strong>Straight P</strong>32-bit S-box output permuted to 32 bits</div>
+    <div class="qr-item"><strong>Key schedule tables</strong>PC1, LS (shifts), PC2</div>
+    <div class="qr-item"><strong>Shift schedule</strong>Rounds 1,2,9,16 → 1 bit; all others → 2 bits</div>
+    <div class="qr-item"><strong>C &amp; D halves</strong>56-bit key split into two 28-bit halves C₀, D₀</div>
+    <div class="qr-item"><strong>PC2 output</strong>48-bit subkey Kᵢ per round</div>
+    <div class="qr-item"><strong>Decryption</strong>Same algorithm; apply subkeys K16 → K1</div>
+    <div class="qr-item"><strong>Key space</strong>2⁵⁶ ≈ 7.2 × 10¹⁶ keys</div>
+    <div class="qr-item"><strong>Brute force (1 enc/µs)</strong>&gt; 1000 years on a single machine</div>
+    <div class="qr-item"><strong>Diffie–Hellman 1977</strong>1M-device machine → ~10 hrs, ~$20M</div>
+    <div class="qr-item"><strong>Broken</strong>EFF, July 1998, ~$250,000 "DES cracker"</div>
+    <div class="qr-item"><strong>Two criticisms</strong>Key too short; S-box design classified</div>
+    <div class="qr-item"><strong>Successor</strong>Triple DES (1999), then AES</div>
+  </div>
+</section>

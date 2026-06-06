@@ -1,0 +1,701 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Key Terminology &amp; Cryptographic Systems</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Core Vocabulary</h3>
+    <ul>
+      <li><strong>Plaintext</strong> — the original message.</li>
+      <li><strong>Ciphertext</strong> — the coded message.</li>
+      <li><strong>Key</strong> — information used in encryption/decryption, known only to sender/receiver.</li>
+      <li><strong>Encipher (encrypt)</strong> — converting plaintext to ciphertext using a key.</li>
+      <li><strong>Decipher (decrypt)</strong> — recovering plaintext from ciphertext using a key.</li>
+      <li><strong>Cryptography</strong> — the study of encryption principles, methods, and designs.</li>
+      <li><strong>Cryptanalysis (code-breaking)</strong> — the study of principles/methods of deciphering ciphertext (without the key).</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🧭 Three Ways to Classify Cryptographic Systems</h3>
+    <p><strong>1. By the operation used</strong> to transform plaintext into ciphertext:</p>
+    <ul>
+      <li><strong>Substitution</strong> — each element in the plaintext is mapped into another element.</li>
+      <li><strong>Transposition</strong> — the elements in the plaintext are re-arranged.</li>
+    </ul>
+    <p><strong>2. By the number of keys used:</strong></p>
+    <ul>
+      <li><strong>Symmetric (private-key)</strong> — both sender and receiver use the <em>same</em> key.</li>
+      <li><strong>Asymmetric (public-key)</strong> — sender and receiver use <em>different</em> keys.</li>
+    </ul>
+    <p><strong>3. By how plaintext is processed:</strong></p>
+    <ul>
+      <li><strong>Block cipher</strong> — inputs are processed one block at a time, producing a corresponding output block.</li>
+      <li><strong>Stream cipher</strong> — inputs are processed continuously, producing one element at a time (bit or byte).</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 Requirements for Secure Symmetric Encryption</h3>
+    <p>Two requirements for the secure use of symmetric encryption:</p>
+    <ul>
+      <li>A <strong>strong encryption algorithm</strong>.</li>
+      <li>A <strong>secret key</strong> known only to sender / receiver.</li>
+    </ul>
+    <div class="math-block">
+      Y = E<sub>K</sub>(X) <span class="comment">encryption: X = plaintext, Y = ciphertext</span><br>
+      X = D<sub>K</sub>(Y) <span class="comment">decryption recovers the plaintext</span>
+    </div>
+    <p class="note">We assume the <strong>encryption algorithm is known</strong> to all parties (Kerckhoffs's principle); this implies a <strong>secure channel</strong> is needed to distribute the key.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Map of Classical Encryption Techniques</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Two Main Categories</h3>
+    <p>Classical ciphers divide into two families, both covered in this lecture:</p>
+    <div class="flow">
+      <div class="flow-step">Classical Ciphers</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Substitution Ciphers</div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-step">Transposition Ciphers</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">1. Substitution Ciphers</h3>
+      <p><strong>Monoalphabetic substitution:</strong></p>
+      <ul>
+        <li>Caesar Cipher (<a href="#s3">§03</a>)</li>
+        <li>Affine Cipher (<a href="#s4">§04</a>)</li>
+      </ul>
+      <p><strong>Polyalphabetic substitution:</strong></p>
+      <ul>
+        <li>Playfair Cipher (<a href="#s5">§05</a>)</li>
+        <li>Hill Cipher (<a href="#s6">§06</a>)</li>
+        <li>Vigenère Cipher (<a href="#s7">§07</a>)</li>
+      </ul>
+    </div>
+    <div class="card purple-left">
+      <h3 class="purple">2. Transposition Ciphers</h3>
+      <ul>
+        <li>Rail Fence (<a href="#s9">§09</a>)</li>
+        <li>Row Transposition (<a href="#s9">§09</a>)</li>
+        <li>Rotor Machine (<a href="#s10">§10</a>)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Monoalphabetic vs Polyalphabetic</h3>
+    <ul>
+      <li><strong>Monoalphabetic</strong> — replaces each letter with another single letter/symbol <em>regardless of its position</em>; every occurrence of a letter is replaced by the <strong>same</strong> letter each time. The additive, shift, Caesar, and affine ciphers are all monoalphabetic.</li>
+      <li><strong>Polyalphabetic</strong> — uses <em>multiple</em> "alphabets" to encipher. If two letters are the same in the ciphertext, it does <strong>not</strong> mean they decipher to the same plaintext letter. Playfair, Hill, and Vigenère are polyalphabetic.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Caesar Cipher</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What It Is</h3>
+    <ul>
+      <li>The <strong>earliest known substitution cipher</strong>.</li>
+      <li>First attested use in <strong>military affairs</strong>.</li>
+      <li>Replaces each letter by the <strong>3rd letter on</strong> (a fixed shift).</li>
+    </ul>
+    <p>Example with shift 3: <code>meet me after the toga party</code> → <code>phhw ph diwhu wkh wrjd sduwb</code>.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ The Transformation</h3>
+    <p>With the letters numbered a=0, b=1, …, z=25, the Caesar cipher is just modular addition by the key k:</p>
+    <div class="math-block">
+      c = E(k, p) = (p + k) mod 26 <span class="comment">encryption</span><br>
+      p = D(k, c) = (c − k) mod 26 <span class="comment">decryption</span>
+    </div>
+    <p class="note">For the classic shift of 3: plain <code>a b c … x y z</code> maps to cipher <code>D E F … A B C</code>. Diagrammatically: sender "Add Kₑ = 3", receiver "Subtract K_d = 3" — e.g. <code>DEAR DEAR FRIEND</code> → <code>GHDU GHDU IULHQG</code> → back to <code>DEAR DEAR FRIEND</code>.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔓 Cryptanalysis of the Caesar Cipher</h3>
+    <p>The Caesar cipher is trivially broken by <strong>brute force</strong> because:</p>
+    <ul>
+      <li>There are only <strong>25 possible keys</strong> (A maps to B, C, … Z).</li>
+      <li>You can simply <strong>try each one in turn</strong>.</li>
+    </ul>
+    <p>A brute-force search succeeds when three conditions hold:</p>
+    <ol>
+      <li>The encryption and decryption <strong>algorithms are known</strong>.</li>
+      <li>There are only <strong>25 keys</strong> to try.</li>
+      <li>The <strong>language of the plaintext is known</strong> and easily recognizable.</li>
+    </ol>
+    <p class="note">Worked brute-force: ciphertext <code>PHHW PH DIWHU WKH WRJD SDUWB</code> tried against all 25 keys reveals key 3 → <code>meet me after the toga party</code> (the only one that reads as English). Another exercise from the slides: break <code>GCUA VQ DTGCM</code> and <code>GCUA VQ DTGCM</code>.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚖️ Brute-Force Feasibility (the general lesson)</h3>
+    <ul>
+      <li>In most networking situations we can assume the <strong>algorithms are known</strong>.</li>
+      <li>What makes brute force impractical is an algorithm employing a <strong>large number of keys</strong>.</li>
+      <li>Example: <strong>Triple DES</strong> uses a 168-bit key, giving a key space of <strong>2¹⁶⁸ &gt; 3.7 × 10⁵⁰</strong> possible keys.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Affine Cipher (with worked maths)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Definition</h3>
+    <p>An encipherment scheme of the form below is called an <strong>affine cipher</strong>:</p>
+    <div class="math-block">
+      E(x) = (a·x + b) mod 26<br>
+      <span class="comment">x = numeric value of the plaintext letter; a, b are chosen integers</span>
+    </div>
+    <p>It generalizes the Caesar cipher (which is just the case a = 1). The letter↔number mapping is the standard one:</p>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td></tr>
+          <tr><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr>
+          <tr><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td></tr>
+          <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ Deriving the Decryption Function</h3>
+    <p>If y = E(x) = (a·x + b) mod 26, we solve for x in terms of y:</p>
+    <div class="math-block">
+      y ≡ a·x + b (mod 26)<br>
+      y − b ≡ a·x (mod 26)<br>
+      a·x ≡ (y − b) (mod 26)<br>
+      multiply both sides by a⁻¹ (mod 26):<br>
+      x ≡ a⁻¹·(y − b) (mod 26)
+    </div>
+    <p>So the decipherment function is:</p>
+    <div class="math-block">
+      E⁻¹(y) = a⁻¹·(y − b) mod 26
+    </div>
+    <p class="note">The catch: <strong>a must have a modular inverse mod 26</strong>, which only happens when gcd(a, 26) = 1. That is why a = 5 works (gcd(5,26)=1) but a = 13 would not.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧮 Worked Example 1 — Affine Encryption</h3>
+    <p>Encipher <code>ITS COOL</code> with E(x) = (5x + 8) mod 26. The SVG below traces each letter through the arithmetic:</p>
+
+    <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" font-family="monospace" role="img" aria-label="Affine cipher encryption worked example for ITS COOL">
+      <text x="20" y="24" fill="#c98a3a" font-size="14" font-family="sans-serif" font-weight="bold">E(x) = (5x + 8) mod 26</text>
+
+      <!-- column headers -->
+      <g font-size="12" font-family="sans-serif" fill="#9fb0c8">
+        <text x="30"  y="60">step</text>
+        <text x="150" y="60" text-anchor="middle">I</text>
+        <text x="230" y="60" text-anchor="middle">T</text>
+        <text x="310" y="60" text-anchor="middle">S</text>
+        <text x="390" y="60" text-anchor="middle">C</text>
+        <text x="470" y="60" text-anchor="middle">O</text>
+        <text x="550" y="60" text-anchor="middle">O</text>
+        <text x="630" y="60" text-anchor="middle">L</text>
+      </g>
+      <line x1="20" y1="68" x2="700" y2="68" stroke="#3a4760"/>
+
+      <!-- row: plain -->
+      <text x="30" y="92" fill="#7fae8a" font-size="12" font-family="sans-serif">plain</text>
+      <g font-size="15" text-anchor="middle" fill="#e8edf5">
+        <text x="150" y="92">I</text><text x="230" y="92">T</text><text x="310" y="92">S</text>
+        <text x="390" y="92">C</text><text x="470" y="92">O</text><text x="550" y="92">O</text><text x="630" y="92">L</text>
+      </g>
+
+      <!-- row: x -->
+      <text x="30" y="124" fill="#7aa0d4" font-size="12" font-family="sans-serif">x</text>
+      <g font-size="15" text-anchor="middle" fill="#bcd0e8">
+        <text x="150" y="124">8</text><text x="230" y="124">19</text><text x="310" y="124">18</text>
+        <text x="390" y="124">2</text><text x="470" y="124">14</text><text x="550" y="124">14</text><text x="630" y="124">11</text>
+      </g>
+
+      <!-- row: 5x+8 -->
+      <text x="30" y="156" fill="#c98a3a" font-size="12" font-family="sans-serif">5x + 8</text>
+      <g font-size="15" text-anchor="middle" fill="#e8c98a">
+        <text x="150" y="156">48</text><text x="230" y="156">103</text><text x="310" y="156">98</text>
+        <text x="390" y="156">18</text><text x="470" y="156">78</text><text x="550" y="156">78</text><text x="630" y="156">63</text>
+      </g>
+
+      <!-- row: mod 26 -->
+      <text x="30" y="188" fill="#b89ad4" font-size="12" font-family="sans-serif">(5x+8) mod 26</text>
+      <g font-size="15" text-anchor="middle" fill="#dcc9f0">
+        <text x="150" y="188">22</text><text x="230" y="188">25</text><text x="310" y="188">20</text>
+        <text x="390" y="188">18</text><text x="470" y="188">0</text><text x="550" y="188">0</text><text x="630" y="188">11</text>
+      </g>
+
+      <line x1="20" y1="200" x2="700" y2="200" stroke="#3a4760"/>
+      <!-- row: cipher -->
+      <text x="30" y="226" fill="#7fff9f" font-size="12" font-family="sans-serif" font-weight="bold">cipher</text>
+      <g font-size="18" text-anchor="middle" fill="#7fff9f" font-weight="bold">
+        <text x="150" y="226">W</text><text x="230" y="226">Z</text><text x="310" y="226">U</text>
+        <text x="390" y="226">S</text><text x="470" y="226">A</text><text x="550" y="226">A</text><text x="630" y="226">L</text>
+      </g>
+
+      <!-- sample calculation callout -->
+      <rect x="40" y="252" width="630" height="140" rx="6" fill="#1d2433" stroke="#3a4760"/>
+      <text x="60" y="276" fill="#c98a3a" font-size="13" font-family="sans-serif" font-weight="bold">Following one letter:  T</text>
+      <text x="60" y="302" fill="#cdd7e6" font-size="13">T → x = 19</text>
+      <text x="60" y="326" fill="#cdd7e6" font-size="13">5·(19) + 8 = 95 + 8 = 103</text>
+      <text x="60" y="350" fill="#cdd7e6" font-size="13">103 mod 26 = 103 − 3·26 = 103 − 78 = 25</text>
+      <text x="60" y="374" fill="#7fff9f" font-size="14" font-weight="bold">25 → Z</text>
+    </svg>
+    <p class="note">Result: <code>ITS COOL</code> → <code>WZUSAAL</code>. Notice the two O's both encrypt to A — expected, because affine is monoalphabetic.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧮 Worked Example 2 — Affine Decryption</h3>
+    <p>Decipher <code>HPCCXAQ</code> given the encryption function E(x) = (5x + 8) mod 26. First we need the decryption function, which requires the modular inverse of 5:</p>
+
+    <svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg" font-family="monospace" role="img" aria-label="Affine cipher decryption worked example for HPCCXAQ">
+      <!-- find inverse -->
+      <rect x="40" y="14" width="630" height="86" rx="6" fill="#241f2e" stroke="#4a3a5d"/>
+      <text x="60" y="38" fill="#b89ad4" font-size="13" font-family="sans-serif" font-weight="bold">Step 1 — find a⁻¹ = 5⁻¹ (mod 26)</text>
+      <text x="60" y="62" fill="#dcc9f0" font-size="13">Solve 5·x ≡ 1 (mod 26).  Test x = 21:  5·21 = 105 = 4·26 + 1 ≡ 1 ✓</text>
+      <text x="60" y="86" fill="#7fff9f" font-size="14" font-weight="bold">so 5⁻¹ (mod 26) = 21  →  E⁻¹(y) = 21·(y − 8) mod 26</text>
+
+      <!-- column headers -->
+      <g font-size="12" font-family="sans-serif" fill="#9fb0c8">
+        <text x="30"  y="130">step</text>
+        <text x="170" y="130" text-anchor="middle">H</text>
+        <text x="245" y="130" text-anchor="middle">P</text>
+        <text x="320" y="130" text-anchor="middle">C</text>
+        <text x="395" y="130" text-anchor="middle">C</text>
+        <text x="470" y="130" text-anchor="middle">X</text>
+        <text x="545" y="130" text-anchor="middle">A</text>
+        <text x="620" y="130" text-anchor="middle">Q</text>
+      </g>
+      <line x1="20" y1="138" x2="700" y2="138" stroke="#3a4760"/>
+
+      <text x="30" y="162" fill="#7fae8a" font-size="12" font-family="sans-serif">cipher</text>
+      <g font-size="15" text-anchor="middle" fill="#e8edf5">
+        <text x="170" y="162">H</text><text x="245" y="162">P</text><text x="320" y="162">C</text>
+        <text x="395" y="162">C</text><text x="470" y="162">X</text><text x="545" y="162">A</text><text x="620" y="162">Q</text>
+      </g>
+
+      <text x="30" y="194" fill="#7aa0d4" font-size="12" font-family="sans-serif">y</text>
+      <g font-size="15" text-anchor="middle" fill="#bcd0e8">
+        <text x="170" y="194">7</text><text x="245" y="194">15</text><text x="320" y="194">2</text>
+        <text x="395" y="194">2</text><text x="470" y="194">23</text><text x="545" y="194">0</text><text x="620" y="194">16</text>
+      </g>
+
+      <text x="30" y="226" fill="#c98a3a" font-size="12" font-family="sans-serif">y − 8</text>
+      <g font-size="15" text-anchor="middle" fill="#e8c98a">
+        <text x="170" y="226">−1</text><text x="245" y="226">7</text><text x="320" y="226">−6</text>
+        <text x="395" y="226">−6</text><text x="470" y="226">15</text><text x="545" y="226">−8</text><text x="620" y="226">8</text>
+      </g>
+
+      <text x="30" y="258" fill="#c98a3a" font-size="12" font-family="sans-serif">21·(y − 8)</text>
+      <g font-size="14" text-anchor="middle" fill="#e8c98a">
+        <text x="170" y="258">−21</text><text x="245" y="258">147</text><text x="320" y="258">−126</text>
+        <text x="395" y="258">−126</text><text x="470" y="258">315</text><text x="545" y="258">−168</text><text x="620" y="258">168</text>
+      </g>
+
+      <text x="30" y="290" fill="#b89ad4" font-size="12" font-family="sans-serif">mod 26</text>
+      <g font-size="15" text-anchor="middle" fill="#dcc9f0">
+        <text x="170" y="290">5</text><text x="245" y="290">17</text><text x="320" y="290">4</text>
+        <text x="395" y="290">4</text><text x="470" y="290">3</text><text x="545" y="290">14</text><text x="620" y="290">12</text>
+      </g>
+
+      <line x1="20" y1="302" x2="700" y2="302" stroke="#3a4760"/>
+      <text x="30" y="328" fill="#7fff9f" font-size="12" font-family="sans-serif" font-weight="bold">plain</text>
+      <g font-size="18" text-anchor="middle" fill="#7fff9f" font-weight="bold">
+        <text x="170" y="328">F</text><text x="245" y="328">R</text><text x="320" y="328">E</text>
+        <text x="395" y="328">E</text><text x="470" y="328">D</text><text x="545" y="328">O</text><text x="620" y="328">M</text>
+      </g>
+
+      <!-- sample calc -->
+      <rect x="40" y="346" width="630" height="110" rx="6" fill="#1d2433" stroke="#3a4760"/>
+      <text x="60" y="370" fill="#c98a3a" font-size="13" font-family="sans-serif" font-weight="bold">Following one letter:  H</text>
+      <text x="60" y="394" fill="#cdd7e6" font-size="13">H → y = 7 ;  21·(7 − 8) = 21·(−1) = −21</text>
+      <text x="60" y="418" fill="#cdd7e6" font-size="13">−21 mod 26 = −21 + 26 = 5</text>
+      <text x="60" y="442" fill="#7fff9f" font-size="14" font-weight="bold">5 → F</text>
+    </svg>
+    <p class="note">Result: <code>HPCCXAQ</code> → <code>FREEDOM</code>. Watch the negatives: a negative result mod 26 is brought back into range by adding 26 (e.g. −21 → 5).</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔓 Monoalphabetic Cipher Security</h3>
+    <ul>
+      <li>A general monoalphabetic substitution has <strong>26! ≈ 4 × 10²⁶ keys</strong>.</li>
+      <li>With so many keys you might <em>think</em> it is secure — but that would be <strong>WRONG</strong>.</li>
+      <li>The problem is <strong>language characteristics</strong>: a monoalphabetic cipher does <strong>not change relative letter frequencies</strong>.</li>
+    </ul>
+    <p><strong>Frequency attack:</strong> calculate letter frequencies in the ciphertext and compare them against known English values (E ≈ 12.7%, T ≈ 9.1%, A ≈ 8.2% are the most common; J, Q, X, Z are rarest). The peaks line up and the key falls out.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Playfair Cipher</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What It Is</h3>
+    <ul>
+      <li>Even the large key count of a homophonic cipher does not provide security; one improvement is to <strong>encrypt multiple letters at once</strong>.</li>
+      <li>The <strong>Playfair cipher</strong> encrypts <strong>digraphs (pairs of letters)</strong> and was invented by <strong>Charles Wheatstone in 1854</strong> (named after Lord Playfair who promoted it).</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 The 5×5 Key Matrix</h3>
+    <p>Build a 5×5 matrix from a keyword: fill in the keyword's letters (dropping duplicates), then fill the rest with the remaining alphabet. <strong>I and J share a cell</strong> (25 cells for 26 letters). Example with keyword <strong>MONARCHY</strong>:</p>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>M</td><td>O</td><td>N</td><td>A</td><td>R</td></tr>
+          <tr><td>C</td><td>H</td><td>Y</td><td>B</td><td>D</td></tr>
+          <tr><td>E</td><td>F</td><td>G</td><td>I/J</td><td>K</td></tr>
+          <tr><td>L</td><td>P</td><td>Q</td><td>S</td><td>T</td></tr>
+          <tr><td>U</td><td>V</td><td>W</td><td>X</td><td>Z</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📏 Encryption Rules (plaintext taken two letters at a time)</h3>
+    <ol>
+      <li>If a pair is a <strong>repeated letter</strong>, insert a filler like <strong>'X'</strong> between them.</li>
+      <li>If both letters are in the <strong>same row</strong>, replace each with the letter to its <strong>right</strong> (wrapping from the end back to the start).</li>
+      <li>If both letters are in the <strong>same column</strong>, replace each with the letter <strong>below</strong> it (wrapping from bottom back to top).</li>
+      <li><strong>Otherwise</strong> (a rectangle), replace each letter with the one in its <strong>own row but in the column of the other letter</strong> of the pair.</li>
+    </ol>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧮 Worked Example — "Hide the gold in the tree stump"</h3>
+    <p>Using the keyword <strong>"playfair example"</strong>, the matrix becomes:</p>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>P</td><td>L</td><td>A</td><td>Y</td><td>F</td></tr>
+          <tr><td>I</td><td>R</td><td>E</td><td>X</td><td>M</td></tr>
+          <tr><td>B</td><td>C</td><td>D</td><td>G</td><td>H</td></tr>
+          <tr><td>K</td><td>N</td><td>O</td><td>Q</td><td>S</td></tr>
+          <tr><td>T</td><td>U</td><td>V</td><td>W</td><td>Z</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Split into digraphs (note the null <strong>X</strong> inserted to separate the repeated E in "tree"):</p>
+    <div class="math-block">
+      HI DE TH EG OL DI NT HE TR EX ES TU MP
+    </div>
+    <p>Applying the rules pair by pair:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pair</th><th>Relationship</th><th>→ Cipher</th></tr></thead>
+        <tbody>
+          <tr><td>HI</td><td>rectangle</td><td>BM</td></tr>
+          <tr><td>DE</td><td>column</td><td>ND</td></tr>
+          <tr><td>TH</td><td>rectangle</td><td>ZB</td></tr>
+          <tr><td>EG</td><td>rectangle</td><td>XD</td></tr>
+          <tr><td>OL</td><td>rectangle</td><td>NA</td></tr>
+          <tr><td>DI</td><td>rectangle</td><td>BE</td></tr>
+          <tr><td>NT</td><td>rectangle</td><td>KU</td></tr>
+          <tr><td>HE</td><td>rectangle</td><td>DM</td></tr>
+          <tr><td>TR</td><td>rectangle</td><td>UI</td></tr>
+          <tr><td>EX</td><td>row (X split EE)</td><td>XM</td></tr>
+          <tr><td>ES</td><td>rectangle</td><td>MO</td></tr>
+          <tr><td>TU</td><td>row</td><td>UV</td></tr>
+          <tr><td>MP</td><td>rectangle</td><td>IF</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">Plaintext: <code>HI DE TH EG OL DI NT HE TR EX ES TU MP</code><br>Ciphertext: <code>BM OD ZB XD NA BE KU DM UI XM MO UV IF</code><br>So "Hide the gold in the tree stump" becomes <strong>BMODZ BXDNA BEKUD MUIXM MOUVI F</strong> (breaks added only for readability).</div>
+    <p class="note">The lecture's intermediate slide and final slide differ on two pairs (e.g. OL → KY vs NA, ES → MN vs MO) because of grid wrap conventions; the final answer slide is the authoritative one shown above.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Hill Cipher</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What It Is</h3>
+    <ul>
+      <li>A polyalphabetic cipher based on <strong>matrix multiplication</strong>, and another historical cipher subject to known-plaintext attacks.</li>
+      <li>Take <strong>K</strong>, an <strong>M×M key matrix</strong> representing a system of linear equations.</li>
+      <li>Ciphertext <strong>C</strong> and plaintext <strong>p</strong> are column vectors (here written as 1×M / M×1 matrices).</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ Encryption &amp; Decryption</h3>
+    <div class="math-block">
+      C = K·p (mod 26) <span class="comment">encryption: multiply the key matrix by the plaintext vector</span>
+    </div>
+    <p>For a 3×3 example, each ciphertext component is a linear combination:</p>
+    <div class="math-block">
+      C&#8321; = (k&#8321;&#8321;·p&#8321; + k&#8321;&#8322;·p&#8322; + k&#8321;&#8323;·p&#8323;) mod 26<br>
+      C&#8322; = (k&#8322;&#8321;·p&#8321; + k&#8322;&#8322;·p&#8322; + k&#8322;&#8323;·p&#8323;) mod 26<br>
+      C&#8323; = (k&#8323;&#8321;·p&#8321; + k&#8323;&#8322;·p&#8322; + k&#8323;&#8323;·p&#8323;) mod 26
+    </div>
+    <p>Decryption requires the key matrix <strong>K to be invertible mod 26</strong>:</p>
+    <div class="math-block">
+      p = K⁻¹·C (mod 26) <span class="comment">K⁻¹ (mod 26) must exist</span>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔓 Weakness</h3>
+    <p>The Hill cipher is subject to a <strong>known-plaintext attack</strong>: if the attacker can choose the plaintext and have it enciphered for them, they can recover the key matrix by solving the resulting linear equations.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Vigenère Cipher &amp; the One-Time Pad</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Vigenère Cipher</h3>
+    <ul>
+      <li>The <strong>simplest polyalphabetic substitution cipher</strong> — effectively <strong>multiple Caesar ciphers</strong>.</li>
+      <li>The key is multiple letters long: <strong>K = k₁ k₂ … k_d</strong>.</li>
+      <li>The <strong>iᵗʰ letter</strong> of the key specifies the <strong>iᵗʰ alphabet (shift)</strong> to use; use each alphabet in turn and repeat from the start after d letters.</li>
+      <li>Decryption simply works in reverse.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ The Equations</h3>
+    <div class="math-block">
+      C<sub>i</sub> = (p<sub>i</sub> + k<sub>(i mod m)</sub>) mod 26 <span class="comment">encryption</span><br>
+      p<sub>i</sub> = (C<sub>i</sub> − k<sub>(i mod m)</sub>) mod 26 <span class="comment">decryption</span>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧮 Worked Example — key "deceptive"</h3>
+    <p>Encrypting <code>wearediscoveredsaveyourself</code> with the repeating key <code>deceptive</code>:</p>
+    <div class="math-block">
+      key:        deceptivedeceptivedeceptive<br>
+      plaintext:  wearediscoveredsaveyourself<br>
+      ciphertext: ZICVTWQNGRZGVTWAVZHCQYGLMGJ
+    </div>
+    <p>Numerically, the first few columns: key 3,4,2,4,15,19,8,21,4…; plaintext 22,4,0,17,4,3,8,18,2…; giving ciphertext 25,8,2,21,19,22,16,13,6… → Z,I,C,V,T,W,Q,N,G…</p>
+    <p class="note">Worked: w(22)+d(3)=25→Z; e(4)+e(4)=8→I; a(0)+c(2)=2→C; and so on, the key recycling every 9 letters.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🛡️ Security of the Vigenère Cipher</h3>
+    <ul>
+      <li>It provides <strong>multiple ciphertext letters for each plaintext letter</strong>, so letter frequencies are <strong>obscured</strong>.</li>
+      <li>But they are <strong>not totally lost</strong> — the frequency distribution still leaks structure (this is what Kasiski/Friedman attacks exploit).</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🔐 The One-Time Pad (OTP)</h3>
+    <ul>
+      <li>If a <strong>truly random key as long as the message</strong> is used, the cipher is secure — this is the <strong>One-Time Pad</strong>.</li>
+      <li>It is <strong>unbreakable</strong> because the ciphertext bears <strong>no statistical relationship</strong> to the plaintext: for any plaintext and any ciphertext, there exists a key mapping one to the other.</li>
+      <li>The key can only be used <strong>once</strong>.</li>
+      <li>Drawbacks: serious <strong>problems in generation and safe distribution</strong> of the key; cannot be used extensively, but it does provide <strong>perfect secrecy</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧩 OTP Security — the intuition</h3>
+    <p>The same ciphertext can decrypt to <em>completely different</em> sensible messages under different keys, so an attacker learns nothing. From the slides, the ciphertext <code>ANKYODKYUREPFJBYOJDSPLREYIUNOFDOIUERFPLUYTS</code>:</p>
+    <ul>
+      <li>with one key → <code>mr mustard with the candlestick in the hall</code></li>
+      <li>with another key → <code>miss scarlet with the knife in the library</code></li>
+    </ul>
+    <p class="note">Because every plaintext of the right length is equally possible, the attacker cannot tell which one is real — that is the essence of perfect secrecy.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Transposition Ciphers — Concept</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What Transposition Means</h3>
+    <ul>
+      <li>A very different kind of mapping: instead of substituting letters, you perform a <strong>permutation</strong> on the plaintext letters.</li>
+      <li>These hide the message by <strong>rearranging letter order</strong> without altering the actual letters used.</li>
+      <li>A pure transposition cipher can be <strong>recognized</strong> because it has the <strong>same letter-frequency distribution</strong> as the original plaintext (the letters are the same, just moved).</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Problem with Transposition</h3>
+    <ul>
+      <li>A pure transposition cipher is easily recognized due to its unchanged letter frequencies.</li>
+      <li>It can be made significantly more secure by performing <strong>more than one stage of transposition</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔗 Product Ciphers (combining two approaches)</h3>
+    <ul>
+      <li>Ciphers using substitution <em>or</em> transposition alone are not secure because of language characteristics.</li>
+      <li>So we use several ciphers in succession. But note:
+        <ul>
+          <li>Two substitutions just make a more complex substitution.</li>
+          <li>Two transpositions just make a more complex transposition.</li>
+          <li><strong>A substitution followed by a transposition makes a new, much harder cipher.</strong></li>
+        </ul>
+      </li>
+      <li>This is the <strong>bridge from classical to modern ciphers</strong> (e.g. DES alternates substitution and permutation).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Rail Fence &amp; Row Transposition</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Rail Fence Cipher</h3>
+    <ul>
+      <li>Write the message letters out <strong>diagonally over a number of rows</strong>.</li>
+      <li>Then read off the cipher <strong>row by row</strong>.</li>
+    </ul>
+    <p>Example — message <code>meet me after toga party</code> written on 2 rails:</p>
+    <div class="math-block">
+      m . e . m . a . t . r . t . g . p . r . y<br>
+      . e . t . e . f . e . t . o . a . a . t .
+    </div>
+    <p>Reading row 1 then row 2 gives the ciphertext:</p>
+    <div class="highlight">Ciphertext: <code>MEMATRHTGPRYETEFETEOAAT</code></div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Row (Columnar) Transposition Cipher</h3>
+    <ul>
+      <li>A more complex transposition. Write the message letters out in <strong>rows over a specified number of columns</strong>.</li>
+      <li>Then <strong>reorder the columns</strong> according to a key before reading off the rows (read column by column in key order).</li>
+    </ul>
+    <p>Example — key <code>4 3 1 2 5 6 7</code>, plaintext <code>attackpostponeduntil</code> (padded):</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Key→</th><th>4</th><th>3</th><th>1</th><th>2</th><th>5</th><th>6</th><th>7</th></tr></thead>
+        <tbody>
+          <tr><td>row1</td><td>a</td><td>t</td><td>t</td><td>a</td><td>c</td><td>k</td><td>p</td></tr>
+          <tr><td>row2</td><td>o</td><td>s</td><td>t</td><td>p</td><td>o</td><td>n</td><td>e</td></tr>
+          <tr><td>row3</td><td>d</td><td>u</td><td>n</td><td>t</td><td>i</td><td>l</td><td>t</td></tr>
+          <tr><td>row4</td><td>w</td><td>o</td><td>a</td><td>m</td><td>x</td><td>y</td><td>z</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Read the columns in the order given by the key (column labelled 1 first, then 2, 3, 4…):</p>
+    <div class="highlight">Ciphertext: <code>TTNAAPTMTSUOAODWCOIXKNLYPETZ</code></div>
+    <p class="note">The key numbers tell you the order in which to read the columns off — the smallest key digit's column is read first.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Rotor Machines</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What They Are</h3>
+    <ul>
+      <li>Before modern ciphers, <strong>rotor machines</strong> were the most common complex ciphers in use.</li>
+      <li>Used in <strong>WW2</strong> — the German <strong>Enigma</strong>, the Allied <strong>Hagelin</strong>, and the Japanese <strong>Purple</strong>.</li>
+      <li>They implemented a very complex, <strong>varying substitution cipher</strong>.</li>
+      <li>They used a series of <strong>cylinders</strong>, each giving one substitution, which <strong>rotated and changed after each letter</strong> was encrypted (like an odometer).</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔢 Why They Were Strong</h3>
+    <div class="math-block">
+      3 cylinders → 26³ = 17,576 alphabets<br>
+      5 cylinders → 26⁵ = 11,881,376 alphabets
+    </div>
+    <p>The diagram of a 3-rotor machine shows a <strong>fast rotor</strong>, <strong>medium rotor</strong>, and <strong>slow rotor</strong>; after each keystroke the fast rotor advances one position, periodically stepping the next rotor — so the substitution alphabet differs for every letter.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔓 Rotor Machine Security</h3>
+    <ul>
+      <li>A given setting of a <strong>5-rotor machine is equivalent to a Vigenère cipher with key length 11,881,376 (26⁵)</strong> — a formidable cryptanalytic challenge.</li>
+      <li>A frequency-analysis attacker would face the equivalent of <strong>over 11 million monoalphabetic ciphers</strong>.</li>
+      <li>Needing ~50 letters per monoalphabetic cipher to solve it would require a ciphertext of <strong>over half a billion letters</strong>.</li>
+    </ul>
+    <p class="note">The Hagelin rotor machine (a portable mechanical device with stepping cylinders) is the physical example shown in the lecture.</p>
+  </div>
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ Rotor Machine (in Action)</h3>
+    <figure>
+      <img src="/images/rotor-machine.png" alt="Rotor machine wiring diagram" style="max-width:100%;height:auto;filter:contrast(1.15) saturate(1.05) brightness(1.03);image-rendering:optimizeQuality;border:1px solid #ddd;border-radius:4px;"/>
+      <figcaption class="note">Figure: Rotor-machine wiring diagram.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Plaintext / Ciphertext</strong>Original message / coded message</div>
+    <div class="qr-item"><strong>Cryptography vs Cryptanalysis</strong>Designing ciphers vs breaking them</div>
+    <div class="qr-item"><strong>3 classifications</strong>Operation (sub/trans), #keys (sym/asym), processing (block/stream)</div>
+    <div class="qr-item"><strong>Symmetric requirements</strong>Strong algorithm + secret key; Y=E_K(X), X=D_K(Y)</div>
+    <div class="qr-item"><strong>Monoalphabetic</strong>Same letter always → same cipher letter</div>
+    <div class="qr-item"><strong>Polyalphabetic</strong>Multiple alphabets; same cipher letter ≠ same plain letter</div>
+    <div class="qr-item"><strong>Caesar formula</strong>c = (p + k) mod 26 ; p = (c − k) mod 26</div>
+    <div class="qr-item"><strong>Caesar break</strong>Only 25 keys → brute force</div>
+    <div class="qr-item"><strong>Affine encrypt</strong>E(x) = (a·x + b) mod 26</div>
+    <div class="qr-item"><strong>Affine decrypt</strong>E⁻¹(y) = a⁻¹·(y − b) mod 26</div>
+    <div class="qr-item"><strong>Affine needs</strong>gcd(a,26)=1 so a⁻¹ exists; 5⁻¹ mod 26 = 21</div>
+    <div class="qr-item"><strong>Affine examples</strong>ITSCOOL→WZUSAAL ; HPCCXAQ→FREEDOM</div>
+    <div class="qr-item"><strong>Mono key count</strong>26! ≈ 4 × 10²⁶ — still broken by frequency analysis</div>
+    <div class="qr-item"><strong>Top English freqs</strong>E 12.7%, T 9.1%, A 8.2%</div>
+    <div class="qr-item"><strong>Playfair</strong>Wheatstone 1854; 5×5 keyword matrix; I/J share a cell</div>
+    <div class="qr-item"><strong>Playfair pairs</strong>Repeat→insert X; row→right; column→down; else rectangle</div>
+    <div class="qr-item"><strong>Playfair example</strong>"Hide the gold…" → BMODZ BXDNA BEKUD MUIXM MOUVI F</div>
+    <div class="qr-item"><strong>Hill cipher</strong>C = K·p (mod 26); needs K⁻¹ to decrypt</div>
+    <div class="qr-item"><strong>Hill weakness</strong>Known-plaintext attack</div>
+    <div class="qr-item"><strong>Vigenère</strong>Multiple Caesars; C_i=(p_i+k_(i mod m)) mod 26</div>
+    <div class="qr-item"><strong>Vigenère example</strong>key "deceptive": wearediscovered… → ZICVTWQNGRZG…</div>
+    <div class="qr-item"><strong>One-Time Pad</strong>Random key = message length; unbreakable, perfect secrecy</div>
+    <div class="qr-item"><strong>OTP catch</strong>Use key once; hard key generation &amp; distribution</div>
+    <div class="qr-item"><strong>Transposition</strong>Rearrange letters; same letter frequencies as plaintext</div>
+    <div class="qr-item"><strong>Rail Fence</strong>Write diagonally over rows, read row by row</div>
+    <div class="qr-item"><strong>Row transposition</strong>Write in rows, read columns in key order</div>
+    <div class="qr-item"><strong>Product cipher</strong>Substitution + transposition = much harder; bridge to modern</div>
+    <div class="qr-item"><strong>Rotor machines</strong>Enigma/Hagelin/Purple (WW2); rotating substitution cylinders</div>
+    <div class="qr-item"><strong>Rotor strength</strong>3 cyl → 26³=17,576 ; 5 cyl → 26⁵=11,881,376 alphabets</div>
+  </div>
+</section>

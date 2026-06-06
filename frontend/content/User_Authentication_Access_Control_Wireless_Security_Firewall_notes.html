@@ -1,0 +1,838 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>User Authentication &amp; the NIST Model</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What is User Authentication?</h3>
+    <p>User authentication is a <strong>two-step process</strong> by which a system confirms you are who you claim to be, so it can then set your permissions and track your activity.</p>
+    <ul>
+      <li><strong>Identification</strong> — You claim an identity by presenting a username / User ID (e.g. walking up and saying "Hi, I'm Alice"). This part is <em>usually not secret</em>.</li>
+      <li><strong>Verification</strong> — You <em>prove</em> the claim by providing a secret (your password). The system checks this secret against what it has on file.</li>
+    </ul>
+    <p>In the worked example: <code>"ABTOKLAS"</code> is Alice's public <strong>identifier</strong>, and her <strong>password</strong> is the secret <strong>authentication information</strong>. If both match, the system trusts the claim.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🏛️ NIST Model for Electronic User Authentication</h3>
+    <p>A standard framework defined by the <strong>National Institute of Standards and Technology (NIST)</strong>, per the <strong>SP 800-63-2 Architectural Model</strong>. It involves several distinct actors.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-left">
+      <h3>Registration Authority (RA)</h3>
+      <p>The trusted office that checks your physical ID (like a passport) and vouches for you. Performs the initial <strong>identity proofing</strong>.</p>
+    </div>
+    <div class="card accent-left">
+      <h3>Credential Service Provider (CSP)</h3>
+      <p>The entity that creates and issues your electronic credential — like a digital ID card. In many systems the <strong>RA and CSP are part of the same organization</strong>.</p>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card accent-left">
+      <h3>Subscriber / Claimant</h3>
+      <p>The user being authenticated.</p>
+    </div>
+    <div class="card accent-left">
+      <h3>Verifier</h3>
+      <p>When you later try to log in, the verifier is the software that challenges you for your password or token.</p>
+    </div>
+    <div class="card accent-left">
+      <h3>Relying Party (RP)</h3>
+      <p>The final application or service you want to access (e.g. your email server). It trusts the Verifier's decision.</p>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 The Process Flow</h3>
+    <div class="flow">
+      <div class="flow-step">Registration</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Credential Issuance</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Authentication</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Authorization</div>
+    </div>
+    <p class="note">In plain words: Get registered → Get your digital credential → Use it to prove who you are → Access services.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🗺️ SP 800-63-2 Architectural Model (relationships)</h3>
+    <p>The diagram maps the message paths between actors:</p>
+    <ul>
+      <li>RA ↔ Subscriber: <strong>Identity proofing / User registration</strong></li>
+      <li>RA ↔ CSP: <strong>Registration confirmation</strong></li>
+      <li>CSP → Subscriber: <strong>Token, credential — Registration / issuance</strong></li>
+      <li>Subscriber ↔ Verifier: <strong>Authenticated protocol exchange</strong></li>
+      <li>CSP ↔ Verifier: <strong>Token / credential validation</strong></li>
+      <li>Subscriber ↔ Relying Party: <strong>Authenticated session</strong></li>
+      <li>Verifier ↔ Relying Party: <strong>Authenticated assertion</strong></li>
+    </ul>
+    <p class="note">Two functional groupings: "Registration, credential issuance, and maintenance" (left) and "E-Authentication using token and credential" (right).</p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Means of Authentication (Factors &amp; Methods)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Four Factors of Authentication</h3>
+    <p>You can prove your identity in four general categories, called <strong>factors of authentication</strong>:</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">Something you know</h3>
+      <p>The most common factor — a <strong>password</strong>, a <strong>PIN</strong>, or answers to security questions. (Knowledge-based)</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Something you possess</h3>
+      <p>A physical object you have — a <strong>smart card</strong>, a security token that generates codes, or even your physical house key. (Possession-based)</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Something you are (Static Biometrics)</h3>
+      <p>Your unique <strong>physical characteristics</strong> — fingerprint, retina pattern, or face. (Inherence-based)</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Something you do (Dynamic Biometrics)</h3>
+      <p>Your <strong>behavioral patterns</strong> — voice rhythm, handwriting, or unique typing rhythm.</p>
+    </div>
+  </div>
+
+  <div class="highlight">Multi-factor authentication (MFA) combines these for stronger security. For logging into a network, the most common combination is <strong>something you know</strong> (a password) used with <strong>something you possess</strong> (a cryptographic key).</div>
+
+  <div class="card accent-left">
+    <h3>🔧 Common Authentication Methods</h3>
+    <ul>
+      <li><strong>Passwords</strong> — the most widely used method, but vulnerable to <strong>brute force, phishing, and dictionary attacks</strong>. Best practice: strong unique passwords stored securely (e.g. <em>hashing with salt</em>).</li>
+      <li><strong>Biometrics</strong> — fingerprints, voice recognition, facial scans. High security but raises <strong>privacy concerns</strong> and potential risk of <strong>spoofing</strong>.</li>
+      <li><strong>Two-Factor Authentication (2FA)</strong> — adds an extra layer with a secondary step such as a <strong>one-time password (OTP)</strong> sent to a device.</li>
+      <li><strong>Public Key Infrastructure (PKI)</strong> — uses cryptographic techniques to authenticate entities, ensuring secure communication.</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card purple-left">
+      <h3 class="purple">🚀 Emerging Trends</h3>
+      <ul>
+        <li><strong>Passwordless Authentication</strong> — relies on biometrics and security keys, reducing dependency on traditional passwords.</li>
+        <li><strong>Behavioral Biometrics</strong> — analyzes patterns like typing speed and mouse movements for <em>continuous</em> authentication.</li>
+        <li><strong>Decentralized Authentication</strong> — blockchain-based systems that eliminate central authorities, reducing risk of breaches.</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">⚠️ Challenges in Authentication</h3>
+      <ul>
+        <li><strong>Credential Theft</strong> — stolen credentials via phishing or social engineering pose significant risks.</li>
+        <li><strong>Usability vs. Security</strong> — balancing user convenience with robust security is hard.</li>
+        <li><strong>Scalability</strong> — adapting systems for large-scale environments with diverse users and devices.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ Best Practices for Authentication</h3>
+    <ul>
+      <li>Employ <strong>MFA</strong> wherever possible.</li>
+      <li>Regularly <strong>audit and update</strong> authentication policies.</li>
+      <li><strong>Educate users</strong> on recognizing and avoiding phishing attempts.</li>
+      <li>Use <strong>adaptive authentication</strong> systems that assess context and risk level (e.g. unusual locations or devices).</li>
+    </ul>
+    <p class="note">Authentication is not a one-size-fits-all solution but a continuously evolving component of information security, adapting to new threats and technologies.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Mutual &amp; One-Way Authentication</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Mutual Authentication</h3>
+    <p>Often it is not enough for just the server to verify you — you also want to verify you are talking to the <strong>real server</strong> and not a fake one set up by a hacker. This two-way verification is called <strong>mutual authentication</strong>.</p>
+    <p>The main goals are to (1) confirm <strong>each other's identity</strong> and (2) securely <strong>exchange a session key</strong> to encrypt the rest of their conversation.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Biggest Threat: Replay Attacks</h3>
+    <p>An eavesdropper records your login sequence and plays it back later to impersonate you. There are different types:</p>
+    <ul>
+      <li><strong>Type 1</strong> — simply copy and replay the message later.</li>
+      <li><strong>Type 2 &amp; 3</strong> — replay a message while its timestamp is still valid, possibly while blocking the original message.</li>
+      <li><strong>Type 4</strong> — send your own message back to you, which can cause confusion (reflection).</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛡️ Countering Replay Attacks — Two Weapons</h3>
+  </div>
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">1. Timestamps</h3>
+      <p>Every message gets a <strong>'born-on' date</strong>. If a message arrives too late, it is rejected.</p>
+      <p class="note">Problem: requires all computers to have perfectly <strong>synchronized clocks</strong>. If clocks drift apart, it causes big problems.</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">2. Challenge / Response</h3>
+      <p>Like a secret handshake. Very secure, but requires extra back-and-forth messages (a handshake), which isn't ideal for all situations.</p>
+    </div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔁 Challenge/Response — Worked Example</h3>
+    <div class="worked-step">
+      <div class="step-label">Step 1 — Issue the challenge</div>
+      <p>You (Party A) say: "Prove you're real by answering this random number I just made up: 57."</p>
+    </div>
+    <div class="worked-step">
+      <div class="step-label">Step 2 — Respond</div>
+      <p>The server (Party B) takes that number, encrypts it with your shared secret key, and sends the encrypted result back.</p>
+    </div>
+    <div class="worked-step">
+      <div class="step-label">Step 3 — Verify</div>
+      <p>You decrypt it; if it gives back '57', you know it's the real server.</p>
+      <p class="result">→ Identity confirmed without exposing the secret key</p>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📧 One-Way Authentication</h3>
+    <p>Not all authentication needs to be mutual. The classic example is <strong>email</strong> — sender and recipient aren't online at the same time. This creates special requirements:</p>
+    <ul>
+      <li>The <strong>envelope</strong> (the 'To:' and 'From:' addresses) must be <em>readable</em> by the email system so it can route the message.</li>
+      <li>The <strong>body</strong> of the message should be <em>encrypted</em> so mail servers can't read it.</li>
+      <li>The recipient wants assurance that the email <strong>actually came from you</strong>.</li>
+    </ul>
+    <p>So we need a way to authenticate the sender <strong>without</strong> requiring the recipient to be online for a complex handshake.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Remote Authentication Using Symmetric Encryption</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Key Distribution Center (KDC)</h3>
+    <p>With symmetric encryption everyone shares secret keys, but managing a secret key between <strong>every possible pair</strong> of users is a nightmare. The solution is a trusted middleman called a <strong>Key Distribution Center (KDC)</strong>.</p>
+    <ul>
+      <li>You and every other user have a single, long-term <strong>master key</strong> shared only with the KDC.</li>
+      <li>When you want to talk to someone else, you ask the KDC for a temporary <strong>session key</strong>.</li>
+      <li>The KDC generates this session key and sends it to both parties, <strong>encrypted inside a package</strong> using each one's respective master key.</li>
+    </ul>
+    <p class="note">Benefit: you only have to protect <strong>one master key</strong>, and the KDC handles the rest.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📧 One-Way Authentication with a KDC (email)</h3>
+    <p>The protocol is similar to the first part of <strong>Needham-Schroeder</strong>, but with the mutual handshake removed. Alice gets a <strong>ticket</strong> for Bob and the <strong>session key</strong> from the KDC, then sends Bob two things:</p>
+    <ul>
+      <li>The <strong>ticket</strong> (which Bob can decrypt with his master key).</li>
+      <li>The actual <strong>email message</strong>, encrypted with the session key.</li>
+    </ul>
+    <p>Bob uses his master key to open the ticket, gets the session key, and uses it to decrypt the email. This proves the message came from someone who got a valid ticket from the KDC (i.e. Alice). Not as strong as mutual authentication, but it works for email.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Suppress-Replay Attack (the catch with timestamps)</h3>
+    <p>Timestamps introduce their own clever attack. It exploits clock drift between two parties.</p>
+    <div class="worked-step">
+      <div class="step-label">The Scenario</div>
+      <p>Imagine Alice's clock is 5 minutes <strong>ahead</strong> of Bob's.</p>
+    </div>
+    <div class="worked-step">
+      <div class="step-label">Step 1</div>
+      <p>Alice sends a request with her timestamp — which is 5 minutes in Bob's <em>future</em>.</p>
+    </div>
+    <div class="worked-step">
+      <div class="step-label">Step 2</div>
+      <p>An attacker, <strong>Eve</strong>, intercepts and holds onto this message.</p>
+    </div>
+    <div class="worked-step">
+      <div class="step-label">Step 3</div>
+      <p>5 minutes later, Bob's clock 'catches up' to the timestamp. Eve now replays the message.</p>
+      <p class="result">→ Bob sees a fresh, valid timestamp and accepts the replayed message!</p>
+    </div>
+    <p>Solutions: either <strong>constantly synchronize clocks</strong> very carefully, or go back to using <strong>nonces</strong> (random challenges), which are not vulnerable to this timing trick.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Kerberos</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What is Kerberos?</h3>
+    <ul>
+      <li>A <strong>trusted third-party authentication service</strong>.</li>
+      <li>Developed at <strong>MIT</strong> as part of <strong>Project Athena</strong>.</li>
+      <li>Relies <strong>exclusively on symmetric encryption</strong> (no public-key crypto).</li>
+      <li>Provides secure <strong>mutual authentication</strong> between users and servers in a network.</li>
+      <li>Uses a protocol based on <a href="#s4">Needham-Schroeder</a> with enhancements to prevent <a href="#s3">replay attacks</a>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📋 Kerberos Requirements (Secure-Reliable-Transparent-Scalable)</h3>
+    <ul>
+      <li><strong>Secure</strong> — a network eavesdropper cannot obtain information to impersonate a user.</li>
+      <li><strong>Reliable</strong> — highly available using a <em>distributed server architecture</em>.</li>
+      <li><strong>Transparent</strong> — users are unaware of authentication beyond entering a password.</li>
+      <li><strong>Scalable</strong> — supports large numbers of clients and servers with a modular design.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧩 Key Components</h3>
+  </div>
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">Authentication Server (AS)</h3>
+      <ul>
+        <li>Verifies user identity at login.</li>
+        <li>Issues <strong>Ticket-Granting Tickets (TGTs)</strong>.</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Ticket-Granting Server (TGS)</h3>
+      <ul>
+        <li>Issues <strong>service-specific tickets</strong>.</li>
+        <li>Acts as a <em>trusted intermediary</em>.</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Ticket</h3>
+      <ul>
+        <li>A <strong>reusable</strong> credential proving the user's identity to a service.</li>
+        <li>Encrypted with the <strong>server's secret key</strong>.</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Authenticator</h3>
+      <ul>
+        <li>A <strong>one-time-use</strong> credential proving the user is the ticket owner.</li>
+        <li>Encrypted with a <strong>session key</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🏰 The Kerberos Realm</h3>
+    <p>A Kerberos realm has three groups of parties, with the <strong>Key Distribution Center (KDC)</strong> in the middle housing the AS and TGS:</p>
+    <ul>
+      <li><strong>Clients / Users</strong> (left)</li>
+      <li><strong>Key Distribution Center</strong> = Authentication Server + Ticket Granting Server (centre)</li>
+      <li><strong>Services</strong> (right)</li>
+    </ul>
+    <p>The two message types that flow are <strong>Authenticators</strong> (one-time proofs) and <strong>Tickets</strong> (reusable credentials).</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔄 The Kerberos Message Flow (6 messages)</h3>
+    <p>The protocol proceeds through three exchanges — with the AS, then the TGS, then the Service:</p>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num" data-n="1">Step 1</div>
+    <h4>User → Authentication Server</h4>
+    <p>The user requests authentication. The message attributes include: <strong>User Name/ID</strong> (e.g. "Rob"), <strong>Service Name/ID</strong> (e.g. "CRM"), <strong>User IP address</strong>, and the <strong>Requested lifetime for the TGT</strong>. The AS holds a table of each user's Name/ID and <strong>Client Secret Key</strong>.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="2">Step 2</div>
+    <h4>Authentication Server → User (issues the TGT)</h4>
+    <p>The AS returns a session-key block (attributes: <strong>TGS Name/ID</strong>, <strong>Timestamp</strong>, <strong>Lifetime</strong> — same as TGT) and the <strong>Ticket Granting Ticket (TGT)</strong>.</p>
+    <div class="formula">TGT attributes: User Name/ID • TGS Name/ID • Timestamp • User IP address • Lifetime for TGT</div>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="3">Step 3</div>
+    <h4>User → Ticket Granting Server</h4>
+    <p>The user presents the <strong>TGT</strong> to the TGS to request access to a specific service.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="4">Step 4</div>
+    <h4>Ticket Granting Server → User (issues the Service Ticket)</h4>
+    <p>The TGS validates the TGT and returns a <strong>Service Ticket (ST)</strong>.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="5">Step 5</div>
+    <h4>User → Service</h4>
+    <p>The user presents the <strong>Service Ticket (ST)</strong> to the target service.</p>
+  </div>
+  <div class="step-box">
+    <div class="step-num" data-n="6">Step 6</div>
+    <h4>Service → User</h4>
+    <p>The service confirms and grants access — completing <strong>mutual authentication</strong>.</p>
+  </div>
+
+  <div class="analogy-box">
+    <div class="a-title">Analogy — The Ticket Booth</div>
+    <p>Think of the AS as the front desk that checks your ID once and hands you a reusable <strong>day-pass (TGT)</strong>. Whenever you want to enter a specific ride (a service), you show the day-pass at the <strong>ride-ticket booth (TGS)</strong>, which gives you a <strong>single-ride ticket (ST)</strong>. The ride operator (service) only needs to check that single-ride ticket — you never expose your original password again.</p>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Where was Kerberos developed and what crypto does it use? → MIT (Project Athena); symmetric encryption only.</li>
+      <li>Difference between a Ticket and an Authenticator? → Ticket = reusable, encrypted with server's secret key; Authenticator = one-time-use, encrypted with session key.</li>
+      <li>What does the AS issue vs. the TGS? → AS issues the TGT; TGS issues service-specific tickets (ST).</li>
+      <li>List the four Kerberos requirements. → Secure, Reliable, Transparent, Scalable.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Access Control Fundamentals</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Authentication vs. Access Control</h3>
+    <p><strong>Authentication</strong> verifies <em>identity</em> using credentials like passwords, biometrics, or tokens. <strong>Authorization (Access Control)</strong> determines <em>what resources</em> a user can access and grants access based on that level.</p>
+    <p class="note">Example: a user might have access to a restaurant (authenticated), but there are specific things they are not allowed to do (authorization limits).</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔑 The Four Stages: Identification → Authentication → Authorization → Access</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Action</th><th>Description</th><th>Scenario Example</th><th>Computer Process</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Identification</strong></td><td>Review of credentials</td><td>Delivery person shows employee badge</td><td>User enters username</td></tr>
+          <tr><td><strong>Authentication</strong></td><td>Validate credentials as genuine</td><td>Mia reads badge to determine it is real</td><td>User provides password</td></tr>
+          <tr><td><strong>Authorization</strong></td><td>Permission granted for admittance</td><td>Mia opens door to allow delivery person in</td><td>User authorized to log in</td></tr>
+          <tr><td><strong>Access</strong></td><td>Right given to access specific resources</td><td>Delivery person can only retrieve box by door</td><td>User allowed to access only specific data</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧱 Authentication Building Blocks (recap)</h3>
+    <ul>
+      <li><strong>Authentication Factors</strong>: Knowledge-based (passwords, PINs), Possession-based (smart cards, tokens), Inherence-based (fingerprints, retina scans).</li>
+      <li><strong>Multifactor Authentication (MFA)</strong>: combines two or more factors (e.g. password + smartphone app).</li>
+      <li><strong>Single Sign-On (SSO)</strong>: one login for multiple systems — reduces password fatigue but <em>increases risk if compromised</em>.</li>
+      <li><strong>Authentication Protocols</strong>: examples include <a href="#s5">Kerberos</a>, OAuth, and OpenID Connect, securing authentication during data exchange.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Access Control Models (DAC, MAC, RBAC, ABAC)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The Four Models</h3>
+    <ol>
+      <li>Discretionary Access Control (DAC)</li>
+      <li>Mandatory Access Control (MAC)</li>
+      <li>Role-Based Access Control (RBAC)</li>
+      <li>Attribute-Based Access Control (ABAC)</li>
+    </ol>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">1️⃣ Discretionary Access Control (DAC)</h3>
+    <p>DAC empowers the <strong>owners of resources</strong> to decide who can access them. Control over permissions lies entirely with the resource owner.</p>
+    <p><strong>Core characteristics:</strong></p>
+    <ul>
+      <li><strong>Ownership-centric</strong> — the owner holds complete authority over access rights.</li>
+      <li><strong>Highly customizable</strong> — permissions tailored for specific users or groups.</li>
+      <li><strong>Access Control Lists (ACLs)</strong> — lists defining which users/groups can read, write, or execute the resource.</li>
+    </ul>
+  </div>
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">DAC — Benefits</h3>
+      <ul>
+        <li>Straightforward and easy for users to manage.</li>
+        <li>Provides fine-grained control over who can do what.</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">DAC — Drawbacks</h3>
+      <ul>
+        <li>Susceptible to <strong>privilege escalation</strong> and <strong>insider threats</strong>.</li>
+        <li>Absence of centralized oversight complicates enforcement of organization-wide policies.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card accent-left">
+    <p><strong>Illustration:</strong> When a user creates a file on their device, they can specify exactly which other users may read, modify, or run that file. <span class="note">(Diagram: Owner → specifies users/groups who can access → Object.)</span></p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">2️⃣ Mandatory Access Control (MAC)</h3>
+    <p>MAC is a model where access rules are <strong>strictly enforced by a central authority</strong>, and users have <em>no ability to alter</em> these rules.</p>
+    <p><strong>Core characteristics:</strong></p>
+    <ul>
+      <li><strong>Security Labels &amp; Clearance Levels</strong> — both users and resources receive classifications (e.g. "Top Secret", "Confidential"); access is permitted only when labels <strong>align</strong>.</li>
+      <li><strong>Non-Discretionary Access</strong> — users cannot modify permissions themselves.</li>
+      <li><strong>Centralized Authority</strong> — only system administrators can set or change access policies.</li>
+    </ul>
+    <div class="formula">Privilege levels (high → low): Top Secret → Secret → Confidential → Public</div>
+  </div>
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">MAC — Benefits</h3>
+      <ul>
+        <li>Delivers a high level of security.</li>
+        <li>Perfectly suited for settings demanding rigorous confidentiality — <strong>military or government</strong> operations.</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">MAC — Drawbacks</h3>
+      <ul>
+        <li>Can be rigid and less intuitive for users.</li>
+        <li>Challenging to deploy and maintain where frequent changes are needed.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card accent-left">
+    <p><strong>Illustration:</strong> A document marked "Top Secret" is accessible exclusively to individuals holding "Top Secret" clearance.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">3️⃣ Role-Based Access Control (RBAC)</h3>
+    <p>RBAC manages permissions by assigning them to <strong>roles</strong> instead of individual users, making access control more efficient.</p>
+    <p><strong>Core characteristics:</strong></p>
+    <ul>
+      <li><strong>Role-focused</strong> — users receive roles such as Admin, Editor, or Viewer, each with predefined access rights.</li>
+      <li><strong>Highly scalable</strong> — ideal for complex hierarchies and large user bases.</li>
+      <li><strong>Duty Segregation</strong> — roles structured to avoid conflicts of interest (e.g. one person cannot both approve and audit the same transaction).</li>
+    </ul>
+    <p class="note">Diagram flow: Admin assigns users to roles → Users assigned to roles → Roles define authority level → Permissions authorized by role.</p>
+  </div>
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">RBAC — Benefits</h3>
+      <ul>
+        <li>Simplifies administration in large enterprises.</li>
+        <li>Enhances ease of auditing and meeting compliance requirements.</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">RBAC — Limitations</h3>
+      <ul>
+        <li>Setting up roles initially can be intricate and time-consuming.</li>
+        <li>Lacks flexibility to adapt to contextual or real-time conditions.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card accent-left">
+    <p><strong>Practical example:</strong> An "HR Manager" role gets access to employee information, whereas a "Finance Manager" role would have permissions related to payroll data.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">4️⃣ Attribute-Based Access Control (ABAC)</h3>
+    <p>ABAC determines access by evaluating <strong>attributes</strong> of the user, the resource, and the environment — enabling real-time, adaptive access management.</p>
+    <p><strong>Core characteristics:</strong></p>
+    <ul>
+      <li><strong>Policy-driven</strong> — permissions governed by rules that assess specific attributes.</li>
+      <li><strong>Context-sensitive &amp; dynamic</strong> — role, current time, location, and device type influence decisions.</li>
+      <li><strong>Granular access</strong> — supports detailed, conditional policies for precise control.</li>
+    </ul>
+    <p class="note">Diagram attribute groups: User attributes (Name, Role, Security clearance) • Resource attributes (Creation date, Resource owner, Data sensitivity) • Environmental attributes (Access time, Data location, Threat levels).</p>
+  </div>
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">ABAC — Benefits</h3>
+      <ul>
+        <li>Exceptional flexibility — suited for frequently changing environments.</li>
+        <li>Capable of handling intricate policies involving multiple attribute combinations.</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">ABAC — Challenges</h3>
+      <ul>
+        <li>Can impose significant processing demands.</li>
+        <li>Crafting and maintaining policies can be complex and resource-intensive.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card accent-left">
+    <p><strong>Illustrative example:</strong> Access permitted only if the individual is an employee (attribute: <em>role</em>), accessing during business hours (attribute: <em>time</em>), and using a company-approved device (attribute: <em>device type</em>).</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚖️ Models at a Glance (restrictiveness)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Restrictions</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Mandatory Access Control (MAC)</td><td>End user cannot set controls</td><td>Most restrictive model</td></tr>
+          <tr><td>Discretionary Access Control (DAC)</td><td>Subject has total control over objects</td><td>Least restrictive model</td></tr>
+          <tr><td>Role-Based Access Control (RBAC)</td><td>Assigns permissions to particular roles, then users are assigned to roles</td><td>Considered a more "real-world" approach</td></tr>
+          <tr><td>Rule-Based Access Control (RBAC)</td><td>Dynamically assigns roles to subjects based on rules defined by a custodian</td><td>Used for managing user access to one or more systems</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔬 Full Comparison: DAC vs MAC vs RBAC vs ABAC</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>DAC</th><th>MAC</th><th>RBAC</th><th>ABAC</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Control Authority</strong></td><td>Resource Owner</td><td>Centralized Administrator</td><td>Role-Based</td><td>Attribute-Based</td></tr>
+          <tr><td><strong>Flexibility</strong></td><td class="diff">High</td><td class="match">Low</td><td>Moderate</td><td class="diff">Very High</td></tr>
+          <tr><td><strong>Scalability</strong></td><td class="match">Low</td><td class="match">Low</td><td class="diff">High</td><td class="diff">High</td></tr>
+          <tr><td><strong>Security</strong></td><td>Moderate</td><td class="diff">Very High</td><td>High</td><td class="diff">Very High</td></tr>
+          <tr><td><strong>Example Usage</strong></td><td>Personal Files</td><td>Government Systems</td><td>Corporate IT Systems</td><td>Cloud Services</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">These models cater to different use cases and security requirements; many organizations employ a <strong>hybrid approach</strong> to leverage their strengths.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>DoS &amp; DDoS Attacks</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">📖 Denial of Service (DoS)</h3>
+    <p>A network security attack in which the hacker makes the system or data <strong>unavailable</strong> to someone who needs it. The hacker tries to make a network, system, or machine unavailable by <strong>flooding it with fake requests or traffic</strong>. This prevents real users from accessing it — causing anything from slowdowns to complete shutdowns.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🌐 Distributed Denial of Service (DDoS)</h3>
+    <p>DDoS attacks use <strong>multiple systems</strong>, often compromised computers (<strong>botnets</strong>), to attack a single target. Two examples are amplification attacks and botnet-based attacks:</p>
+    <ul>
+      <li><strong>Amplification attack</strong> — attackers use services like <strong>DNS</strong> to send a <em>small query</em> that generates a <em>large response</em>, flooding the victim with data.</li>
+      <li><strong>Botnet-based attack</strong> — coordinates many infected computers to send attack traffic from multiple sources, making it hard to defend against.</li>
+    </ul>
+    <p class="note">Operation of a DDoS attack: attacker computers send malicious traffic → through the Internet → to the target server, while real users' clean traffic is crowded out → target goes "Out of Resources / Service Offline".</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🗂️ Types of DoS / DDoS Attacks</h3>
+  </div>
+  <div class="grid-3">
+    <div class="card red-left">
+      <h3 class="red">Volume-Based Attacks</h3>
+      <p>Floods the network with too much data.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">Protocol Attacks</h3>
+      <p>Exploit weaknesses in network protocols.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">Application Layer Attacks</h3>
+      <p>Make target applications crash or become sluggish.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">DDoS Attacks</h3>
+      <p>Use multiple systems to attack a single target.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">Resource Exhaustion</h3>
+      <p>Repeatedly request access to overload the application.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">Reflective Attacks</h3>
+      <p>Send requests to 3rd-party servers using the victim's IP address (responses bounce back to the victim).</p>
+    </div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Wireless Security</h2>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚠️ Why Wireless Security is Critical — Key Risk Factors</h3>
+    <ul>
+      <li><strong>Channel</strong> — broadcast nature → prone to <strong>eavesdropping</strong> and <strong>jamming</strong>.</li>
+      <li><strong>Mobility</strong> — portability increases risk of <strong>loss / theft / unauthorized access</strong>.</li>
+      <li><strong>Resources</strong> — limited memory/processing in mobile devices → vulnerable to <strong>malware</strong>.</li>
+      <li><strong>Accessibility</strong> — devices left unattended → <strong>physical attacks</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🎯 Wireless Network Threats</h3>
+    <ul>
+      <li><strong>Accidental Association</strong> — e.g. an employee's laptop connects to a neighbouring company's Wi-Fi unintentionally.</li>
+      <li><strong>Malicious Association</strong> — e.g. an attacker sets up a fake "Free Airport Wi-Fi" AP to capture login credentials.</li>
+      <li><strong>Ad Hoc Networks</strong> — e.g. two laptops connected directly without an AP → no central control.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧩 Wireless Components &amp; Attack Points</h3>
+    <ul>
+      <li><strong>Wireless Client</strong> — phone, laptop, IoT device.</li>
+      <li><strong>Access Point</strong> — Wi-Fi hotspot, cell tower.</li>
+      <li><strong>Transmission Medium</strong> — radio waves (vulnerable to interception).</li>
+    </ul>
+    <p class="note">Example: a Wi-Fi-enabled laptop in a café connects to a <strong>rogue AP</strong> instead of the legitimate one.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">🔒 Securing Wireless Transmissions</h3>
+      <p><strong>Threat:</strong> unauthorized network access.</p>
+      <p><strong>Solution:</strong> IEEE <strong>802.1X Port-Based Access Control</strong> — requires authentication before granting network access; prevents rogue APs.</p>
+      <p class="note">Example: an employee must enter username / password / certificate to connect to corporate Wi-Fi. Also: encrypt all Wi-Fi traffic so intercepted data is unreadable.</p>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">📡 Securing Wireless Access Points</h3>
+      <p><strong>Goal:</strong> prevent eavesdropping, tampering, disruption.</p>
+      <p><strong>Signal hiding techniques:</strong> disable SSID broadcasting, use cryptic SSID names, reduce signal strength, use directional antennas.</p>
+      <p><strong>Encryption:</strong> use <strong>WPA3</strong>, <strong>AES-CCMP</strong>.</p>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ Securing Wireless Networks — Best Practices</h3>
+    <ul>
+      <li>Use encryption (<strong>WPA3</strong> for router-to-router).</li>
+      <li>Install antivirus / firewall on all endpoints.</li>
+      <li>Turn off identifier broadcasting.</li>
+      <li>Change default router SSID.</li>
+      <li>Change default admin password.</li>
+      <li>Use MAC filtering — <em>with caution, as it can be spoofed</em>.</li>
+    </ul>
+    <p class="note">Example: Home Wi-Fi → change SSID from "Linksys" to "HomeNet_secure", disable SSID broadcast, enable WPA3.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Firewalls</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What is a Firewall?</h3>
+    <p>A firewall is a network security system that:</p>
+    <ul>
+      <li>Creates a controlled <strong>barrier</strong> between trusted internal networks and untrusted external networks (e.g. the Internet).</li>
+      <li><strong>Inspects and controls traffic</strong> based on security rules.</li>
+      <li>Provides a <strong>single point</strong> of monitoring and enforcement.</li>
+    </ul>
+    <p class="note">"The function of a strong position is to make the forces holding it practically unassailable." — Carl von Clausewitz.</p>
+    <p>Example: a company uses a firewall to allow employees to browse the web while blocking hackers from entering the network.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧱 Firewall Characteristics</h3>
+    <p>Firewalls are designed to:</p>
+    <ul>
+      <li><strong>Force all traffic through them</strong> — no bypass allowed.</li>
+      <li><strong>Permit only authorized traffic</strong> — defined by security policy.</li>
+      <li><strong>Be immune to attacks</strong> — run on hardened, secure systems.</li>
+    </ul>
+    <p><strong>Control techniques:</strong></p>
+    <ul>
+      <li><strong>Service Control</strong> — what services (HTTP, SMTP) are allowed.</li>
+      <li><strong>Direction Control</strong> — which way traffic can flow.</li>
+      <li><strong>User Control</strong> — who can access (via authentication).</li>
+      <li><strong>Behavior Control</strong> — how services are used (e.g. block spam).</li>
+    </ul>
+    <p class="note">Example: only HR can access the payroll server, and only during work hours.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🗂️ Types of Firewall</h3>
+  </div>
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">Packet Filtering Firewall</h3>
+      <p>Filters based on <strong>IP, port, protocol</strong>. Fast but minimal inspection.</p>
+      <p class="note">Example: block all traffic from a specific IP.</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Stateful Inspection Firewall</h3>
+      <p>Tracks active connections in a <strong>state table</strong>; only allows return traffic for established sessions.</p>
+      <p class="note">Example: allow an inbound response only if an outbound request was made first.</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Application-Level Gateway (Proxy)</h3>
+      <p>Acts as an intermediary for app traffic (e.g. HTTP, FTP); inspects full content and enforces detailed policies.</p>
+      <p class="note">Example: a web proxy that blocks malicious sites.</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Circuit-Level Gateway</h3>
+      <p>Relays TCP connections <strong>without deep inspection</strong>; often used with the <strong>SOCKS</strong> protocol.</p>
+      <p class="note">Example: a secure relay for remote-user VPN access.</p>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📊 Firewall Types — Summary Comparison</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Layer</th><th>Security</th><th>Speed</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td>Packet Filtering</td><td>Network</td><td>Low</td><td>Fast</td><td>Basic perimeter security</td></tr>
+          <tr><td>Stateful Inspection</td><td>Transport</td><td>Medium</td><td>Fast</td><td>Enterprise networks</td></tr>
+          <tr><td>Application Gateway</td><td>Application</td><td>High</td><td>Slow</td><td>Web / Mail security</td></tr>
+          <tr><td>Circuit-Level Gateway</td><td>Session</td><td>Medium</td><td>Medium</td><td>VPNs, remote access</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Authentication = 2 steps</strong>Identification (claim, public) + Verification (prove with secret)</div>
+    <div class="qr-item"><strong>NIST SP 800-63-2 actors</strong>RA, CSP, Subscriber/Claimant, Verifier, Relying Party</div>
+    <div class="qr-item"><strong>NIST flow</strong>Registration → Credential Issuance → Authentication → Authorization</div>
+    <div class="qr-item"><strong>4 Auth factors</strong>Know, Possess, Are (static bio), Do (dynamic bio)</div>
+    <div class="qr-item"><strong>Most common MFA combo</strong>Something you know (password) + something you possess (crypto key)</div>
+    <div class="qr-item"><strong>Mutual auth threat</strong>Replay attack (Types 1–4); Type 4 = reflection</div>
+    <div class="qr-item"><strong>Counter replay</strong>Timestamps (need synced clocks) OR Challenge/Response (handshake)</div>
+    <div class="qr-item"><strong>One-way auth example</strong>Email — envelope readable, body encrypted, sender authenticated</div>
+    <div class="qr-item"><strong>KDC idea</strong>One master key per user; KDC issues temporary session keys</div>
+    <div class="qr-item"><strong>Suppress-replay attack</strong>Exploits clock drift; fix = sync clocks or use nonces</div>
+    <div class="qr-item"><strong>Kerberos origin</strong>MIT, Project Athena; symmetric encryption only</div>
+    <div class="qr-item"><strong>Kerberos requirements</strong>Secure, Reliable, Transparent, Scalable</div>
+    <div class="qr-item"><strong>AS vs TGS</strong>AS issues TGT; TGS issues Service Tickets (ST)</div>
+    <div class="qr-item"><strong>Ticket vs Authenticator</strong>Ticket = reusable (server key); Authenticator = one-time (session key)</div>
+    <div class="qr-item"><strong>Kerberos flow</strong>User↔AS → User↔TGS → User↔Service (6 messages)</div>
+    <div class="qr-item"><strong>I-A-A-A</strong>Identification → Authentication → Authorization → Access</div>
+    <div class="qr-item"><strong>SSO trade-off</strong>Reduces password fatigue; one compromise exposes many systems</div>
+    <div class="qr-item"><strong>DAC</strong>Owner decides (ACLs); least restrictive; risk: privilege escalation</div>
+    <div class="qr-item"><strong>MAC</strong>Central authority, security labels; most restrictive; military/gov</div>
+    <div class="qr-item"><strong>MAC levels</strong>Top Secret → Secret → Confidential → Public</div>
+    <div class="qr-item"><strong>RBAC</strong>Permissions via roles; scalable; supports duty segregation</div>
+    <div class="qr-item"><strong>ABAC</strong>User + resource + environment attributes; dynamic, context-aware</div>
+    <div class="qr-item"><strong>Most flexible / restrictive</strong>Flexibility: ABAC highest, MAC lowest; Security: MAC &amp; ABAC very high</div>
+    <div class="qr-item"><strong>DoS vs DDoS</strong>DoS = one source flood; DDoS = many sources (botnets)</div>
+    <div class="qr-item"><strong>Amplification attack</strong>Small query (e.g. DNS) → large response floods victim</div>
+    <div class="qr-item"><strong>DoS types</strong>Volume, Protocol, App-layer, DDoS, Resource exhaustion, Reflective</div>
+    <div class="qr-item"><strong>Wireless risk factors</strong>Channel, Mobility, Resources, Accessibility</div>
+    <div class="qr-item"><strong>Wireless threats</strong>Accidental assoc., Malicious assoc. (rogue AP), Ad hoc nets</div>
+    <div class="qr-item"><strong>Wireless transmission fix</strong>IEEE 802.1X port-based access control</div>
+    <div class="qr-item"><strong>Wireless encryption</strong>WPA3, AES-CCMP; hide SSID, directional antennas</div>
+    <div class="qr-item"><strong>Firewall 3 design rules</strong>Force all traffic through, permit only authorized, immune to attack</div>
+    <div class="qr-item"><strong>Firewall controls</strong>Service, Direction, User, Behavior</div>
+    <div class="qr-item"><strong>Firewall types</strong>Packet Filter, Stateful Inspection, App Gateway (proxy), Circuit-Level</div>
+    <div class="qr-item"><strong>Highest-security firewall</strong>Application Gateway (slow); Packet filter = fastest, lowest security</div>
+  </div>
+</section>
