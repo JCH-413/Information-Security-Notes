@@ -23,6 +23,38 @@ export interface LectureSource {
 
 export const lectureSources: LectureSource[] = [
   {
+    id: "01",
+    file: "intro-information-security-notes.html",
+    slug: "intro-information-security",
+    title: "Introduction to Information Security",
+    description: "Course introduction: foundational InfoSec concepts and vocabulary, the seven-area landscape (cyber defense, operations, forensics, secure development, policy, risk, human factors), CIA triad and ITU‑T X.800 services, RMIAS model, active vs passive attacks, and a phishing breach case study with prevention/detection/response.",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "02",
+    file: "malware-and-cyber-attacks-notes.html",
+    slug: "malware-and-cyber-attacks",
+    title: "Malware and Cyber Attacks 1",
+    description: "Survey of malware and network attacks: threats to confidentiality and integrity, malware taxonomy and families (worms, viruses, bots, trojans, ransomware, spyware), attack vectors and social engineering (phishing, vishing, smishing), detection/classification techniques, and mitigation best practices.",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "03",
+    file: "malware-part-2-notes.html",
+    slug: "malware-part-2",
+    title: "Malware and Cyber Attacks 2",
+    description: "In-depth malware study: purpose-based taxonomy (concealment, infection, information-stealing, profit), examples (trojans, rootkits, viruses, worms, keyloggers, ransomware, botnets), detection approaches (signature, change, anomaly), malware analysis, incident response, and classification into families using static/dynamic signatures.",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "04",
+    file: "cyber-threat-spectrum-notes.html",
+    slug: "cyber-threat-spectrum",
+    title: "Cyber Threat Spectrum",
+    description: "Survey of the cyber-threat landscape: secure-design principles, major frameworks (NIST CSF, ISO/IEC 27001, GDPR, CIS), insider and competitor threats (espionage), the attack lifecycle, and practical governance-based defenses (identify/protect/detect/respond/recover).",
+    videos: [{ url: "" }],
+  },
+  {
     id: "05",
     file: "buffer-overflow-notes.html",
     slug: "buffer-overflow",

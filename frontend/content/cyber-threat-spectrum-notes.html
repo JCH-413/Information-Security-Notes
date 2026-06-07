@@ -1,0 +1,525 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>The Cyber Threat Spectrum — Introduction</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Lecture Overview</h3>
+    <p>This lecture surveys the full <strong>spectrum of cyber threats</strong> and how to defend against them. It covers the <strong>principles of secure design</strong>, the major <strong>security frameworks and standards</strong> (NIST, ISO/IEC 27001, GDPR, CIS), the threat posed by <strong>employees and ex-employees</strong>, the <strong>criminal era of competitor threats</strong> (corporate espionage), and finally <strong>cyberwar and cyberterrorism</strong>.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Fundamental Security Design Principles</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Source</h3>
+    <p>The <strong>National Centers of Academic Excellence in Information Assurance/Cyber Defense</strong> — jointly sponsored by the U.S. <strong>National Security Agency</strong> and the U.S. <strong>Department of Homeland Security</strong> — list the following fundamental security design principles [NCAE13].</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 The Principles</h3>
+    <ul>
+      <li><strong>Economy of mechanism</strong> — keep security designs simple and small to minimize vulnerabilities.</li>
+      <li><strong>Fail-safe defaults</strong> — deny access by default unless explicitly permitted.</li>
+      <li><strong>Complete mediation</strong> — check every access request against security policies without exception.</li>
+      <li><strong>Open design</strong> — security should not rely on secrecy of design or implementation.</li>
+      <li><strong>Separation of privilege</strong> — require multiple independent conditions for access.</li>
+      <li><strong>Least privilege</strong> — grant only the minimum access rights necessary to perform a task.</li>
+      <li><strong>Least common mechanism</strong> — limit sharing of resources to reduce interference and information leaks.</li>
+      <li><strong>Psychological acceptability</strong> — design controls that are easy for users to understand and use.</li>
+      <li><strong>Isolation</strong> — separate system components to contain faults and limit damage.</li>
+      <li><strong>Encapsulation</strong> — hide internal system details behind well-defined interfaces.</li>
+      <li><strong>Modularity</strong> — build systems with interchangeable and independent modules.</li>
+      <li><strong>Layering</strong> — use multiple defensive layers to protect against failures.</li>
+      <li><strong>Least astonishment</strong> — ensure system behavior matches user expectations to avoid errors.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Security Frameworks &amp; Standards</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What They Are</h3>
+    <p>Cybersecurity standards are <strong>published methods to protect users and organizations online</strong>. They cover users, networks, devices, software, processes, data (stored or moving), applications, services, and connected systems.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🎯 Principal Objective &amp; Contents</h3>
+    <p>The principal objective is to <strong>reduce risks</strong>, including preventing or mitigating cyber-attacks. Published materials include collections of:</p>
+    <ul>
+      <li>Tools</li>
+      <li>Policies</li>
+      <li>Security concepts and safeguards</li>
+      <li>Guidelines and risk management approaches</li>
+      <li>Actions and training</li>
+      <li>Best practices, assurance, and technologies</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧭 Understanding Cybersecurity Frameworks</h3>
+    <p>Frameworks are <strong>comprehensive sets of guidelines, standards, and best practices</strong> aimed at managing cyber risks effectively. They serve as <strong>strategic tools</strong> to minimize an organization's vulnerabilities and reduce the chances of exploitation by hackers and cybercriminals.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>NIST Cybersecurity Framework (CSF)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What NIST CSF Provides</h3>
+    <p>The NIST CSF offers detailed cybersecurity guidance for <strong>private-sector organizations in the US</strong>. It provides a high-level classification of cybersecurity outcomes and a method to assess and manage them, and is <strong>adaptable to organizations of various sizes and maturity levels</strong>.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚙️ The Six Functions (Addressed Concurrently)</h3>
+    <p>The functions should be addressed <strong>concurrently</strong>:</p>
+    <ul>
+      <li><strong>GOVERN, IDENTIFY, PROTECT, and DETECT</strong> — supporting actions should happen <strong>continuously</strong>.</li>
+      <li><strong>RESPOND and RECOVER</strong> — should be <strong>ready at all times</strong> and happen when cybersecurity incidents occur.</li>
+    </ul>
+    <p>All functions have vital roles: <strong>GOVERN, IDENTIFY, and PROTECT</strong> outcomes help <strong>prevent and prepare</strong> for incidents, while <strong>GOVERN, DETECT, RESPOND, and RECOVER</strong> outcomes help <strong>discover and manage</strong> incidents.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📋 Five Steps to Create &amp; Use a CSF Organizational Profile</h3>
+    <ol>
+      <li>Scope the Organizational Profile</li>
+      <li>Gather needed information</li>
+      <li>Create the Organizational Profile</li>
+      <li>Analyze gaps and create an action plan</li>
+      <li>Implement the action plan and update the Profile</li>
+    </ol>
+    <p class="note">…then repeat — it is a continuous cycle.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">GOVERN</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">IDENTIFY</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">PROTECT</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">DETECT</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">RESPOND</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">RECOVER</div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>ISO/IEC 27001</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 The ISMS Standard</h3>
+    <p><strong>ISO/IEC 27001</strong> is part of the ISO/IEC 27000 series/family — an <strong>Information Security Management System (ISMS)</strong> standard.</p>
+    <ul>
+      <li>The latest version (referenced here) was published in <strong>October 2013</strong> by ISO and IEC.</li>
+      <li>Full title: <strong>ISO/IEC 27001:2013 — Information technology — Security techniques — Information security management systems — Requirements</strong>.</li>
+      <li>It <strong>formally specifies a management system</strong> to control information security explicitly.</li>
+    </ul>
+    <p class="note">Reference book: <em>Principles of Information Security</em>.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>GDPR — General Data Protection Regulation</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Overview</h3>
+    <p>The <strong>GDPR</strong> is a comprehensive legal framework established by the <strong>European Union</strong> to safeguard the privacy and security of personal data belonging to its residents.</p>
+    <ul>
+      <li>Introduced in <strong>2016</strong>.</li>
+      <li>Applies to <strong>any organization that handles the personal information of EU citizens</strong>, no matter where the organization is based globally.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ GDPR Compliance Checklist</h3>
+    <ul>
+      <li><strong>Data Mapping</strong> — document what personal data is collected, why, and how it's processed/stored.</li>
+      <li><strong>Legal Basis</strong> — identify the lawful reason for each data-processing activity.</li>
+      <li><strong>Policies</strong> — create clear, plain-language privacy policies and consent forms.</li>
+      <li><strong>Training</strong> — educate staff on GDPR and data-protection basics.</li>
+      <li><strong>Third-Party Management</strong> — ensure vendors follow GDPR and have proper contracts.</li>
+      <li><strong>Audits</strong> — regularly review compliance and fix gaps.</li>
+      <li><strong>DPO</strong> — appoint a Data Protection Officer if required.</li>
+      <li><strong>DPIAs</strong> — assess risks for high-impact data projects.</li>
+      <li><strong>Security Measures</strong> — use encryption, MFA, and regular security checks.</li>
+      <li><strong>Data Rights</strong> — enable access, correction, deletion, and objection.</li>
+      <li><strong>Breach Response</strong> — have a plan to detect and report data breaches fast.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>CIS Controls</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Center for Internet Security (CIS)</h3>
+    <ul>
+      <li>A <strong>prioritized set of cybersecurity best practices</strong>.</li>
+      <li>Originally known as <strong>SANS Top 20</strong>; now managed by CIS.</li>
+      <li>Globally recognized for reducing risk from common threats.</li>
+      <li>Suitable for organizations of all sizes and sectors.</li>
+    </ul>
+  </div>
+
+  <div class="grid-3">
+    <div class="card blue-left">
+      <h3 class="blue">1. Basic Controls (CIS 1–5)</h3>
+      <p>Establish core cybersecurity hygiene.</p>
+      <ul>
+        <li>CIS 1: Inventory of hardware assets</li>
+        <li>CIS 2: Inventory of software assets</li>
+        <li>CIS 3: Data protection (encryption, DLP)</li>
+        <li>CIS 4: Secure configuration of systems</li>
+        <li>CIS 5: Account lifecycle management</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">2. Foundational Controls (CIS 6–10)</h3>
+      <p>Strengthen defenses and monitoring.</p>
+      <ul>
+        <li>CIS 6: Access control (least privilege)</li>
+        <li>CIS 7: Continuous vulnerability management</li>
+        <li>CIS 8: Audit log collection and analysis</li>
+        <li>CIS 9: Email &amp; browser protections</li>
+        <li>CIS 10: Malware defenses</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">3. Organizational Controls (CIS 11–15)</h3>
+      <p>Embed security into governance and culture.</p>
+      <ul>
+        <li>CIS 11: Data recovery capabilities</li>
+        <li>CIS 12: Secure network infrastructure</li>
+        <li>CIS 13: Security awareness training</li>
+        <li>CIS 14: Secure software development</li>
+        <li>CIS 15: Third-party/service provider management</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">💡 Why Use CIS Controls?</h3>
+    <ul>
+      <li>Actionable, prioritized, and cost-effective</li>
+      <li>Protects against real-world threats</li>
+      <li>Useful for both new and mature security programs</li>
+      <li>Supports compliance and risk management</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Employee &amp; Ex-Employee Threats</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Why Insiders Matter</h3>
+    <ul>
+      <li>Employees and ex-employees are a <strong>major source of computer crimes</strong>.</li>
+      <li>Many perpetrators had <strong>legitimate or recent access</strong> to systems.</li>
+      <li>Managing personnel with access is a <strong>critical security priority</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card orange-left">
+      <h3 class="orange">🤷 Unintentional Threats</h3>
+      <ul>
+        <li>Forgetting security rules</li>
+        <li>Failing to follow procedures</li>
+        <li>Creating vulnerabilities unknowingly</li>
+      </ul>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">😈 Intentional Threats</h3>
+      <ul>
+        <li>Knowingly violating controls</li>
+        <li>Assisting in security breaches</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">📋 Examples of Internal Threats</h3>
+    <ul>
+      <li>Unauthorized access or enabling others</li>
+      <li>Altering or deleting data</li>
+      <li>Crashing or destroying systems</li>
+      <li>Misusing systems for personal gain</li>
+      <li>Holding data hostage</li>
+      <li>Stealing customer/strategic data (espionage, fraud)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Personnel Security — Hiring to Termination</h2>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔍 Background Checks &amp; Screening</h3>
+    <ul>
+      <li>Resume verification (employment &amp; education history)</li>
+      <li>Interview discrepancies with experienced staff</li>
+      <li>Intensive checks for sensitive roles: background investigation agency, criminal record check, credit record check (financial-stress risks), polygraph (where legal), and bonding for sensitive positions</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📝 Employment Agreements</h3>
+    <p>Contracts should include:</p>
+    <ul>
+      <li>Confidentiality &amp; non-disclosure agreements</li>
+      <li>Employee obligations to protect information</li>
+      <li>Reference to the organization's security policy</li>
+    </ul>
+    <p class="note">Employees must review and agree to abide by the policy.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛡️ Security During Employment</h3>
+    <ul>
+      <li>Ongoing awareness and training programs</li>
+      <li>Policies for email &amp; Internet use (e.g., NUCES examples)</li>
+      <li>Key principles: <strong>Least privilege</strong> (minimal access required), <strong>Separation of duties</strong> (avoid conflicts of interest), and <strong>avoid over-reliance on key employees</strong> → build redundancy</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🚪 Termination of Employment (ISO 27002)</h3>
+    <p>Objective: an <strong>orderly exit &amp; removal of access</strong>. Key actions:</p>
+    <ul>
+      <li>Remove from access lists</li>
+      <li>Inform guards/security teams</li>
+      <li>Revoke personal access codes/cards</li>
+      <li>Change locks / reprogram systems</li>
+      <li>Recover company assets (IDs, devices, documents)</li>
+      <li>Notify relevant departments</li>
+    </ul>
+  </div>
+
+  <div class="highlight">Security measures must cover the entire lifecycle: <strong>Hiring → Employment → Termination</strong>. Strong personnel security reduces the risks of insider misuse, espionage, fraud, and sabotage.</div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Competitor Threats &amp; Corporate Espionage</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🏢 The Criminal Era</h3>
+    <p>Businesses face threats not only from hackers but also from <strong>competitors</strong>, who may use unethical or illegal tactics to gain advantage — known as <strong>corporate espionage</strong> or <strong>industrial spying</strong>.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🎯 Nature of Competitor Threats</h3>
+    <ul>
+      <li>Theft of trade secrets and intellectual property</li>
+      <li>Unauthorized access to confidential business data</li>
+      <li>Manipulation of systems to cause financial or reputational harm</li>
+      <li>Targeting strategic assets (customers, designs, formulas)</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card red-left">
+      <h3 class="red">🛠️ Common Techniques</h3>
+      <ul>
+        <li>Hacking into rival networks</li>
+        <li>Planting insiders or bribing employees</li>
+        <li>Stealing customer or supplier databases</li>
+        <li>Reverse engineering of products</li>
+        <li>Spreading misinformation or fake news</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">💰 Motivations</h3>
+      <ul>
+        <li>Gaining market advantage</li>
+        <li>Disrupting rival operations</li>
+        <li>Copying innovations without R&amp;D costs</li>
+        <li>Winning contracts through stolen insights</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📚 Real-World Examples</h3>
+    <p>Technology, pharmaceutical, and defense industries are prime targets; state-sponsored competitors may also engage in cyber-theft.</p>
+    <ul>
+      <li><strong>Coca-Cola vs. Pepsi (2006)</strong> — Pepsi employees caught attempting to steal Coke's trade secrets.</li>
+      <li><strong>Google vs. Uber (2017)</strong> — lawsuit over stolen self-driving car technology.</li>
+      <li><strong>DuPont (2011)</strong> — a Chinese company convicted of stealing the chemical formula for Kevlar.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">📉 Consequences for Victims</h3>
+    <ul>
+      <li>Financial losses (millions to billions)</li>
+      <li>Loss of customer trust and loyalty</li>
+      <li>Competitive disadvantage in the market</li>
+      <li>Legal and regulatory consequences</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛡️ Defense Strategies &amp; ISO 27002 Perspective</h3>
+    <ul>
+      <li>Strong cybersecurity policies &amp; monitoring</li>
+      <li>Employee awareness and training (reduce insider risk)</li>
+      <li>Use of encryption &amp; secure communication</li>
+      <li>Regular audits and access-control reviews</li>
+      <li>Legal action &amp; collaboration with authorities</li>
+    </ul>
+    <p class="note">ISO 27002 security objectives: protect intellectual property, prevent misuse of sensitive information, and ensure the <strong>confidentiality, integrity, and availability</strong> of corporate data.</p>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Cyberwar &amp; Cyberterrorism</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card red-left">
+      <h3 class="red">⚔️ Cyberwar</h3>
+      <p>The use of computer technology to <strong>disrupt the activities of a state or organization</strong>, especially the deliberate attacking of information systems for <strong>strategic or military purposes</strong>.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">💥 Cyberterrorism</h3>
+      <p>Hacking to <strong>conduct terrorist activities</strong> via networks or the Internet.</p>
+    </div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🏛️ Government Focus</h3>
+    <p>Governments worldwide are working to secure <strong>critical computing systems, communication networks, and physical &amp; power infrastructures</strong>.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📜 Origin &amp; FBI Definition</h3>
+    <ul>
+      <li><strong>Origin:</strong> the term was coined in the <strong>1980s by Barry Collin</strong> (Institute for Security and Intelligence, California), defined as the convergence of <strong>cyberspace + terrorism</strong>.</li>
+      <li><strong>FBI (Mark Pollitt)</strong> defines cyberterrorism as <strong>premeditated, politically motivated attacks</strong> targeting information, computer systems, programs, and data, resulting in <strong>violence against noncombatant targets</strong>, carried out by <strong>subnational groups or clandestine agents</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🕰️ Early Instances</h3>
+    <ul>
+      <li><strong>Defacement of NATO websites</strong> during the Kosovo War (1998–1999).</li>
+      <li>Some experts considered cyberterrorism to be <strong>hype</strong> that distracts from more pressing cybersecurity issues.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🌐 Notable Attack — DNS Root Servers (Oct 21, 2002)</h3>
+    <ul>
+      <li>A <strong>Distributed Denial-of-Service (DDoS)</strong> attack targeted the <strong>13 root DNS servers</strong>.</li>
+      <li><strong>9 out of 13</strong> servers were jammed.</li>
+      <li>The problem was <strong>mitigated quickly</strong>; most Internet users were unaffected.</li>
+      <li>At peak, only <strong>6% of DNS requests</strong> went unanswered (normally DNS responds almost 100% of the time).</li>
+    </ul>
+    <p class="note">Though limited, the attack showed the <strong>potential scale</strong> of cyberterrorism threats.</p>
+  </div>
+
+  <div class="highlight">Cyberterrorism poses risks to national security and critical infrastructure. Even small disruptions highlight vulnerabilities in global systems, so <strong>continuous improvement in cyber defense strategies is essential</strong>.</div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Design principles source</strong>NCAE (NSA + DHS)</div>
+    <div class="qr-item"><strong>Economy of mechanism</strong>Keep designs simple &amp; small</div>
+    <div class="qr-item"><strong>Fail-safe defaults</strong>Deny by default</div>
+    <div class="qr-item"><strong>Complete mediation</strong>Check every access, no exceptions</div>
+    <div class="qr-item"><strong>Open design</strong>No security through obscurity</div>
+    <div class="qr-item"><strong>Separation of privilege</strong>Multiple independent conditions</div>
+    <div class="qr-item"><strong>Least privilege</strong>Minimum rights to do the task</div>
+    <div class="qr-item"><strong>Least common mechanism</strong>Limit shared resources</div>
+    <div class="qr-item"><strong>Psychological acceptability</strong>Easy to understand &amp; use</div>
+    <div class="qr-item"><strong>Other principles</strong>Isolation, Encapsulation, Modularity, Layering, Least astonishment</div>
+    <div class="qr-item"><strong>Frameworks aim</strong>Reduce risk; prevent/mitigate attacks</div>
+    <div class="qr-item"><strong>NIST CSF scope</strong>US private sector; size/maturity-adaptable</div>
+    <div class="qr-item"><strong>NIST 6 functions</strong>Govern, Identify, Protect, Detect, Respond, Recover</div>
+    <div class="qr-item"><strong>Prevent/prepare</strong>Govern, Identify, Protect</div>
+    <div class="qr-item"><strong>Discover/manage</strong>Govern, Detect, Respond, Recover</div>
+    <div class="qr-item"><strong>CSF profile steps</strong>Scope → Gather → Create → Gap/plan → Implement → repeat</div>
+    <div class="qr-item"><strong>ISO/IEC 27001</strong>ISMS standard; 27001:2013; formal mgmt system</div>
+    <div class="qr-item"><strong>GDPR</strong>EU data-privacy law (2016); applies to any handler of EU data</div>
+    <div class="qr-item"><strong>GDPR checklist</strong>Data mapping, legal basis, policies, training, DPO, DPIAs, encryption/MFA, data rights, breach plan, audits</div>
+    <div class="qr-item"><strong>CIS Controls</strong>Prioritized best practices; ex-SANS Top 20</div>
+    <div class="qr-item"><strong>CIS Basic (1–5)</strong>HW/SW inventory, data protection, secure config, account lifecycle</div>
+    <div class="qr-item"><strong>CIS Foundational (6–10)</strong>Access control, vuln mgmt, audit logs, email/browser, malware defense</div>
+    <div class="qr-item"><strong>CIS Organizational (11–15)</strong>Recovery, secure network, awareness, secure SW dev, third-party mgmt</div>
+    <div class="qr-item"><strong>Insider threat</strong>Major source of computer crime; had legitimate access</div>
+    <div class="qr-item"><strong>Insider types</strong>Unintentional vs. Intentional</div>
+    <div class="qr-item"><strong>Screening</strong>Resume check, background/criminal/credit, polygraph, bonding</div>
+    <div class="qr-item"><strong>Agreements</strong>NDA, obligations, security policy acceptance</div>
+    <div class="qr-item"><strong>During employment</strong>Least privilege, separation of duties, redundancy</div>
+    <div class="qr-item"><strong>Termination (ISO 27002)</strong>Remove access, revoke cards, change locks, recover assets</div>
+    <div class="qr-item"><strong>Lifecycle</strong>Hiring → Employment → Termination</div>
+    <div class="qr-item"><strong>Corporate espionage</strong>Competitors steal trade secrets/IP</div>
+    <div class="qr-item"><strong>Espionage techniques</strong>Hacking rivals, insiders/bribery, DB theft, reverse engineering, misinformation</div>
+    <div class="qr-item"><strong>Famous cases</strong>Coke/Pepsi 2006, Google/Uber 2017, DuPont Kevlar 2011</div>
+    <div class="qr-item"><strong>Cyberwar</strong>Disrupt a state/org for strategic/military aims</div>
+    <div class="qr-item"><strong>Cyberterrorism</strong>Hacking for terrorist activity; term coined by Barry Collin (1980s)</div>
+    <div class="qr-item"><strong>FBI definition</strong>Premeditated, politically motivated, violence vs. noncombatants</div>
+    <div class="qr-item"><strong>NATO defacement</strong>Kosovo War 1998–1999</div>
+    <div class="qr-item"><strong>2002 DNS attack</strong>DDoS on 13 root servers; 9 jammed; peak 6% unanswered</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>List and explain at least six fundamental security design principles. → e.g., economy of mechanism, fail-safe defaults, complete mediation, open design, separation of privilege, least privilege</li>
+      <li>What is the difference between fail-safe defaults and least privilege? → Fail-safe defaults deny access unless explicitly permitted; least privilege grants only the minimum rights needed for a task</li>
+      <li>Name the six NIST CSF functions and say which prevent vs. manage incidents. → Govern, Identify, Protect, Detect, Respond, Recover; Govern/Identify/Protect prevent &amp; prepare, Govern/Detect/Respond/Recover discover &amp; manage</li>
+      <li>What are the five steps to create and use a CSF Organizational Profile? → Scope, gather information, create the profile, analyze gaps/create an action plan, implement and update (repeat)</li>
+      <li>What does ISO/IEC 27001 specify? → A formal Information Security Management System (ISMS) to control information security</li>
+      <li>What is GDPR and to whom does it apply? → An EU data-protection regulation (2016) applying to any organization handling EU citizens' personal data, regardless of location</li>
+      <li>Describe the three tiers of CIS Controls. → Basic (1–5) core hygiene, Foundational (6–10) defenses/monitoring, Organizational (11–15) governance/culture</li>
+      <li>Differentiate unintentional and intentional insider threats with examples. → Unintentional: forgetting rules, not following procedures; Intentional: knowingly violating controls, assisting breaches</li>
+      <li>What personnel-security measures span the employment lifecycle? → Background checks/screening at hiring, NDAs and training during employment, and ISO 27002 orderly access removal at termination</li>
+      <li>What is corporate espionage, and name common techniques and a real case. → Competitors stealing trade secrets/IP via hacking, insiders/bribery, DB theft, reverse engineering, misinformation; e.g., Coke/Pepsi (2006), Google/Uber (2017), DuPont Kevlar (2011)</li>
+      <li>Define cyberwar and cyberterrorism. → Cyberwar = disrupting a state/org for strategic/military purposes; cyberterrorism = hacking to conduct politically motivated terrorist activity</li>
+      <li>Describe the 2002 root DNS server attack and its significance. → A DDoS jammed 9 of 13 root DNS servers (peak 6% requests unanswered); quickly mitigated but demonstrated the potential scale of cyberterrorism</li>
+    </ul>
+  </div>
+</section>

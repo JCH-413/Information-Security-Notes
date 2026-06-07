@@ -1,0 +1,613 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Information Security — Course Introduction</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Lecture Overview</h3>
+    <p>This opening lecture lays the foundation for the whole course. It maps the <strong>areas of information security</strong>, defines core concepts (information, security, information security), states the <strong>security objectives</strong> and the wider <strong>ITU-T X.800 security services</strong>, introduces the <strong>RMIAS</strong> reference model, distinguishes <strong>active vs. passive attacks</strong>, and establishes the standard <strong>terminology</strong> (asset, vulnerability, threat, risk, countermeasure, policy).</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌐 Why It Matters Today</h3>
+    <p>Security figures prominently in the 21st-century world, spanning <strong>personal security</strong> and <strong>information security</strong> (protecting the electronic information of organizations and users).</p>
+    <ul>
+      <li>There is <strong>no simple solution</strong>; there are many different types of attacks, and defending against them is often difficult.</li>
+      <li>Information security continues to rank as the <strong>number one concern of IT managers</strong>.</li>
+      <li>Despite <strong>tens of billions of dollars</strong> spent annually, the number of successful attacks keeps increasing.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📰 Today's Security Attacks (Examples)</h3>
+    <ul>
+      <li>Fake anti-virus</li>
+      <li>Taking control of wireless cameras</li>
+      <li>ATM machine attacks (malware called <strong>Ploutus</strong>)</li>
+      <li>Taking over Twitter accounts</li>
+      <li>Attackers using online sites such as Craigslist and eBay to lure victims into downloading malware</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>The Seven Areas of Information Security</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🗺️ The Landscape</h3>
+    <p>Information security is broad. It is commonly divided into seven major areas:</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card blue-left">
+      <h3 class="blue">1. Cyber Defense</h3>
+      <ul>
+        <li>Computer Security (Endpoint Security)</li>
+        <li>Network Security</li>
+        <li>Data Security</li>
+        <li>Cryptography</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">2. Cyber Operations</h3>
+      <ul>
+        <li>Cyber Attacks</li>
+        <li>Penetration Testing</li>
+        <li>Cyber Intelligence</li>
+        <li>Reverse Engineering</li>
+        <li>Cryptanalysis</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">3. Digital Forensics</h3>
+      <ul>
+        <li>Hardware and Software</li>
+        <li>Incident Response</li>
+        <li>Cyber Crime</li>
+        <li>Cyber Law Enforcement</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">4. Secure Software Development</h3>
+      <ul>
+        <li>Secure System Design</li>
+        <li>Secure Coding</li>
+        <li>Secure Deployment</li>
+        <li>Maintainability</li>
+        <li>Usability of Secure System</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">5. Cyber Policy &amp; Government Law</h3>
+      <ul>
+        <li>Laws, Regulations, and Acts</li>
+        <li>Government and Institutional Policies and Practices</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">6. Cyber Risk Management</h3>
+      <ul>
+        <li>Disaster Recovery</li>
+        <li>Business Continuity</li>
+        <li>Security Evaluation</li>
+        <li>Cyber Economics</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">7. Human Behaviors</h3>
+      <ul>
+        <li>Social Engineering</li>
+        <li>Social Networks</li>
+        <li>User Experience</li>
+        <li>Organizational Behavior</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Defining Information, Security &amp; InfoSec</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📄 What is Information?</h3>
+    <p>Something <strong>meaningful</strong>, conveyed by a sequence of symbols.</p>
+    <ul>
+      <li>Symbols can be alphabetic characters, numbers, punctuation, etc.</li>
+      <li>It can be <strong>physical or logical</strong> — a book, or something on a computer.</li>
+      <li>It is accurate, timely, contextualised, relevant, and purposeful — specific and able to be organized.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔒 What is Security?</h3>
+    <p>The <strong>state of being free from danger or threats</strong>, applicable to both physical and logical scenarios. The Cambridge English Dictionary defines security as the protection of a building, a person, an organization, or a country against threats such as crime.</p>
+    <p>Security can be provided through:</p>
+    <ul>
+      <li><strong>Physical artifacts</strong> such as walls and locks.</li>
+      <li><strong>Logical means</strong> — people and processes, inspections, surveillance, authorizations (as found in airports).</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🛡️ What is Information Security?</h3>
+    <p>The practice of <strong>defending information from un-authorized access, use, disclosure, disruption, modification, inspection, recording, or destruction</strong>.</p>
+    <ul>
+      <li>A computing-based discipline involving <strong>technology, people, information, and processes</strong> to enable secured operations of an organization.</li>
+      <li>It involves the creation, operation, analysis, and testing of secure computer systems.</li>
+      <li>It is <strong>interdisciplinary</strong>, including law, policy, human factors, ethics, and risk management in the context of adversaries.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Security, Safety, Privacy &amp; Trade-offs</h2>
+  </div>
+
+  <div class="grid-3">
+    <div class="card red-left">
+      <h3 class="red">Security</h3>
+      <p>Protection against <strong>intentional, human-made threats</strong> (malicious acts).</p>
+      <p class="note">Threat source: attackers, hackers, insiders, criminals.</p>
+    </div>
+    <div class="card orange-left">
+      <h3 class="orange">Safety</h3>
+      <p>Protection against <strong>unintentional, accidental, or environmental harm</strong>.</p>
+      <p class="note">Threat source: accidents, natural disasters, system failures, human error.</p>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">Privacy (Person-Centered)</h3>
+      <p>The <strong>right of individuals to control</strong> how their personal data is collected, used, and shared.</p>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🖥️ NIST Definition of Computer Security</h3>
+    <p>The NIST Computer Security Handbook defines computer security as the protection afforded to an automated information system in order to attain the applicable objectives of <strong>preserving the integrity, availability, and confidentiality</strong> of information-system resources.</p>
+    <p class="note">Resources include hardware, software, firmware, information/data, and telecommunications.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>⚖️ Understanding Security</h3>
+    <p>Security is both <strong>the goal</strong> to be free from danger and <strong>the process</strong> that achieves that freedom. Harm may come from two sources:</p>
+    <ul>
+      <li>A <strong>direct action</strong> intended to inflict damage.</li>
+      <li>An <strong>indirect and unintentional</strong> action.</li>
+    </ul>
+    <div class="highlight">As security is increased, convenience is often decreased — security is often described as <strong>sacrificing convenience for safety</strong>. The more secure something is, the less convenient it may be to use.</div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Security Objectives — The CIA Triad</h2>
+  </div>
+
+  <div class="grid-3">
+    <div class="card green-left">
+      <h3 class="green">Confidentiality</h3>
+      <p>Assures that private or confidential information is <strong>not made available or disclosed to unauthorized individuals</strong>.</p>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">Integrity</h3>
+      <p>Assures that information and programs are <strong>changed only in a specified and authorized manner</strong>.</p>
+    </div>
+    <div class="card green-left">
+      <h3 class="green">Availability</h3>
+      <p>Assures that systems work promptly and <strong>service is not denied to authorized users</strong>.</p>
+    </div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">💳 Quiz — Confidentiality of a Credit Card</h3>
+    <p><em>Suppose you make an online purchase and pay by credit card. What is the best way to preserve confidentiality of your card information?</em></p>
+    <div class="math-block">
+      HTTPS (SSL/TLS) + trusted merchant + PayPal/virtual card<br>
+      + private network + transaction alerts<br>
+      <span class="comment">= strongest confidentiality</span>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧩 Integrity — Breaches &amp; Countermeasures</h3>
+    <p>Events that lead to integrity breaches (often non-intentional): accidentally deleting files, entering invalid data, altering configurations.</p>
+    <p>Countermeasures:</p>
+    <ul>
+      <li>Hashing (data integrity)</li>
+      <li>Configuration management (system integrity)</li>
+      <li>Access control (physical and technical)</li>
+      <li>Software digital signing</li>
+      <li>Transmission cyclic redundancy check (CRC) functions</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚙️ Availability — Countermeasures</h3>
+    <ul>
+      <li>Redundant Array of Independent Disks (RAID)</li>
+      <li>Load balancing</li>
+      <li>Redundant data and power lines</li>
+      <li>Software and data backups</li>
+      <li>Co-location and offsite facilities</li>
+      <li>Rollback functions</li>
+      <li>Failover configurations</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Case Study — A Classic Data Breach</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🎣 How the Breach Unfolds</h3>
+    <ul>
+      <li>An employee is sent a <strong>phishing email</strong> with a link to a realistic-looking internal site.</li>
+      <li>The employee opens the email, clicks the link, and types their username and password.</li>
+      <li>The <strong>malicious site collects the password</strong> and shows the user that everything is fine, so they are not suspicious.</li>
+      <li>The malicious actor uses the username and password to <strong>download sensitive files</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Phishing email</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Credentials entered</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Password harvested</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Sensitive files stolen</div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛡️ Defense in Three Stages</h3>
+    <ul>
+      <li><strong>Prevention:</strong> detect phishing URLs and mark as spam, train employees to notice phishing, identify and block offsite access of sensitive files, encrypt files so they are useless if leaked.</li>
+      <li><strong>Detection:</strong> identify that sensitive files have been accessed from offsite.</li>
+      <li><strong>Response:</strong> change the employee's password, notify the CTO, notify the insurer, begin the post-breach plan.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Security Services — ITU-T (X.800)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📋 The Six Services</h3>
+    <p>X.800 extends the CIA triad into six security services: <strong>Confidentiality, Authentication, Integrity, Non-repudiation, Availability, and Access Control</strong>. Each counters a specific class of attack.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Service</th><th>Purpose</th><th>Associated Attack</th></tr></thead>
+      <tbody>
+        <tr><td>Confidentiality (Secrecy)</td><td>Protect transmitted data; protect against traffic analysis; timeliness</td><td class="match">Interception — unauthorised party gains access to data</td></tr>
+        <tr><td>Authentication</td><td>Assurance the message is from the proper source; mutual authentication</td><td class="match">Fabrication — insertion of counterfeit messages / masquerade</td></tr>
+        <tr><td>Integrity</td><td>Message received as sent; also covers replay, re-ordering, deletion, delay</td><td class="match">Modification — gains access and tampers with messages</td></tr>
+        <tr><td>Non-repudiation</td><td>Prevents parties from denying they sent/received a message; sender and receiver can prove the other party</td><td class="match">Repudiation attempt — party falsely claims keys/messages were stolen</td></tr>
+        <tr><td>Availability</td><td>Availability of information/resources</td><td class="match">Interruption (cut the cable) / Denial of Service (noisy comms)</td></tr>
+        <tr><td>Access Control</td><td>Limit &amp; control access to hosts, services, networks; authenticate each party; fine-grained DRM; auditing service</td><td class="match">Replay — record a legitimate message (e.g., a login) and replay later</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔍 Non-repudiation in Detail</h3>
+    <p>Concerned with protecting against <strong>legitimate protocol participants</strong>, not an external source. The receiver can verify and prove who sent a message, and the sender can verify and prove who received it.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>RMIAS — Reference Model for Information Assurance &amp; Security</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧭 What RMIAS Captures</h3>
+    <p>RMIAS organizes information security across four dimensions: an <strong>Information Taxonomy</strong>, a set of <strong>Security Goals</strong>, a <strong>Security Development Life Cycle</strong>, and a catalogue of <strong>Security Countermeasures</strong>.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📚 Information Taxonomy</h3>
+    <p>Information is classified along several axes:</p>
+    <ul>
+      <li><strong>Sensitivity</strong> — how sensitive the information is.</li>
+      <li><strong>Location</strong> — where the information resides.</li>
+      <li><strong>Form</strong> — Paper, Electronic, Verbal.</li>
+      <li><strong>State</strong> — Creation, Storage, Processing, Transmission, Destruction.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🎯 Security Goals (Eight Petals)</h3>
+    <p>RMIAS expands the goals beyond CIA to eight: <strong>Confidentiality, Integrity, Availability, Privacy, Non-repudiation, Auditability, Authenticity &amp; Trustworthiness, and Accountability</strong>.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧰 Security Countermeasures (Four Categories)</h3>
+    <ul>
+      <li><strong>Organisational</strong> — Strategy, Audit, Policy, Procedures, Governance.</li>
+      <li><strong>Technical</strong> — Cryptography, Authentication, Authorisation.</li>
+      <li><strong>Human-Oriented</strong> — Training, Culture, Education, Ethics, Motivation.</li>
+      <li><strong>Legal</strong> — Law, Contracts, Agreements.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Active vs. Passive Attacks</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Classification (X.800 &amp; RFC 4949)</h3>
+    <p>Security attacks are classified as <strong>passive</strong> or <strong>active</strong>:</p>
+    <ul>
+      <li>A <strong>passive attack</strong> attempts to learn or make use of information from the system but <strong>does not affect system resources</strong>.</li>
+      <li>An <strong>active attack</strong> attempts to <strong>alter system resources or affect their operation</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card orange-left">
+      <h3 class="orange">🕵️ Passive Attacks</h3>
+      <p>In the nature of <strong>eavesdropping on or monitoring transmissions</strong>; the opponent's goal is to obtain the information being transmitted. Two types:</p>
+      <ul>
+        <li><strong>Release of message contents</strong></li>
+        <li><strong>Traffic analysis</strong></li>
+      </ul>
+      <p class="note">Hard to detect (no alteration); emphasis is on <strong>prevention</strong>.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">⚔️ Active Attacks</h3>
+      <p>Involve <strong>modification of the data stream</strong> or creation of a false stream. Difficult to prevent due to the wide variety of vulnerabilities; the goal is to <strong>detect and recover</strong>. Four kinds:</p>
+      <ul>
+        <li><strong>Masquerade</strong> — pretending to be a legitimate user/system to gain unauthorized access by leveraging trust.</li>
+        <li><strong>Replay</strong> — passive capture of a data unit and its later retransmission to produce an unauthorized effect.</li>
+        <li><strong>Modification of messages</strong> — altering, delaying, or reordering part of a legitimate message.</li>
+        <li><strong>Denial of Service</strong> — prevents or inhibits the normal use/management of communications facilities.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Core Security Terminology</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>💎 Asset</h3>
+    <p>An <strong>item of value</strong> — data in an information system; a service provided by a system; a system capability; or an item of system equipment (a component — hardware, firmware, software, or documentation).</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔑 Vulnerability, Threat, Threat Agent, Attack</h3>
+    <ul>
+      <li><strong>Vulnerability:</strong> a flaw or weakness in a system's design, implementation, or operation/management that could be exploited to violate the system's security policy.</li>
+      <li><strong>Threat:</strong> a potential for violation of security — a circumstance, capability, action, or event that could breach security and cause harm. A possible danger that might exploit a vulnerability.</li>
+      <li><strong>Threat agent:</strong> a person or element with the power to carry out a threat.</li>
+      <li><strong>Attack:</strong> a threat that is carried out (a threat action).</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📊 Risk, Countermeasure, Security Policy</h3>
+    <ul>
+      <li><strong>Risk:</strong> an expectation of loss expressed as the probability that a particular threat will exploit a particular vulnerability with a particular harmful result.</li>
+      <li><strong>Countermeasure:</strong> an action, device, procedure, or technique that reduces a threat, vulnerability, or attack by eliminating/preventing it, minimizing its harm, or discovering and reporting it so corrective action can be taken.</li>
+      <li><strong>Security Policy:</strong> a set of rules and practices that specify or regulate how a system or organization provides security services to protect sensitive and critical resources.</li>
+    </ul>
+  </div>
+
+  <div class="math-block">
+    Risk = P(threat exploits vulnerability) × harmful result
+    <span class="comment">risk combines likelihood with impact</span>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>General Attacks, Assets, Threats &amp; Countermeasures</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🎯 General Attacks That Threaten Security Goals</h3>
+    <ul>
+      <li><strong>Eavesdropping</strong> — learning confidential information.</li>
+      <li><strong>Modification</strong> — modifying a message in transit.</li>
+      <li><strong>Denial of service</strong> — making the service unavailable (e.g., by keeping it busy).</li>
+      <li><strong>Forging</strong> — building a fake message, pretending it was sent by someone else.</li>
+      <li><strong>Masquerade</strong> — posing as someone else in a single message or interactive protocol.</li>
+      <li><strong>Repudiation</strong> — denying having sent or received some message.</li>
+      <li><strong>Profiling</strong> — gathering information about a single user.</li>
+      <li><strong>Fingerprinting</strong> — identifying the user associated with some message.</li>
+      <li><strong>Traffic analysis</strong> — learning origin, destination, length, and times of communications (not the content).</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card blue-left">
+      <h3 class="blue">💼 Assets</h3>
+      <p>Tangible and intangible items of value, including: data and archives; computers, disks, tapes; CPU time, storage, network capacity; comms equipment (routers, switches, firewalls, modems, bandwidth), phones, faxes; air-conditioning/alarm systems and physical security; manuals and guides; printouts (reports, letters, emails, contracts); configuration information; passwords; staff; safety and health of personnel; privacy of users; public image and reputation; customer goodwill; share price; intellectual property; domain name.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">⚠️ Threats</h3>
+      <p>Hardware errors; terrorists; theft and malicious acts; industrial/government spying; malicious software (viruses, worms, trojan horses, bombs, trap doors, spoofs, password crackers, cryptanalysis); pirating; password cracking; denial of service; masquerade; misuse of resources; social engineering; reverse engineering; acts of God (fire, earthquakes); disaffected employees; human error; illness &amp; injury; economic downturns; hackers; government/military/industrial spies; criminals; ISPs and backbone providers.</p>
+      <p class="note">The slide poses the question: <strong>what is the biggest threat?</strong> — often the insider/human element.</p>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🧰 Countermeasures</h3>
+    <p>Protect buildings, equipment, and people from unauthorised access and natural disasters; use fibre-optic cabling and shield equipment/cabling; use reliable hardware &amp; software and shredders; keep backups and standby systems; use good cryptography; use firewalls and simulated attacks; use good password admin, virus checkers, intrusion-detection and auditing software, and biometrics; isolate the network; employ counter-intelligence, ethical hackers, security guards, lawyers; employ trustworthy staff with background checks; train/educate staff; keep staff happy; insure; keep good legal backup; and take security seriously (planning, administration, risk assessment, cost/benefit analysis).</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📜 Policies</h3>
+    <p>A set of well-defined, consistent, and implementable rules (security requirements). Policies should be <strong>general and change little over time</strong>. Example exercise: for an online auction company like eBay (where users buy and sell goods, sellers post listings, and buyers bid), <em>what policies might the users want applied?</em></p>
+  </div>
+</section>
+
+<section id="s12">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2>Risk Management &amp; the Network Access Model</h2>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📉 Five Options to Deal with Risk</h3>
+    <ul>
+      <li><strong>Risk avoidance</strong> — identify the risk but do not engage in the activity (don't buy the scooter).</li>
+      <li><strong>Acceptance</strong> — acknowledge the risk but take no steps to address it (ignore it and buy the scooter anyway).</li>
+      <li><strong>Risk mitigation</strong> — address the risk to make it less serious (ask management to fix the fence).</li>
+      <li><strong>Deterrence</strong> — understand the attacker and inform them of the consequences (put up a warning sign).</li>
+      <li><strong>Transference</strong> — transfer the risk to a third party (insurance).</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🚪 Network Access Security Model</h3>
+    <p>An <strong>opponent</strong> — human (e.g., a hacker) or software (e.g., a virus or worm) — attempts to reach an <strong>information system</strong> through an <strong>access channel</strong>. A <strong>gatekeeper function</strong> stands in the way, and <strong>internal security controls</strong> protect the resources within.</p>
+    <ul>
+      <li>The information system holds <strong>computing resources</strong> (processor, memory, I/O), <strong>data</strong>, <strong>processes</strong>, and <strong>software</strong>.</li>
+      <li>The gatekeeper authenticates and filters access; internal controls provide a second layer of defense.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Opponent (human / software)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Access Channel</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Gatekeeper Function</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Information System + Internal Controls</div>
+  </div>
+</section>
+
+<section id="s13">
+  <div class="section-header">
+    <span class="section-num">13</span>
+    <h2>Why InfoSec Is Challenging</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🧩 The Difficulties</h3>
+    <ul>
+      <li>Security is <strong>not simple</strong>.</li>
+      <li>Potential attacks on the security features themselves must be considered.</li>
+      <li>Procedures used to provide services are often <strong>counter-intuitive</strong>.</li>
+      <li>It is necessary to decide <strong>where</strong> to use the various security mechanisms.</li>
+      <li>Requires <strong>constant monitoring</strong>, and is too often an afterthought.</li>
+      <li>Security mechanisms typically involve more than a single algorithm or protocol.</li>
+      <li>Security is essentially a <strong>battle of wits</strong> between a perpetrator and the designer.</li>
+      <li>Little benefit from security investment is perceived <strong>until a failure occurs</strong>.</li>
+      <li>Strong security is often viewed as an <strong>impediment</strong> to efficient and user-friendly operation.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔬 Explore Further (Lab/Self-Study)</h3>
+    <ul>
+      <li><strong>World's biggest data breaches</strong> — study breaches by industry sector and filter by leak method and number of records stolen (Information is Beautiful).</li>
+      <li><strong>Live threat maps</strong> — monitor global hacking, bots, and malware attacks in real time (FireEye cyber threat map).</li>
+      <li><strong>Assignment</strong> — install VirtualBox, then install Kali Linux inside VirtualBox (download from kali.org).</li>
+    </ul>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📚 References</h3>
+    <ul>
+      <li>CompTIA Security+ Guide to Network Security Fundamentals, 5th Ed., Mark Ciampa.</li>
+      <li>Corporate Computer Security, Randall J. Boyle, 3rd Ed.</li>
+      <li>Cherdantseva Y. &amp; Hilton J., "A Reference Model of Information Assurance &amp; Security," SecOnt 2013 (ARES 2013), University of Regensburg.</li>
+      <li>Computer Security: Principles and Practice, 5th Ed., William Stallings &amp; Lawrie Brown, 2024.</li>
+      <li>Computer and Internet Security: A Hands-On Approach, Wenliang Du, 3rd Ed., 2022 (for Labs).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>InfoSec</strong>Defending information from unauthorized access, use, disclosure, disruption, modification, recording, destruction</div>
+    <div class="qr-item"><strong>7 areas</strong>Cyber Defense, Cyber Ops, Digital Forensics, Secure SW Dev, Policy/Law, Risk Mgmt, Human Behavior</div>
+    <div class="qr-item"><strong>Information</strong>Meaningful sequence of symbols; physical or logical</div>
+    <div class="qr-item"><strong>Security</strong>State of being free from danger or threats</div>
+    <div class="qr-item"><strong>Security vs Safety</strong>Security = intentional threats; Safety = accidental/environmental harm</div>
+    <div class="qr-item"><strong>Privacy</strong>Right to control collection/use/sharing of personal data</div>
+    <div class="qr-item"><strong>NIST comp. security</strong>Preserve integrity, availability, confidentiality of system resources</div>
+    <div class="qr-item"><strong>Trade-off</strong>More security = less convenience</div>
+    <div class="qr-item"><strong>CIA Triad</strong>Confidentiality, Integrity, Availability</div>
+    <div class="qr-item"><strong>Integrity fixes</strong>Hashing, config mgmt, access control, digital signing, CRC</div>
+    <div class="qr-item"><strong>Availability fixes</strong>RAID, load balancing, backups, failover, rollback, offsite</div>
+    <div class="qr-item"><strong>Data breach stages</strong>Prevention, Detection, Response</div>
+    <div class="qr-item"><strong>X.800 services</strong>Confidentiality, Authentication, Integrity, Non-repudiation, Availability, Access Control</div>
+    <div class="qr-item"><strong>Interception</strong>Attack on confidentiality</div>
+    <div class="qr-item"><strong>Fabrication</strong>Attack on authentication (counterfeit messages)</div>
+    <div class="qr-item"><strong>Modification</strong>Attack on integrity</div>
+    <div class="qr-item"><strong>Replay</strong>Attack countered by access control</div>
+    <div class="qr-item"><strong>RMIAS dims</strong>Information Taxonomy, Security Goals, Life Cycle, Countermeasures</div>
+    <div class="qr-item"><strong>RMIAS goals (8)</strong>CIA + Privacy, Non-repudiation, Auditability, Authenticity, Accountability</div>
+    <div class="qr-item"><strong>RMIAS countermeasures</strong>Organisational, Technical, Human-Oriented, Legal</div>
+    <div class="qr-item"><strong>Passive attack</strong>Eavesdrop/monitor; no resource change (release of contents, traffic analysis)</div>
+    <div class="qr-item"><strong>Active attack</strong>Masquerade, Replay, Modification, Denial of Service</div>
+    <div class="qr-item"><strong>Asset</strong>Item of value (data, service, capability, equipment)</div>
+    <div class="qr-item"><strong>Vulnerability</strong>Exploitable flaw/weakness</div>
+    <div class="qr-item"><strong>Threat</strong>Potential danger that may exploit a vulnerability</div>
+    <div class="qr-item"><strong>Threat agent</strong>Entity able to carry out a threat</div>
+    <div class="qr-item"><strong>Attack</strong>A threat that is carried out</div>
+    <div class="qr-item"><strong>Risk</strong>P(threat exploits vulnerability) × harmful result</div>
+    <div class="qr-item"><strong>Countermeasure</strong>Reduces threat/vulnerability/attack</div>
+    <div class="qr-item"><strong>Security policy</strong>Rules regulating how security services are provided</div>
+    <div class="qr-item"><strong>Risk options</strong>Avoidance, Acceptance, Mitigation, Deterrence, Transference</div>
+    <div class="qr-item"><strong>Network access model</strong>Opponent → Access Channel → Gatekeeper → System + Internal Controls</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Define information security. → The practice of defending information from unauthorized access, use, disclosure, disruption, modification, recording, or destruction</li>
+      <li>List the seven areas of information security. → Cyber Defense, Cyber Operations, Digital Forensics, Secure SW Development, Cyber Policy &amp; Law, Cyber Risk Management, Human Behavior</li>
+      <li>Differentiate security, safety, and privacy. → Security = intentional human threats; Safety = accidental/environmental harm; Privacy = control over personal data</li>
+      <li>State the CIA triad. → Confidentiality, Integrity, Availability</li>
+      <li>List the six X.800 security services. → Confidentiality, Authentication, Integrity, Non-repudiation, Availability, Access Control</li>
+      <li>Match each service to its attack. → Confidentiality–Interception, Authentication–Fabrication, Integrity–Modification, Non-repudiation–Repudiation, Availability–Interruption/DoS, Access Control–Replay</li>
+      <li>Name the four RMIAS dimensions and the eight security goals. → Dimensions: Information Taxonomy, Security Goals, Life Cycle, Countermeasures; Goals: CIA + Privacy, Non-repudiation, Auditability, Authenticity &amp; Trustworthiness, Accountability</li>
+      <li>Differentiate active and passive attacks with examples. → Passive (eavesdropping/monitoring, no change): release of contents, traffic analysis; Active (alters resources): masquerade, replay, modification, DoS</li>
+      <li>Define asset, vulnerability, threat, threat agent, attack, risk, countermeasure, and security policy.</li>
+      <li>List the five options for dealing with risk. → Avoidance, Acceptance, Mitigation, Deterrence, Transference</li>
+      <li>Describe the Network Access Security Model. → An opponent reaches a system via an access channel; a gatekeeper function plus internal security controls protect the computing resources, data, processes, and software</li>
+      <li>Why is information security challenging? → Counter-intuitive procedures, attacks on the mechanisms themselves, constant monitoring, a battle of wits, benefit unseen until failure, and tension with usability</li>
+    </ul>
+  </div>
+</section>
