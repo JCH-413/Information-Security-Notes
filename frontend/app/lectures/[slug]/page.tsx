@@ -72,9 +72,10 @@ export default async function LecturePage({
         </div>
       </article>
 
-      {/* Sticky topic nav — desktop only */}
+      {/* Sticky topic nav — desktop only. Scrolls on its own when the topic
+          list is taller than the viewport. */}
       <aside className="hidden w-56 shrink-0 xl:block">
-        <div className="sticky top-20">
+        <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2">
           <TopicNav topics={lecture.topics} />
         </div>
       </aside>
