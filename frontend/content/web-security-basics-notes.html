@@ -1,0 +1,506 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>The Web Architecture</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Three Core Components</h3>
+    <p>The web architecture is made up of three components that work together to deliver content to users.</p>
+    <ul>
+      <li><strong>Browser</strong> — the client that requests and renders content.</li>
+      <li><strong>Web Application Server</strong> — processes requests and generates responses.</li>
+      <li><strong>Database</strong> — stores the application's data.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Browser</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Web Application Server</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Database</div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📋 Lecture Outline</h3>
+    <ul>
+      <li>Web technologies — Web Browser, Web Server</li>
+      <li>HTTP Request</li>
+      <li>Cookies and sessions</li>
+      <li>Ajax, WebSocket and Same-origin policy</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Web Browser: HTML, CSS &amp; Rendering</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-left">
+      <h3>📄 HTML</h3>
+      <p>HTML provides the <strong>basic data part</strong> — it defines the structure of the web document and the content within it.</p>
+      <p class="note">HTML and CSS are often called <em>markup languages</em> rather than programming languages, because at their core they provide markup for documents with very little dynamism.</p>
+    </div>
+    <div class="card accent-left">
+      <h3>🎨 CSS — Cascading Style Sheet</h3>
+      <p>CSS handles the <strong>presentation part</strong>. It declares various styles for the contents on the web document.</p>
+      <p>It tells the browser <em>how to render and deal with this content</em>.</p>
+    </div>
+  </div>
+
+  <div class="highlight">HTML defines structure and content; CSS declares styles. Neither provides dynamic behavior on its own — that role belongs to <a href="#s4">JavaScript</a>.</div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Plug-ins vs. Extensions</h2>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔌 Plug-ins</h3>
+    <p>Browsers have limited functionality, but people want to do additional work — so plug-ins help handle <strong>specific types of content</strong>.</p>
+    <p>A browser plug-in is a <strong>binary piece of code</strong> that manages Internet content a browser is not designed to process.</p>
+    <ul>
+      <li>Example: to open a PDF on a website you may need an Adobe Acrobat Reader plugin. Without it, the browser does not understand how to open the PDF.</li>
+      <li>Plug-ins lie <strong>inside the protected gate</strong> of the browser — they are like part of the browser, so they can <strong>access memory directly</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Vulnerability of Plug-ins</h3>
+    <p>Plug-ins can be a source of vulnerability because they are developed by <strong>3rd parties</strong>, so they might come from the attacker's side. An attacker can embed malicious code inside a plug-in, and plug-ins can access memory directly.</p>
+    <p class="note">Solution: Browser developers are adding maximum functionality into the browser, so the need for plug-ins is gradually decreasing. For example, there is no longer a need to install the Adobe Acrobat Reader plug-in, because HTML5 in the browser supports opening PDF files.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🧩 Extensions</h3>
+    <p>A browser extension is a <strong>small software application</strong> that adds capability or functionality to a web browser using its own set of APIs. They can also remove unwanted website elements such as pop-up ads and features such as auto-play for online videos.</p>
+    <ul>
+      <li>Extensions are written in a <strong>high-level language</strong> (scripts).</li>
+      <li>They talk to data and resources <strong>through APIs</strong> in the browser.</li>
+      <li>They do <strong>not</strong> have direct access to memory because they are <strong>outside the gate</strong>.</li>
+      <li>A lot of access control is involved this way.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌐 Examples of Browser Extensions</h3>
+    <ul>
+      <li><strong>AdBlock</strong> — enables content filtering and ad blocking.</li>
+      <li><strong>StayFocusd</strong> — limits the amount of time the user is allowed to spend on designated websites.</li>
+      <li><strong>Highly</strong> — allows the user to highlight webpage text and share it through social media or email.</li>
+    </ul>
+    <p class="note">Extensions lie outside the protected gate of the browser, so they cannot access memory.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Aspect</th><th>Plug-in</th><th>Extension</th></tr></thead>
+      <tbody>
+        <tr><td>Code type</td><td>Binary code</td><td>High-level scripts</td></tr>
+        <tr><td>Position</td><td class="match">Inside the gate</td><td class="diff">Outside the gate</td></tr>
+        <tr><td>Memory access</td><td class="match">Direct access</td><td class="diff">No direct access (via APIs)</td></tr>
+        <tr><td>Access control</td><td class="match">Minimal</td><td class="diff">Heavy access control</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Dynamic Content &amp; JavaScript</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Dynamic Content</h3>
+    <p>Dynamic content is a web-page or email component that <strong>changes based on user signals</strong> — i.e., the behavior, preferences, and interests of the user.</p>
+    <p>Sources of dynamic content:</p>
+    <ul>
+      <li><strong>In-session behavior</strong> — adapt content based on which pages they visit, which products they add to cart, and how long they spend on the site.</li>
+      <li><strong>User data</strong> — change content based on past purchases, customer lifecycle, or past engagements.</li>
+      <li><strong>User characteristics</strong> — geo-location or buyer personas.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🛠️ Technologies to Create Dynamic Content</h3>
+    <ul>
+      <li>Adobe Flash (animation)</li>
+      <li>Microsoft Silverlight</li>
+      <li>ActiveX</li>
+      <li>Java applets</li>
+      <li>JavaScript</li>
+    </ul>
+    <p class="note">These days, the most popular technology for creating dynamic content is JavaScript.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>⚙️ JavaScript</h3>
+    <p>JavaScript is a scripting language that enables you to create dynamically updating content, control multimedia, animate images, and implement complex features on web pages. It can <strong>calculate, manipulate, and validate data</strong>.</p>
+    <p>Unlike HTML and CSS (markup languages), JavaScript is a dynamic programming language that supports math calculations, lets you dynamically add HTML content to the DOM, fetches content from another website, and lots more.</p>
+  </div>
+
+  <div class="analogy-box">
+    <div class="a-title">The Risk of Running Code</div>
+    <p>Suppose you download a file and execute it — this leads to risks. But on the web we do exactly that on a daily basis: we invite code to come and execute on our computers.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🔍 How JavaScript Works</h3>
+    <ul>
+      <li><strong>Client-Side Execution</strong> — JavaScript typically runs directly in the user's web browser. Every major browser has a built-in "engine" (like Chrome's V8) designed to read and execute JS code instantly.</li>
+      <li><strong>Event-Driven</strong> — it "listens" for specific events (a click, a hover, a scroll) and runs a block of code (a function) only when that event occurs.</li>
+      <li><strong>DOM Manipulation</strong> — JavaScript interacts with the Document Object Model (DOM), the browser's internal map of your HTML. This lets JS add, remove, or change HTML elements and CSS styles on the fly.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>JavaScript Engine &amp; Security Layer</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>⚙️ JavaScript Engine</h3>
+    <p>JavaScript engines are used to <strong>compile JavaScript byte code</strong>. The engine lives inside your browser — you can also consider it a <strong>JavaScript VM</strong>.</p>
+    <p>The engines also <strong>enforce security policies</strong>, so the sandbox runs inside the JavaScript engine.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌐 Engines by Browser</h3>
+    <ul>
+      <li><strong>V8</strong> from Google — for Chrome and Microsoft Edge</li>
+      <li><strong>SpiderMonkey</strong> from Mozilla — for Firefox</li>
+      <li><strong>JavaScriptCore</strong> from Apple — for Safari</li>
+    </ul>
+    <p class="note">All engines run bytecode and enforce security.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">❓ Why Not Just Use Binary Code?</h3>
+    <p>Question: why can't we just use binary code, e.g. <code>&lt;binary src="https://www.example.com/code.bin"&gt;&lt;/binary&gt;</code> (a fictional HTML tag)?</p>
+    <ul>
+      <li>It is very difficult to enforce security on binary because binary runs directly on top of the CPU.</li>
+      <li>It deals directly with the CPU → the OS can only handle things at that stage.</li>
+      <li>But the OS doesn't know which binary is related to the browser and which is untrusted code — it lacks the <strong>granularity</strong> to separate them.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛡️ The Engine Layer Solution</h3>
+    <p>The <strong>Engine layer</strong> is part of the browser. Any bytecode that comes in, the browser knows whether it is from a trusted party or an untrusted party, etc. This way, we can apply <strong>access control</strong> on the behavior of bytecode.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Byte Code</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Engine</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">CPU</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">OS</div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Sandboxing JavaScript</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📦 What is Sandboxing?</h3>
+    <p>Sandboxing is a security mechanism that allows you to run a piece of code in an <strong>isolated space</strong>.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card green-left">
+      <h3 class="green">✅ Benefits</h3>
+      <ul>
+        <li>Helpful for executing untrusted applications.</li>
+        <li>Prevents the system from permanent changes.</li>
+        <li>Secure web browsing — malware downloaded from a website cannot harm your system.</li>
+      </ul>
+    </div>
+    <div class="card blue-left">
+      <h3 class="blue">🔧 Example</h3>
+      <p>The most popular tool is <strong>Sandboxie</strong>.</p>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🎯 Behavior of the Sandbox</h3>
+    <p>The sandbox decides what kinds of things can be accessed. As shown in the figure, items 1, 2, 3, 4 and 5 are accessible to the sandbox.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Accessing Page, Browser &amp; File Data</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🌳 Accessing Page Content — HTML DOM</h3>
+    <p>The HTML <strong>DOM (Document Object Model)</strong> treats every element as a <strong>node</strong>. You access nodes with the list of APIs provided by the browser — every element has an <code>id</code>.</p>
+    <div class="math-block">
+      document.getElementById("demo").innerHTML = "Hello World";
+      <span class="comment">find an element by its id, then set its content</span>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔒 Scope of DOM Access</h3>
+    <p>Once you find the reference of an element through an API, you can change the content of the <strong>same page</strong>. But you <strong>cannot modify another page</strong> — you do not have a reference to another page.</p>
+    <p class="note">These things get complicated when a developer uses <strong>iframes</strong> inside a web page, because each iframe behaves as a web page inside a web page.</p>
+    <p>HTML Objects (examples):</p>
+    <ul>
+      <li><code>document.cookies</code></li>
+      <li><code>document.images</code></li>
+      <li><code>document.forms</code></li>
+      <li><code>document.URL</code></li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🪟 Accessing Browser Data — BOM</h3>
+    <p>The <strong>Browser Object Model (BOM)</strong> is centered on the <code>window</code> object. The browsing data belongs to the user. The server and 3rd parties can access user browsing data through APIs <strong>with user permission</strong>.</p>
+    <p>Objects (examples):</p>
+    <ul>
+      <li><code>window.history</code> — with <code>back()</code> and <code>forward()</code> APIs</li>
+      <li><code>window.navigator</code> — e.g. <code>navigator.geolocation.getCurrentPosition()</code></li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📁 How JavaScript Accesses Files</h3>
+    <p>There is <strong>no API that can access a file directly from memory</strong>.</p>
+    <ul>
+      <li>The file is opened in the browser when the user browses to upload it.</li>
+      <li>Then the <strong>reference</strong> of the file from the browser is given to the JavaScript code.</li>
+    </ul>
+    <p class="note">This is the beauty of access control.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Web Server &amp; Server-Side Scripts</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🖥️ Web Server</h3>
+    <p>The <strong>HTTP server</strong> only responds to <strong>static content</strong>. So, <strong>Web Application Servers</strong> are used to respond with <strong>dynamic content</strong>.</p>
+    <p>The HTTP server communicates with the web application server using <strong>CGI (Common Gateway Interface)</strong>, <strong>Fast CGI</strong>, or <strong>Modules</strong> (Apache).</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📝 Server-Side Script</h3>
+    <p>Mostly the server provides dynamic content and also creates dynamic pages. Technologies used to create dynamic content include <strong>PHP, Python, and JavaScript</strong>, etc.</p>
+    <p>For example, the Apache server knows the PHP tags and will replace the response against <code>.date("h:i:sa")</code> with the returned data.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📤 Returning Data on an HTML Page</h3>
+    <ul>
+      <li><strong>Inline</strong> — return data directly inline on the HTML page.</li>
+      <li><strong>Use a Template</strong> — used for a large number of files.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Client–Server Interaction &amp; HTTP</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔄 How the Client Interacts with the Server</h3>
+    <p>JavaScript runs on the browser side and scripts are used on the server side. There are <strong>three ways</strong> the server and browser interact with each other:</p>
+    <ul>
+      <li><strong>HTTP Request</strong></li>
+      <li><strong>Ajax Request</strong></li>
+      <li><strong>WebSocket</strong></li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">HTTP Request</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Server processes</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">HTTP Response</div>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📨 GET and POST Methods</h3>
+    <p>HTTP requests use methods such as <strong>GET</strong> and <strong>POST</strong> to send requests to the server, which processes them and returns an HTTP response.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Cookies &amp; Sessions</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Stateless Nature of the Web</h3>
+    <p>Suppose a user sends an HTTP request to the server; the server processes the request and responds. But the server <strong>does not keep a record</strong> of the user.</p>
+    <p>The second time the same user sends an HTTP request, the server <strong>cannot recognize</strong> the user — whether they visited the site before or not. So this is the problem.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🍪 Cookies</h3>
+    <p>Cookies are designed to keep track of the user <strong>at the user end</strong>.</p>
+    <ul>
+      <li>A user sends an HTTP request; the server processes it and responds <strong>with cookies</strong>. The cookies are saved on the browser.</li>
+      <li>The second time the same user sends a request, the cookies are <strong>attached with the request automatically</strong>. The server then recognizes the user and treats them in a better way.</li>
+    </ul>
+    <p class="note">Operations: setting cookies in the HTTP response, and attaching cookies in the HTTP request (with PHP code examples).</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🕵️ Web Tracking Using 3rd-Party Cookies</h3>
+    <p>Third-party cookies can be used to track users across websites.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 Session and Session Cookie</h3>
+    <p>Cookies are stored in the user's browser, but <strong>not all user data can be stored on the user side</strong>. Suppose a shopping website stores all user data at the user side as cookies (quantity, price, size, etc.). The user's bill of $1000 is also saved as a cookie at the user end — the user could <strong>change the price</strong>. So this is a vulnerability.</p>
+    <p>The solution is that the price must be saved <strong>on the server</strong>. But then how does the server recognize which price belongs to which user? A <strong>Session ID</strong> is used for this problem.</p>
+    <ul>
+      <li>The Session ID is a cookie assigned to the user at the time of <strong>login</strong>.</li>
+      <li>The Session ID <strong>expires</strong> when the user logs out.</li>
+      <li>The Session ID must be <strong>secure</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="highlight">If an attacker steals the Session ID using a sniffing attack, they do <strong>not</strong> need to steal the username or password to log into the user's account.</div>
+</section>
+
+<section id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Ajax &amp; the Same-Origin Policy</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>⚡ Ajax versus Normal HTTP Requests</h3>
+    <p>In a <strong>normal HTTP request</strong>, the request is sent to the HTTP server from the web page. The server processes it and responds. When the response comes back, the <strong>previous page is discarded</strong> (the one that sent the request) and a <strong>new page is loaded</strong> on the browser (this new page is the server's response).</p>
+    <p>In an <strong>Ajax request</strong>, the request is sent to the HTTP server from the web page. When the response comes back, the <strong>previous page is updated</strong> according to the server response (no full page reload).</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">✍️ How to Write Ajax Code</h3>
+    <ul>
+      <li>You need an <strong>HTTP object</strong> to send the request.</li>
+      <li>Ajax is <strong>asynchronous</strong> — when the user sends a request to the server, the current page does <strong>not block</strong>. The user can even use other features of the page.</li>
+      <li>As the server response comes back, the browser <strong>notifies you</strong> if you have registered a <strong>callback function</strong>. The user gets the server response in the callback function.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🌐 Origin Policy on Ajax</h3>
+    <p>Consider having an active session of <code>facebook.com</code> while also using <code>google.com</code>, and sending a request from google.com to facebook.com:</p>
+    <ul>
+      <li><strong>HTTP Case</strong> — facebook.com responds, and the response is shown on facebook.com instead of google.com, because HTTP discards the requesting page and shows the response in a new window. <strong>This case has no vulnerability.</strong></li>
+      <li><strong>Ajax Case</strong> — facebook.com responds, and the response is shown on google.com because Ajax updates the same page. <strong>This case has a vulnerability</strong>, because the data of one website is showing on another website.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛡️ Ajax Security Policy</h3>
+    <p>In the Ajax security policy, the browser <strong>blocks cross-origin responses</strong>.</p>
+    <ul>
+      <li>If a request is sent from google.com to facebook.com, facebook.com responds — but the browser <strong>blocks the response</strong>.</li>
+      <li>If facebook.com adds permission to display data on another site in the <strong>response header</strong>, then the browser <strong>releases the response</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Bypassing Same-Origin Policy via DNS Rebinding</h3>
+    <p>DNS rebinding is a technique used to bypass the Same-Origin Policy.</p>
+  </div>
+</section>
+
+<section id="s12">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2>WebSocket</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔌 WebSocket</h3>
+    <p>WebSocket is also used to communicate between the browser and the server. The problem with HTTP and Ajax is that the user has to <strong>establish a connection again and again</strong> to get updated data from the server.</p>
+    <p>But with WebSocket, <strong>one connection is established</strong> and the server <strong>automatically sends updated data</strong> to the client.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Method</th><th>Page Behavior</th><th>Connection</th></tr></thead>
+      <tbody>
+        <tr><td>HTTP Request</td><td>Page discarded, new page loaded</td><td class="match">New connection each time</td></tr>
+        <tr><td>Ajax Request</td><td>Same page updated (async)</td><td class="match">New connection each time</td></tr>
+        <tr><td>WebSocket</td><td>Server pushes updates automatically</td><td class="diff">One persistent connection</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Web Architecture</strong>Browser → Web App Server → Database</div>
+    <div class="qr-item"><strong>HTML / CSS</strong>Structure &amp; content / styling — markup languages</div>
+    <div class="qr-item"><strong>JavaScript</strong>Dynamic programming language; DOM manipulation, event-driven, client-side</div>
+    <div class="qr-item"><strong>Plug-in</strong>Binary; inside the gate; direct memory access</div>
+    <div class="qr-item"><strong>Extension</strong>Scripts; outside the gate; API access, no direct memory</div>
+    <div class="qr-item"><strong>JS Engines</strong>V8 (Chrome/Edge), SpiderMonkey (Firefox), JavaScriptCore (Safari)</div>
+    <div class="qr-item"><strong>Why not binary?</strong>OS lacks granularity to separate trusted/untrusted code</div>
+    <div class="qr-item"><strong>Sandbox</strong>Runs code in isolated space; e.g. Sandboxie</div>
+    <div class="qr-item"><strong>DOM</strong>Every element = node; getElementById; same-page only</div>
+    <div class="qr-item"><strong>BOM</strong>window object: history, navigator, geolocation</div>
+    <div class="qr-item"><strong>File access</strong>No direct memory API; browser passes a reference</div>
+    <div class="qr-item"><strong>HTTP server</strong>Static only; web app server for dynamic (CGI/FastCGI/Modules)</div>
+    <div class="qr-item"><strong>Server scripts</strong>PHP, Python, JavaScript; inline or template</div>
+    <div class="qr-item"><strong>Stateless web</strong>Server keeps no record between requests</div>
+    <div class="qr-item"><strong>Cookies</strong>Track user at user end; auto-attached to requests</div>
+    <div class="qr-item"><strong>Session ID</strong>Cookie set at login, expires at logout; must be secure</div>
+    <div class="qr-item"><strong>Session theft</strong>Stolen Session ID = login without username/password</div>
+    <div class="qr-item"><strong>HTTP vs Ajax</strong>HTTP reloads new page; Ajax updates same page (async)</div>
+    <div class="qr-item"><strong>Ajax vulnerability</strong>Cross-origin data shown on another site</div>
+    <div class="qr-item"><strong>Ajax security</strong>Browser blocks cross-origin response unless header permits</div>
+    <div class="qr-item"><strong>DNS Rebinding</strong>Technique to bypass Same-Origin Policy</div>
+    <div class="qr-item"><strong>WebSocket</strong>One persistent connection; server auto-pushes updates</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What are the three components of the web architecture? → Browser, Web Application Server, Database</li>
+      <li>Differentiate between plug-ins and extensions. → Plug-in = binary, inside gate, direct memory; Extension = scripts, outside gate, API only</li>
+      <li>Why can't we use binary code directly in the browser? → OS lacks granularity to separate trusted/untrusted code; the engine layer enforces access control</li>
+      <li>Name the JavaScript engines and their browsers. → V8 (Chrome/Edge), SpiderMonkey (Firefox), JavaScriptCore (Safari)</li>
+      <li>What is sandboxing and its benefits? → Running code in isolated space; executes untrusted apps safely, prevents permanent changes, secure browsing</li>
+      <li>Why is the web stateless and how do cookies solve it? → Server keeps no record; cookies track the user at the user end and auto-attach to requests</li>
+      <li>What is a Session ID and why must it be secure? → Cookie assigned at login, expires at logout; stealing it allows login without credentials</li>
+      <li>Difference between HTTP and Ajax requests? → HTTP discards page and loads new one; Ajax updates the same page asynchronously</li>
+      <li>How does the Ajax same-origin security policy work? → Browser blocks cross-origin responses unless the response header grants permission</li>
+      <li>How does WebSocket differ from HTTP/Ajax? → One persistent connection; server automatically pushes updated data</li>
+    </ul>
+  </div>
+</section>

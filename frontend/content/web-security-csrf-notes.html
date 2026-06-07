@@ -1,0 +1,328 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Cross-Site vs. Single-Site Requests</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Overview</h3>
+    <p>This topic covers <strong>Cross-Site Requests</strong>, the <strong>CSRF Attack</strong> itself, and the <strong>countermeasures</strong> used to defend against it.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🏠 Single-Site / Same-Site Request</h3>
+    <p>A request that is sent from a web page to the <strong>same website's</strong> server (e.g., a facebook.com page sending a request to the facebook.com server). This is the normal, expected behavior.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔀 Cross-Site Request</h3>
+    <p>Suppose a user opens two different web pages of different websites: 1) <code>www.facebook.com</code> and 2) <code>www.web.com</code>. The user is logged in to Facebook, and a session ID is created.</p>
+    <ul>
+      <li>The <code>web.com</code> page contains a <strong>form of facebook.com</strong>.</li>
+      <li>As you fill in the Facebook form on web.com, the request will be sent to the <strong>Facebook server</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">web.com page</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">request (with FB cookies)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">facebook.com server</div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Cross-Site Request Vulnerabilities</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ First Vulnerability — Automatic Cookie Attachment</h3>
+    <p>As the user sends a request to the Facebook server through web.com, the <strong>cookies of the Facebook web page are automatically attached</strong> with the request.</p>
+    <ul>
+      <li>This is <strong>not hijacking</strong> — it is the <strong>natural behavior of the browser</strong>.</li>
+      <li>But web.com can <strong>copy the session easily</strong>. So this is a vulnerability of cross-site requests.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Second Vulnerability — Unverified Origin</h3>
+    <p>Suppose a request is sent through web.com to the Facebook server. If the Facebook server <strong>doesn't know where the request came from</strong>, it will respond to the web.com page <strong>with user data</strong>. This is also a vulnerability.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🍪 Session Cookies</h3>
+    <p>There is a type of cookie called a <strong>"Session cookie"</strong> that can attach to <strong>both sites</strong>. That may cause the problem.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🎯 Session Hijacking</h3>
+    <ul>
+      <li>In TCP, if you get the <strong>sequence number (seq #)</strong>, you can hijack the session.</li>
+      <li>If an attacker puts their web page on the victim's computer, the request will go from A to B.</li>
+      <li>Meanwhile, if B <strong>can't recognize the difference</strong>, then it's a problem.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📡 CSRF Attack on IoT Devices</h3>
+    <p>IoT devices <strong>don't have countermeasures</strong> to deal with CSRF attacks, and they use a <strong>web server</strong> for their working — making them vulnerable.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Launching a CSRF Attack — GET vs. POST</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🚀 How to Launch a CSRF Attack</h3>
+    <ul>
+      <li>The attacker must know the <strong>method of the HTTP request</strong> before launching the attack.</li>
+      <li>The method can be <strong>GET or POST</strong>, which can be analyzed through the <strong>"HTTP Header Live"</strong> extension in Firefox, or <strong>Wireshark</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Aspect</th><th>GET</th><th>POST</th></tr></thead>
+      <tbody>
+        <tr><td>Data location</td><td class="match">In the header / URL portion</td><td class="diff">In the body portion</td></tr>
+        <tr><td>Visibility</td><td class="match">User can see data in the URL</td><td class="diff">Data hidden in request body</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight">In the GET method, data is attached in the header of the HTTP request and the user can see it in the URL. In the POST method, data is attached in the body part of the HTTP request.</div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>CSRF Attack on GET Services</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🎯 Objective</h3>
+    <p>The objective of this attack is to <strong>add the attacker as a friend</strong> in the victim's friend list — i.e., add yourself to someone's friend-list <strong>without their consent</strong>.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔍 Investigate the GET Method</h3>
+    <p>The attacker investigates the GET method request before launching the attack:</p>
+    <ul>
+      <li>When Alice clicks "add friend", we can <strong>observe the GET request</strong>.</li>
+      <li>Goal is to <strong>capture that traffic</strong> — note the value of "add friend".</li>
+      <li><strong>Disable the countermeasures</strong> if they are attached (doesn't matter).</li>
+      <li>All we need to know is the <strong>friend's ID</strong>.</li>
+      <li>The randomly generated <strong>session ID</strong> is granted after giving login credentials — and <strong>by design the browser adds it for us</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛠️ Preparation of Forged GET Request</h3>
+    <ul>
+      <li>The attacker prepares a <strong>forged GET request</strong> in a web page with their <strong>own ID</strong>.</li>
+      <li>As the victim clicks on the page link, the forged GET request will <strong>trigger</strong>.</li>
+      <li>You have to play with their minds — once the user clicks this request, the friend request will be sent.</li>
+      <li>The victim needs to have an <strong>active session</strong> with the social media site.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚡ Forge the GET Request — Why It's Easy</h3>
+    <ul>
+      <li>The browser <strong>triggers a GET request</strong> as soon as it sees an <code>&lt;img&gt;</code> or <code>&lt;iframe&gt;</code> tag in the HTML.</li>
+      <li>An attack on a GET HTTP request is <strong>easy</strong>, because the data is attached in the header of the HTTP request or in the URL.</li>
+    </ul>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">⚙️ Mechanism (Forge the GET Request)</h3>
+    <ul>
+      <li>Suppose <strong>Alice</strong> and <strong>Samy (Attacker)</strong> are two users on a social network like Facebook.</li>
+      <li>Samy wants to add Alice to his friend list <strong>without Alice's permission</strong>.</li>
+      <li>Alice is logged into her account and her <strong>session ID is created</strong>.</li>
+      <li>Samy sends a URL of a web page to Alice that contains a <strong>forged GET request with Samy's profile ID</strong>.</li>
+      <li>As Alice clicks the link, the browser triggers the HTTP GET request. <strong>Alice's session ID is attached with the request automatically.</strong></li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🧪 Demo: Lab Setup</h3>
+    <ul>
+      <li>Based on <strong>lab setup 2.0</strong>, which is based on <strong>containers</strong>.</li>
+      <li>The code is inside the <strong>'attacker'</strong> folder.</li>
+      <li><code>docker build</code> — takes time.</li>
+      <li><code>dcup</code> — your container starts running.</li>
+      <li>Check the mapping of IP with <code>more /etc/hosts</code>.</li>
+      <li>Open the attacker's website, add code in the page so the friend can be added — just mention the ID and that person will be added to the friend's list. Refresh the pages and check the results.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>CSRF Attack on POST Services</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🎯 Objective</h3>
+    <p>The objective of this attack is to <strong>edit the victim's profile</strong>.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔍 Investigate the POST Method</h3>
+    <ul>
+      <li>The attacker investigates the <strong>POST method request</strong> before launching the attack.</li>
+      <li>The POST request will be sent in <strong>forms</strong>, because the objective of the attack is to edit the victim's profile.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛠️ Preparation of Forged POST Request</h3>
+    <p>The attacker prepares a <strong>forged POST request</strong> in a web page with the <strong>victim's ID</strong>. As the victim clicks on the page link, the forged POST request will <strong>trigger</strong>.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">⚙️ Mechanism (Forge the POST Request)</h3>
+    <ul>
+      <li>Suppose <strong>Alice</strong> and <strong>Samy (Attacker)</strong> are two users on a social network like Facebook.</li>
+      <li>Samy wants to <strong>edit Alice's profile</strong> without Alice's permission.</li>
+      <li>Alice is logged into her account and her <strong>session ID is created</strong>.</li>
+      <li>Samy sends a URL of a web page to Alice that contains a <strong>forged POST request with Alice's profile ID</strong>.</li>
+      <li>As Alice clicks the link, the browser triggers the HTTP POST request. The <strong>session ID attaches automatically</strong>.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Countermeasures: Fundamental Cause &amp; Referral Header</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Fundamental Cause</h3>
+    <p>The <strong>browser knows</strong> whether an HTTP request is single-site or cross-site, but the <strong>server doesn't know</strong>. This is the vulnerability, because the <strong>protected shield must be deployed on the server side</strong>, not at the browser side.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📋 Referral Header</h3>
+    <ul>
+      <li>The referral header tells the server <strong>where the request came from</strong>.</li>
+      <li>But the referral header carries a lot of <strong>user information that can harm user privacy</strong>. So many users <strong>block the referral header</strong> via a proxy.</li>
+    </ul>
+    <p class="note">Therefore, the referral header is <strong>not a reliable solution</strong>.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Countermeasure: Secret Token</h2>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🔐 Secret Token</h3>
+    <ul>
+      <li>The server attaches a <strong>secret token</strong> with each web page to know whether a request is single-site or cross-site.</li>
+      <li>Tokens are <strong>strings of special characters</strong>.</li>
+      <li>The property of the token is <strong>hidden</strong> so that a malicious user cannot steal it.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>⚙️ Generating and Using the Token</h3>
+    <p>The developer can generate the token <strong>inside the page dynamically</strong>, and then send the HTTP request <strong>with the token</strong> attached.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">📡 Token Approach in IoT</h3>
+    <p>The same secret-token approach can be applied to IoT devices to defend them against CSRF attacks.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Countermeasure: Same-Site Cookies</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ The Problem</h3>
+    <p>As a request is sent to the Facebook server from a web page of web.com, the <strong>cookies of facebook.com are attached automatically</strong>. The problem is that the Facebook server <strong>can't recognize</strong> whether the request comes from a Facebook web page or a web.com web page.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🍪 Setting Cookies and Their Types</h3>
+    <ul>
+      <li><strong>Simple cookies</strong> — attached with cross-site requests.</li>
+      <li><strong>Lax cookies</strong> — sometimes attached with cross-site requests and sometimes not (depends on the developer).</li>
+      <li><strong>Strict cookies</strong> — only attached with same-site requests.</li>
+    </ul>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Cookie Type</th><th>Attached to Cross-Site Request?</th></tr></thead>
+      <tbody>
+        <tr><td>Simple</td><td class="match">Yes — always attached</td></tr>
+        <tr><td>Lax</td><td>Sometimes (depends on developer)</td></tr>
+        <tr><td>Strict</td><td class="diff">No — same-site only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight">Setting cookies to <strong>Strict</strong> blocks them from cross-site requests, directly defeating the automatic cookie attachment that makes CSRF possible.</div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>CSRF</strong>Cross-Site Request Forgery — forces a victim's browser to send forged requests</div>
+    <div class="qr-item"><strong>Single-site request</strong>Request from a page to the same website's server</div>
+    <div class="qr-item"><strong>Cross-site request</strong>Request from one site (web.com) to another (facebook.com)</div>
+    <div class="qr-item"><strong>Vulnerability 1</strong>Cookies auto-attached (natural browser behavior, not hijacking)</div>
+    <div class="qr-item"><strong>Vulnerability 2</strong>Server doesn't know origin, responds with user data</div>
+    <div class="qr-item"><strong>Session cookie</strong>Can attach to both sites — causes the problem</div>
+    <div class="qr-item"><strong>Session hijacking</strong>Get the TCP seq # to hijack the session</div>
+    <div class="qr-item"><strong>IoT risk</strong>No CSRF countermeasures; use web servers</div>
+    <div class="qr-item"><strong>Recon tools</strong>HTTP Header Live (Firefox), Wireshark</div>
+    <div class="qr-item"><strong>GET</strong>Data in header/URL; easy to forge</div>
+    <div class="qr-item"><strong>POST</strong>Data in body; sent via forms</div>
+    <div class="qr-item"><strong>GET attack goal</strong>Add attacker as victim's friend without consent</div>
+    <div class="qr-item"><strong>POST attack goal</strong>Edit the victim's profile</div>
+    <div class="qr-item"><strong>Auto-trigger tags</strong>Browser fires GET on &lt;img&gt; or &lt;iframe&gt;</div>
+    <div class="qr-item"><strong>Attack requirement</strong>Victim must have an active session</div>
+    <div class="qr-item"><strong>Fundamental cause</strong>Browser knows site origin, server doesn't; shield must be server-side</div>
+    <div class="qr-item"><strong>Referral header</strong>Tells origin, but blocked for privacy → unreliable</div>
+    <div class="qr-item"><strong>Secret token</strong>Hidden string per page; server checks origin</div>
+    <div class="qr-item"><strong>Same-site cookies</strong>Simple / Lax / Strict control cross-site attachment</div>
+    <div class="qr-item"><strong>Strict cookie</strong>Best defense — same-site requests only</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What is a cross-site request and how does it differ from a single-site request? → A cross-site request goes from one website's page to another website's server, vs. same-site requests staying within one site</li>
+      <li>Why is automatic cookie attachment a vulnerability? → The browser attaches the target site's cookies automatically, letting a malicious site send authenticated requests / copy the session</li>
+      <li>What is the difference between GET and POST in terms of data placement? → GET puts data in the header/URL; POST puts data in the body</li>
+      <li>Why is forging a GET request easy? → The browser auto-triggers GET on &lt;img&gt;/&lt;iframe&gt; tags, and data sits in the URL/header</li>
+      <li>Describe the mechanism of a CSRF GET attack. → Samy sends Alice a page with a forged GET request carrying Samy's ID; Alice's session ID attaches automatically on click, adding Samy as a friend</li>
+      <li>What is the objective of a CSRF POST attack? → To edit the victim's profile</li>
+      <li>What is the fundamental cause of CSRF? → The browser knows the request origin but the server does not; protection must be on the server side</li>
+      <li>Why is the referral header not a reliable countermeasure? → It leaks user privacy info, so many users block it via proxy</li>
+      <li>How does a secret token defend against CSRF? → The server embeds a hidden token per page; cross-site requests lack the valid token and are rejected</li>
+      <li>List the three same-site cookie types and their behavior. → Simple (always attached cross-site), Lax (sometimes), Strict (same-site only)</li>
+    </ul>
+  </div>
+</section>

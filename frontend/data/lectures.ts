@@ -23,12 +23,52 @@ export interface LectureSource {
 
 export const lectureSources: LectureSource[] = [
   {
+    id: "05",
+    file: "buffer-overflow-notes.html",
+    slug: "buffer-overflow",
+    title: "Buffer Overflow",
+    description: "Practical buffer-overflow module: memory and stack layout, stack frames, strcpy-style vulnerabilities, exploit construction (offsets/shellcode), and mitigations (ASLR, stack canaries, safe coding).",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "06",
+    file: "web-security-basics-notes.html",
+    slug: "web-security-basics",
+    title: "Web Security 1 Basics",
+    description: "Foundations of web security: browser/server/database architecture, HTTP, cookies & sessions, JavaScript engines and sandboxing, and common web risks.",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "07",
+    file: "web-security-csrf-notes.html",
+    slug: "web-security-csrf",
+    title: "Web Security 2 CSRF",
+    description: "CSRF explained: automatic cookie attachment, forged GET/POST attacks, examples, and server-side defenses such as secret tokens and referer checks.",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "08",
+    file: "web-security-xss-notes.html",
+    slug: "web-security-xss",
+    title: "Web Security 3 XSS",
+    description: "XSS deep dive: persistent vs non-persistent XSS, real-world worms (Samy), attack demos (add-friend, profile edit), propagation, and countermeasures (filters, CSP, sandboxing).",
+    videos: [{ url: "" }],
+  },
+  {
+    id: "09",
+    file: "web-security-sql-injection-notes.html",
+    slug: "web-security-sql-injection",
+    title: "Web Security 4 SQL Injection",
+    description: "Practical SQL injection coverage: vulnerable query patterns, login-bypass (OR 1=1, comment tricks), data modification attacks, multi-statement risks, and recommended defenses (parameterized queries, input validation).",
+    videos: [{ url: "" }],
+  },
+  {
     id: "10",
     file: "crypto_classical_notes.html",
     slug: "classical-cryptography",
     title: "Classical Cryptography",
     description:
-      "Notes on classical cryptography techniques and algorithms. Caesar Cipher, Affine Cipher, Playfair Cipher, Hill Cipher, Vigenère Cipher, Rail Fence, Row Transposition, Rotor Machine",
+      "Survey of classical cryptography: substitution and transposition ciphers (Caesar, Affine, Playfair, Hill, Vigenère, Rail Fence, Row Transposition) and rotor machines, with worked examples and cryptanalysis notes.",
     videos: [
       { url: "https://youtu.be/JtbKh_12ctg?si=Cn9uACa1tqbluk9z", title: "Caesar Cipher" },
       { url: "https://youtu.be/iyESl17IqFQ?si=p5SNaaEs3B8o5mO0", title: "Affine Cipher" },
@@ -45,7 +85,7 @@ export const lectureSources: LectureSource[] = [
     slug: "des",
     title: "Data Encryption Standard (DES)",
     description:
-      "Notes on the Data Encryption Standard, its structure, and a step-by-step walkthrough of the encryption process.",
+      "Detailed DES coverage: Feistel structure, IP/FP, round function (expansion, S-boxes, P-box), key schedule, and security considerations (meet-in-the-middle, 3DES).",
     videos: [{ url: "https://youtu.be/j53iXhTSi_s?si=82Mo6bKY6k3wNCWY" }],
   },
   {
@@ -54,7 +94,7 @@ export const lectureSources: LectureSource[] = [
     slug: "aes",
     title: "Advanced Encryption Standard (AES)",
     description:
-      "The Advanced Encryption Standard, its structure, and a step-by-step walkthrough of the encryption process.",
+      "Exam-focused AES notes: parameters, 4x4 state representation, round operations (SubBytes, ShiftRows, MixColumns, AddRoundKey), key schedule, and worked diagrams.",
     videos: [{ url: "https://youtu.be/I68uBhHdnM4?si=woDjrlmOIni0_nQ7" }],
   },
   {
@@ -63,7 +103,7 @@ export const lectureSources: LectureSource[] = [
     slug: "sha-512",
     title: "Hashing & SHA-512",
     description:
-      "Why hashing exists, hash-function requirements, the SHA family, and SHA-512 step by step — padding, the message schedule, the 80-round compression, and a worked example.",
+      "Hashing fundamentals and SHA-512: padding/length rules, buffer/register initialization, 80-round compression steps, avalanche property, and worked examples.",
     videos: [{ url: "https://youtu.be/b6HebMn05Kk" }],
   },
   {
@@ -72,7 +112,7 @@ export const lectureSources: LectureSource[] = [
     slug: "rsa-algorithm",
     title: "The RSA Algorithm",
     description:
-      "Public-key encryption end to end: key generation, encryption and decryption, a full worked example, the Extended Euclidean Algorithm, security, and timing attacks.",
+      "RSA explained: key generation (p,q,φ(n),e,d), encryption/decryption formulas, worked numerical example, and security assumptions (integer factorization).",
     videos: [
       { url: "https://youtu.be/hm8s6FAc4pg", title: "RSA — Part 1" },
       { url: "https://youtu.be/4zahvcJ9glg", title: "RSA — Part 2" },
@@ -85,7 +125,7 @@ export const lectureSources: LectureSource[] = [
     slug: "diffie-hellman",
     title: "Diffie-Hellman Key Exchange",
     description:
-      "Sharing a secret over an open channel: the key-exchange algorithm, the discrete logarithm problem, worked examples, the man-in-the-middle attack, and real-world uses.",
+      "Diffie–Hellman key exchange: public parameters, computing public/private values, shared-secret derivation, the discrete-log security assumption, and worked examples.",
     videos: [
       {
         title: "Diffie-Hellman Key Exchange: How to Share a Secret",
@@ -99,7 +139,7 @@ export const lectureSources: LectureSource[] = [
     slug: "public-key-infrastructure",
     title: "Cryptography & Public Key Infrastructure",
     description:
-      "Asymmetric cryptography, digital certificates, the chain of trust, TLS certificate types, digital signatures, code signing, time stamping, and S/MIME.",
+      "Practical PKI: CA/RA roles, digital certificates (X.509), CRL/OCSP, certificate lifecycle, trust chains, and certificate validation flows.",
     videos: [{ url: "https://youtu.be/0ctat6RBrFo" }],
   },
   {
@@ -108,7 +148,7 @@ export const lectureSources: LectureSource[] = [
     slug: "user-authentication-access-control-wireless-security-firewall",
     title: "User Authentication, Access Control, Wireless Security, and Firewall Notes",
     description:
-      "Notes on user authentication, access control, wireless security, and firewall configurations.",
+      "Authentication & access control primer: NIST model, authentication factors, KDC/Kerberos, replay mitigation, and best practices.",
     videos: [{ url: "" }],
   },
 ];

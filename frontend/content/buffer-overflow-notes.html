@@ -1,0 +1,692 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Secure Coding &amp; Common Security Issues</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Overview</h3>
+    <p>This two-part topic covers buffer overflow from fundamentals (memory/stack layout, the vulnerability, a vulnerable program, experimental setup) through to a full working exploit (offsets, payload construction, shellcode, and countermeasures).</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ Secure Coding Practices</h3>
+    <ul>
+      <li>Input validation and sanitization</li>
+      <li>Output encoding</li>
+      <li>Principle of least privilege</li>
+      <li>Secure authentication and session management</li>
+      <li>Proper error handling and logging</li>
+      <li>Use of parameterized queries (avoid SQL injection)</li>
+      <li>Secure password storage (hashing + salting)</li>
+      <li>Avoid hardcoded credentials</li>
+      <li>Enforce secure communication (TLS/SSL)</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Common Software Security Issues</h3>
+    <ul>
+      <li>Buffer overflows</li>
+      <li>SQL injection</li>
+      <li>Cross-site scripting (XSS)</li>
+      <li>Cross-site request forgery (CSRF)</li>
+      <li>Sensitive data exposure</li>
+      <li>Security misconfigurations</li>
+      <li>Lack of input/output validation</li>
+      <li>Weak or custom cryptography</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>What is a Buffer Overflow?</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Definition</h3>
+    <p>A <strong>buffer overflow</strong> (or buffer overrun) occurs when <strong>more data is put into a fixed-length buffer than the buffer can handle</strong>. The extra information, which has to go somewhere, can overflow into adjacent memory space, <strong>corrupting or overwriting</strong> the data held in that space.</p>
+    <p>It is a common software coding mistake that an attacker could exploit to gain access to your system.</p>
+    <ul>
+      <li>A <strong>buffer is sequential memory</strong>.</li>
+      <li>Buffer overflow is a <strong>common and classic vulnerability</strong> — one of the oldest in software.</li>
+    </ul>
+  </div>
+
+  <div class="analogy-box">
+    <div class="a-title">Analogy</div>
+    <p>Think of a buffer like a glass sized for exactly 12 ounces. Pour in 30 ounces and the extra spills onto whatever is sitting next to the glass — in memory, that "whatever" can be critical control data like the return address.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Virtual vs. Physical Address Scheme</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧠 How the OS Allocates Memory</h3>
+    <ul>
+      <li>For every process, the OS allocates one or several blocks of memory for it to run.</li>
+      <li><strong>RAM has physical addresses.</strong></li>
+      <li>If two processes are created (P1 &amp; P2), the OS allocates physical memory/addresses to them.</li>
+      <li>Although processes have a <strong>virtual address space</strong>, there is a <strong>mapping (Paging)</strong> between physical and virtual addresses.</li>
+      <li>The two processes are mapped onto two different physical addresses in RAM — the OS makes sure of this.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Virtual Address</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Paging (mapping)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Physical Address (RAM)</div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Memory Layout of a Program</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🗂️ The Segments</h3>
+    <p>A program stores different types of data in different memory locations:</p>
+    <ul>
+      <li><strong>Text segment</strong> — for strings storage (code/strings).</li>
+      <li><strong>Data segment</strong> — initialized global variables (e.g., <code>x</code>) are stored here.</li>
+      <li><strong>BSS segment</strong> — uninitialized variables (e.g., <code>y</code>, and <code>z</code> if not initialized).</li>
+      <li><strong>Stack</strong> — local variables (e.g., <code>a</code>, <code>b</code>, <code>ptr</code>).</li>
+      <li><strong>Heap</strong> — the blocks of memory that a pointer (<code>ptr</code>) points to are stored here.</li>
+    </ul>
+    <p class="note">Rule of thumb: a variable goes to <strong>data</strong> if initialized, otherwise to the <strong>BSS</strong> segment. <code>ptr</code> lives on the stack but points to a block on the heap.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Segment</th><th>Stores</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Text</td><td>Code / strings</td><td>program instructions</td></tr>
+        <tr><td>Data</td><td>Initialized globals</td><td>x</td></tr>
+        <tr><td>BSS</td><td>Uninitialized globals</td><td>y, z</td></tr>
+        <tr><td>Heap</td><td>Dynamically allocated blocks</td><td>*ptr target</td></tr>
+        <tr><td>Stack</td><td>Local variables</td><td>a, b, ptr</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Stack Layout &amp; the Stack Frame</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧱 Three Portions of a Stack Frame</h3>
+    <p>When a function is invoked, three portions take place inside the stack frame:</p>
+    <ul>
+      <li><strong>Arguments (a, b)</strong> — pushed onto the stack by the <strong>caller</strong> function before jumping into the new function.</li>
+      <li><strong>Special region</strong> — the bridge between the old function and the new one. It contains:
+        <ul>
+          <li><strong>Return Address (4 bytes)</strong> — the location the CPU jumps to when the function finishes.</li>
+          <li><strong>Old EBP (4 bytes)</strong> — the base pointer of the previous function, saved so it can be restored later.</li>
+        </ul>
+      </li>
+      <li><strong>Local variables</strong> — space reserved for variables declared inside the function (e.g., <code>int x</code>).</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📍 Why Use the EBP Register</h3>
+    <p>During compilation it is difficult for the compiler to get the exact location of the variables — the compiler has no idea. The problem is solved by <strong>using registers (ebp)</strong>.</p>
+    <p>Since the special region has two 4-byte portions, locations become easy for the compiler to compute relative to ebp:</p>
+    <div class="math-block">
+      a = ebp + 8<br>
+      b = ebp + 12
+      <span class="comment">arguments addressed as positive offsets from ebp</span>
+    </div>
+    <p>Local variables are addressed as <strong>negative</strong> offsets, e.g. the assembly <code>-8(%ebp)</code> refers to the local variable <code>x</code>.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🎞️ Anatomy of a Stack Frame</h3>
+    <p>Memory addresses grow <strong>upward</strong> here. The stack itself grows <strong>downward</strong> (high → low), but a buffer is filled <strong>upward</strong> (low → high) — keep both arrows in mind, because their opposition is the whole reason an overflow can reach the return address.</p>
+    <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of a stack frame showing buffer, old EBP, and return address with growth directions">
+      <text x="320" y="22" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#444">Stack Frame of foo()</text>
+
+      <!-- address axis -->
+      <line x1="60" y1="50" x2="60" y2="320" stroke="#999" stroke-width="1.5"/>
+      <polygon points="60,46 56,56 64,56" fill="#999"/>
+      <text x="48" y="58" text-anchor="end" font-family="monospace" font-size="11" fill="#888">high addr</text>
+      <text x="48" y="316" text-anchor="end" font-family="monospace" font-size="11" fill="#888">low addr</text>
+
+      <!-- frame cells: high address at top -->
+      <!-- arguments -->
+      <rect x="90" y="50" width="320" height="36" fill="#e8eef6" stroke="#5b7fa6" stroke-width="1.5"/>
+      <text x="250" y="73" text-anchor="middle" font-family="monospace" font-size="13" fill="#33485f">Arguments (a = ebp+8, b = ebp+12)</text>
+
+      <!-- return address -->
+      <rect x="90" y="86" width="320" height="36" fill="#f7e3e1" stroke="#c0564b" stroke-width="2"/>
+      <text x="250" y="109" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#a23b30">Return Address (4 bytes)</text>
+
+      <!-- old ebp -->
+      <rect x="90" y="122" width="320" height="36" fill="#fdf0db" stroke="#c98a2b" stroke-width="2"/>
+      <text x="250" y="145" text-anchor="middle" font-family="monospace" font-size="13" fill="#9a6716">Old EBP (4 bytes)  &#8592; ebp</text>
+
+      <!-- local buffer -->
+      <rect x="90" y="158" width="320" height="120" fill="#e6f0e8" stroke="#4f8a5b" stroke-width="1.5"/>
+      <text x="250" y="180" text-anchor="middle" font-family="monospace" font-size="13" fill="#356041">Local variables / buffer[ ]</text>
+      <text x="250" y="200" text-anchor="middle" font-family="monospace" font-size="11" fill="#5a7d63">addressed as -8(%ebp), etc.</text>
+
+      <!-- stack grows down arrow -->
+      <line x1="450" y1="60" x2="450" y2="150" stroke="#5b7fa6" stroke-width="2"/>
+      <polygon points="450,158 445,148 455,148" fill="#5b7fa6"/>
+      <text x="462" y="105" font-family="monospace" font-size="11" fill="#5b7fa6">stack grows</text>
+      <text x="462" y="120" font-family="monospace" font-size="11" fill="#5b7fa6">(high &#8594; low)</text>
+
+      <!-- buffer fills up arrow (animated) -->
+      <line x1="540" y1="270" x2="540" y2="180" stroke="#4f8a5b" stroke-width="2"/>
+      <polygon points="540,172 535,182 545,182" fill="#4f8a5b"/>
+      <text x="552" y="220" font-family="monospace" font-size="11" fill="#4f8a5b">copy fills</text>
+      <text x="552" y="235" font-family="monospace" font-size="11" fill="#4f8a5b">(low &#8594; high)</text>
+
+      <!-- animated fill bar inside buffer, rising safely -->
+      <rect x="100" y="268" width="300" height="0" fill="#86c79a" opacity="0.7">
+        <animate attributeName="height" values="0;100;100;0" dur="4s" begin="0s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="268;168;168;268" dur="4s" begin="0s" repeatCount="indefinite"/>
+      </rect>
+
+      <text x="320" y="305" text-anchor="middle" font-family="monospace" font-size="12" fill="#356041">A correctly-sized copy stays inside the green buffer.</text>
+    </svg>
+    <p class="note">The buffer fills from the bottom upward toward the saved <strong>Old EBP</strong> and <strong>Return Address</strong>. As long as the input fits, those control values are never touched.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Function Invocation in the Stack</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔗 Nested Calls: main() → foo() → strcpy()</h3>
+    <p>Consider <code>main()</code> containing <code>foo()</code>, which contains <code>strcpy()</code>:</p>
+    <ul>
+      <li>When <code>main()</code> invokes <code>foo()</code>, the program allocates a <strong>new block of space</strong> for <code>foo()</code>.</li>
+      <li>We need <code>ebp</code> to point at <code>foo()</code>'s special region — but there is only <strong>one ebp register</strong>, needed to point to foo()'s local variables and arguments.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">💾 Saving the Old EBP</h3>
+    <ul>
+      <li>We must <strong>remember the value of ebp</strong> to properly point to both venues.</li>
+      <li>The first region of <code>foo()</code> stores the value of ebp as <strong>(old ebp)</strong>, so it can point back to <code>main()</code>.</li>
+      <li>Inside <code>foo()</code>, <code>strcpy()</code> also acquires a new block of space with two arguments, and the <strong>same old ebp value</strong> is stored in <code>strcpy()</code>'s frame.</li>
+    </ul>
+  </div>
+
+  <div class="card accent-left">
+    <h3>↩️ Return Addresses</h3>
+    <p>Keep in mind the location where you must return from one function to another — <strong>save the return address</strong> of each level:</p>
+    <ul>
+      <li>When <code>strcpy()</code> returns, we return to location (1); its space is freed and ebp jumps to the upper level.</li>
+      <li>When <code>foo()</code> returns, we return to location (2); its space is freed and ebp jumps up to <code>main()</code>.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">main()</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">foo() [saves old ebp + return addr]</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">strcpy()</div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>The Buffer Overflow Vulnerability</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📋 strcpy() and the Null Terminator</h3>
+    <p>When copying data from <code>src</code> to <code>dest</code>, we don't know how much data must be copied into <code>dest</code>. But one character tells us where to stop: <strong><code>\0</code> (value 0), the termination character</strong>.</p>
+    <p class="note">If you remove <code>\0</code>, the compiler will copy the whole string and place <code>\0</code> by itself at the end.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">💥 How the Overflow Happens</h3>
+    <ul>
+      <li><code>foo()</code> is invoked in <code>main()</code>, and <code>main()</code> passes <code>str</code> to it.</li>
+      <li><code>foo()</code> has a local string (buffer) of size <strong>12</strong>, but it copies a <code>str</code> of <strong>more than 12 characters</strong> into it.</li>
+      <li>So this buffer will <strong>overflow</strong>.</li>
+      <li>The whole string is copied even <strong>outside the buffer portion</strong> until its end, but the outside portion gets <strong>corrupted</strong>.</li>
+    </ul>
+    <div class="highlight">Important misconception: some think the data/buffer grows as the stack grows (high to low) — <strong>No</strong>. Only the stack grows from high to low; the <strong>buffer (data) is copied from low to high addresses</strong>, which is exactly why it overruns into the saved ebp and return address.</div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🎞️ Watch the Overflow Happen</h3>
+    <p>The buffer holds 12 bytes, but <code>strcpy()</code> keeps copying until it hits <code>\0</code>. Watch the copy climb past the buffer's top edge and spill into the saved <strong>Old EBP</strong> and then the <strong>Return Address</strong>.</p>
+    <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animation of data overflowing a buffer into old EBP and return address">
+      <text x="320" y="22" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#444">strcpy(buffer, str) — str is longer than buffer</text>
+
+      <!-- cells -->
+      <rect x="160" y="44" width="320" height="40" fill="#f7e3e1" stroke="#c0564b" stroke-width="2"/>
+      <text x="320" y="69" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#a23b30">Return Address</text>
+
+      <rect x="160" y="84" width="320" height="40" fill="#fdf0db" stroke="#c98a2b" stroke-width="2"/>
+      <text x="320" y="109" text-anchor="middle" font-family="monospace" font-size="13" fill="#9a6716">Old EBP</text>
+
+      <rect x="160" y="124" width="320" height="150" fill="#e6f0e8" stroke="#4f8a5b" stroke-width="1.5"/>
+      <text x="320" y="146" text-anchor="middle" font-family="monospace" font-size="12" fill="#356041">buffer[12]</text>
+
+      <!-- rising data column: fills buffer (0-1.6s), then keeps going into ebp + RA -->
+      <rect x="170" y="264" width="300" height="0" fill="#d98b80" opacity="0.85">
+        <animate attributeName="height" values="0;140;230;230;0" keyTimes="0;0.35;0.62;0.9;1" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="264;124;44;44;264" keyTimes="0;0.35;0.62;0.9;1" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="fill" values="#86c79a;#86c79a;#d98b80;#d98b80;#86c79a" keyTimes="0;0.34;0.5;0.9;1" dur="6s" repeatCount="indefinite"/>
+      </rect>
+
+      <!-- "CORRUPTED" stamp that appears when RA is hit -->
+      <text x="320" y="69" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#7a1d14" opacity="0">CORRUPTED!
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.6;0.65;0.9;1" dur="6s" repeatCount="indefinite"/>
+      </text>
+
+      <!-- moving copy pointer label -->
+      <text x="500" y="270" font-family="monospace" font-size="11" fill="#a23b30">
+        copy pointer
+        <animate attributeName="y" values="270;130;50;50;270" keyTimes="0;0.35;0.62;0.9;1" dur="6s" repeatCount="indefinite"/>
+      </text>
+
+      <!-- caption -->
+      <text x="320" y="320" text-anchor="middle" font-family="monospace" font-size="12" fill="#666">
+        <tspan>fitting safely…</tspan>
+        <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.34;0.4;0.95;1" dur="6s" repeatCount="indefinite"/>
+      </text>
+      <text x="320" y="320" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#a23b30">
+        <tspan>…overflowing into control data!</tspan>
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.4;0.45;0.9;1" dur="6s" repeatCount="indefinite"/>
+      </text>
+      <text x="320" y="345" text-anchor="middle" font-family="monospace" font-size="11" fill="#888">strcpy keeps going until it reads a \0 byte</text>
+    </svg>
+    <p class="note">Once the saved Old EBP and Return Address are overwritten with arbitrary bytes, the function no longer knows where to return — leading directly to the crash scenarios in <a href="#s8">the next topic</a>.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Why the Program Crashes</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Corrupted Return Address</h3>
+    <p>When the buffer overflows, the <strong>return value/addresses are replaced</strong> with your data that spilled outside the given space. So the real address is no longer there, and the program can crash. There are several scenarios:</p>
+    <ul>
+      <li><strong>Unmapped virtual address:</strong> if you jump to a virtual address not mapped to a physical address, it's an invalid address → the <strong>OS will kill</strong> the process.</li>
+      <li><strong>Invalid instructions:</strong> the address maps to an invalid place, so you may jump to invalid instructions → the <strong>CPU won't recognize them and kills</strong> the process.</li>
+      <li><strong>Restricted area:</strong> if you have a valid address but it's a restricted area such as OS kernel territory, the <strong>CPU won't allow</strong> you there and the program crashes.</li>
+      <li><strong>No pointer address:</strong> if you have no pointer address, the program also crashes.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Exploiting the Vulnerability</h2>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🎯 Why a Privileged Program is the Target</h3>
+    <p>If it is a <strong>vulnerable AND privileged program</strong> — e.g. a <strong>Set-UID program</strong> running on a server with a known vulnerability — the damage can be massive. To attack the code, we try to <strong>insert our malicious code</strong> into it so we can do damage.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🧨 The Attack Idea</h3>
+    <ul>
+      <li>If we insert our malicious code at the top and we are unable to reach it, it's <strong>dead code</strong>.</li>
+      <li>Most of the stack contains <strong>data, not code</strong> — but the <strong>return address can lead us to code</strong>.</li>
+      <li>The idea: <strong>overflow the buffer and replace our data until it overwrites the return address</strong>.</li>
+      <li>We place the <strong>address of our code (A)</strong> in the return-address slot.</li>
+      <li>So if we can make execution jump to our code, we can run it and do damage.</li>
+    </ul>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Overflow buffer</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Overwrite return address with addr A</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">CPU jumps to our code</div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🎞️ Hijacking the Return Address</h3>
+    <p>Instead of random bytes, the attacker carefully overwrites the return address with the address <strong>A</strong> of the injected code. When <code>foo()</code> finishes, the CPU dutifully "returns" — straight into the attacker's shellcode.</p>
+    <svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animation of execution returning to injected shellcode instead of the caller">
+      <text x="320" y="22" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#444">return address now points to attacker code</text>
+
+      <!-- return address cell -->
+      <rect x="60" y="44" width="220" height="44" fill="#f7e3e1" stroke="#c0564b" stroke-width="2"/>
+      <text x="170" y="64" text-anchor="middle" font-family="monospace" font-size="12" fill="#a23b30">Return Address</text>
+      <text x="170" y="80" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#7a1d14">= A (0xbffff1c0)</text>
+
+      <!-- legit caller (greyed) -->
+      <rect x="380" y="44" width="200" height="44" fill="#eee" stroke="#bbb" stroke-width="1.5"/>
+      <text x="480" y="64" text-anchor="middle" font-family="monospace" font-size="12" fill="#999">caller in main()</text>
+      <text x="480" y="80" text-anchor="middle" font-family="monospace" font-size="11" fill="#bbb">(never reached)</text>
+
+      <!-- shellcode block -->
+      <rect x="380" y="210" width="200" height="80" fill="#f7e3e1" stroke="#c0564b" stroke-width="2"/>
+      <text x="480" y="240" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#a23b30">Injected shellcode</text>
+      <text x="480" y="262" text-anchor="middle" font-family="monospace" font-size="11" fill="#a23b30">execve("/bin/sh")</text>
+      <text x="480" y="280" text-anchor="middle" font-family="monospace" font-size="11" fill="#a23b30">→ root shell</text>
+
+      <!-- path from RA to shellcode -->
+      <path id="hijack" d="M 170 88 L 170 250 L 380 250" fill="none" stroke="#c0564b" stroke-width="2" stroke-dasharray="6 5"/>
+      <polygon points="380,250 370,245 370,255" fill="#c0564b"/>
+
+      <!-- faded legit path -->
+      <path d="M 280 66 L 380 66" fill="none" stroke="#ccc" stroke-width="2" stroke-dasharray="4 4"/>
+
+      <!-- moving execution dot -->
+      <circle r="7" fill="#7a1d14">
+        <animateMotion dur="3s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="linear" path="M 170 88 L 170 250 L 380 250"/>
+      </circle>
+
+      <text x="120" y="170" font-family="monospace" font-size="11" fill="#c0564b">CPU "returns"</text>
+      <text x="120" y="185" font-family="monospace" font-size="11" fill="#c0564b">to address A</text>
+
+      <text x="320" y="320" text-anchor="middle" font-family="monospace" font-size="11" fill="#888">The same instruction that normally resumes main() now launches the attacker's code.</text>
+    </svg>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Vulnerable Program &amp; Experimental Setup</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧪 The Vulnerable Program</h3>
+    <ul>
+      <li>Set up the environment: a vulnerable program with a <strong>buffer of size 100</strong>.</li>
+      <li><code>main()</code> gets its input from a file called <strong>'badfile'</strong>.</li>
+      <li><code>main()</code> reads <strong>300 characters</strong> from <code>badfile</code>, then invokes <code>foo()</code>.</li>
+      <li>Inside <code>foo()</code>, it copies the 300 characters (<code>str</code>) into the 100-character buffer.</li>
+      <li>Obviously there is a <strong>buffer overflow</strong>.</li>
+      <li>The program is a <strong>Set-UID program owned by root</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚙️ Experimental Setup (Disabling Countermeasures)</h3>
+    <p>Buffer overflow is one of the oldest vulnerabilities. The VM has several countermeasures; turn some off for this task:</p>
+    <ul>
+      <li>Set <strong>memory randomization = 0</strong> (off) — you need to be root, use <code>sudo</code>.</li>
+      <li>Compile the code and <strong>turn off two other countermeasures</strong>.</li>
+      <li>Make it a privileged program: <strong>change ownership &amp; set the Set-UID bit</strong>.</li>
+      <li>Result: a <strong>vulnerable-privileged program</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔬 Demonstrating the Crash</h3>
+    <ul>
+      <li>The stack takes input from <code>badfile</code>, so generate <strong>100 bytes</strong> of random numbers into <code>badfile</code> — no problem occurs, since the buffer size is 100.</li>
+      <li>Try again with <strong>160 bytes</strong> of random numbers into the file.</li>
+      <li>After executing, a <strong>fault message</strong> occurs — meaning the buffer-overflow program <strong>crashes</strong>.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Exploit Challenges &amp; NOP Sled</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🎯 The Goal</h3>
+    <p><code>foo()</code> copies data into the buffer and it overflows, writing data over the <strong>return-address section</strong>. We want to let the program <strong>return to our code</strong> — our job is to make <code>foo()</code> return to our code.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">❓ Two Challenges</h3>
+    <ul>
+      <li><strong>Where do we put the return address? → What is the offset?</strong> (the distance from the buffer start to the return-address slot)</li>
+      <li><strong>What value do we put into the address?</strong> The value should be the <strong>beginning of our code</strong>. But we don't know exactly where our code is placed in the stack.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛬 NOP Sled — Multiple Entry Points</h3>
+    <p>Because we don't know the exact start of our code, we create <strong>multiple entry points</strong> to increase the chances of a correct guess, so we can enter our code from multiple points.</p>
+    <ul>
+      <li>We place <strong>a lot of NOP</strong> (no-operation) instructions before our code.</li>
+      <li>Landing anywhere in the NOP region slides execution down into our code, so the <strong>success rate increases</strong>.</li>
+      <li>If we get the ebp value and the address of the buffer, we can compute the <strong>offset</strong>. We then add some value to ebp so we land on one of the NOP values.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🎞️ Why the NOP Sled Improves the Odds</h3>
+    <p>A precise jump to the first shellcode byte is hard to guess. A long runway of <code>NOP</code> (0x90) instructions does nothing but advance to the next instruction — so any landing inside the sled "slides" the CPU forward into the shellcode. Watch three different (imperfect) guesses all succeed.</p>
+    <svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animation of three guessed addresses landing in a NOP sled and sliding into shellcode">
+      <text x="320" y="22" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#444">NOP sled: many landing spots, one destination</text>
+
+      <!-- the payload bar: NOP region then shellcode -->
+      <rect x="80" y="150" width="380" height="44" fill="#e6f0e8" stroke="#4f8a5b" stroke-width="1.5"/>
+      <rect x="460" y="150" width="100" height="44" fill="#f7e3e1" stroke="#c0564b" stroke-width="2"/>
+      <text x="270" y="177" text-anchor="middle" font-family="monospace" font-size="13" fill="#356041">NOP NOP NOP NOP NOP NOP …</text>
+      <text x="510" y="172" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#a23b30">shell</text>
+      <text x="510" y="186" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#a23b30">code</text>
+
+      <!-- target marker -->
+      <text x="510" y="220" text-anchor="middle" font-family="monospace" font-size="11" fill="#a23b30">execute!</text>
+
+      <!-- three guess arrows landing at different NOPs -->
+      <g font-family="monospace" font-size="10" fill="#5b7fa6">
+        <line x1="150" y1="80" x2="150" y2="146" stroke="#5b7fa6" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <polygon points="150,148 146,138 154,138" fill="#5b7fa6"/>
+        <text x="150" y="74" text-anchor="middle">guess 1</text>
+
+        <line x1="270" y1="100" x2="270" y2="146" stroke="#5b7fa6" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <polygon points="270,148 266,138 274,138" fill="#5b7fa6"/>
+        <text x="270" y="94" text-anchor="middle">guess 2</text>
+
+        <line x1="390" y1="80" x2="390" y2="146" stroke="#5b7fa6" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <polygon points="390,148 386,138 394,138" fill="#5b7fa6"/>
+        <text x="390" y="74" text-anchor="middle">guess 3</text>
+      </g>
+
+      <!-- sliding dot: starts at whichever guess, slides right to shellcode -->
+      <circle r="7" fill="#356041">
+        <animate attributeName="cx" values="150;460;510;510;270;460;510;510;390;460;510;510" keyTimes="0;0.1;0.13;0.25;0.33;0.43;0.46;0.58;0.66;0.76;0.79;1" dur="7.5s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="172;172;172;172;172;172;172;172;172;172;172;172" dur="7.5s" repeatCount="indefinite"/>
+        <animate attributeName="fill" values="#356041;#356041;#a23b30;#a23b30;#356041;#356041;#a23b30;#a23b30;#356041;#356041;#a23b30;#a23b30" keyTimes="0;0.12;0.13;0.25;0.32;0.45;0.46;0.58;0.65;0.78;0.79;1" dur="7.5s" repeatCount="indefinite"/>
+      </circle>
+
+      <text x="320" y="260" text-anchor="middle" font-family="monospace" font-size="12" fill="#356041">Land on ANY NOP → slide right → reach the shellcode.</text>
+      <text x="320" y="285" text-anchor="middle" font-family="monospace" font-size="11" fill="#888">A wider sled tolerates a less precise return-address guess.</text>
+    </svg>
+    <p class="note">This is why the chosen return value need not be exact — <code>ebp+8</code>, <code>+100</code>, or <code>+120</code> all work as long as they point somewhere inside the sled.</p>
+  </div>
+</section>
+
+<section id="s12">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2>Finding the Offset and Addresses (GDB)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🐞 Debugging with GDB</h3>
+    <p>We assume we have the source code and run it for debugging:</p>
+    <ul>
+      <li>Set a <strong>breakpoint</strong> so we can stop the program during execution and print out variables.</li>
+      <li>When <code>foo()</code> is invoked, the program stops.</li>
+      <li>Make sure <code>badfile</code> exists before running GDB — <strong>create badfile first</strong>.</li>
+      <li>The program runs and stops inside <code>foo()</code>; then print the value of <code>ebp</code> and <code>buffer</code>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">📐 Computing the Offset</h3>
+    <ul>
+      <li>Use the <code>p</code> command to print the values of <code>ebp</code> and <code>buffer</code>.</li>
+      <li>Use <code>p/d</code> to get the difference of these addresses.</li>
+    </ul>
+    <div class="math-block">
+      offset = ebp − buffer = <span class="val-shared">108</span>
+      <span class="comment">distance from buffer start to the saved ebp</span>
+    </div>
+    <p>This tells us the candidate value of the return address (R.T). We need to return into one of our NOPs, so <strong>ebp+8 is a candidate for R.T</strong>.</p>
+    <p class="note">In the actual attack we may not use ebp+8; we might use +100, +120, etc., depending on the experiment's scenario.</p>
+  </div>
+</section>
+
+<section id="s13">
+  <div class="section-header">
+    <span class="section-num">13</span>
+    <h2>Constructing the Payload (badfile)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧩 Layout of the badfile</h3>
+    <ul>
+      <li>Construct the <code>badfile</code> and copy it onto the stack.</li>
+      <li>At the <strong>end of badfile</strong>, put our <strong>malicious code</strong>.</li>
+      <li>The return address <strong>'A' must land in the NOP range</strong>.</li>
+      <li>Put the return address at a particular location so that, when the buffer overflows, our code is triggered. <strong>Everything is on our side</strong> — overflow the buffer and our code runs.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ The Null-Byte (0) Pitfall</h3>
+    <p>Remember: <code>strcpy()</code> <strong>stops at 0</strong>. If <code>strcpy()</code> sees a <code>0</code>, it stops copying — which would stop your attack.</p>
+    <ul>
+      <li>Inside our <strong>payload, there should be no 0</strong>.</li>
+      <li>The <strong>return address may contain a 0</strong> (placed at the end so copying still reaches it).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s14">
+  <div class="section-header">
+    <span class="section-num">14</span>
+    <h2>Exploit Code &amp; Launching the Attack</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>💻 Shellcode &amp; Exploit</h3>
+    <ul>
+      <li><strong>Machine code is put inside the shellcode.</strong></li>
+      <li>Once the code is ready, put it into <code>badfile</code> and launch the attack.</li>
+      <li>Prepare <code>exploit.py</code> and the <code>stack</code> program.</li>
+      <li>Run <code>exploit.py</code> → generates <code>badfile</code>.</li>
+      <li>Run <code>stack</code> → you get a shell.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ First Attempt Fails to Get Root</h3>
+    <p>Running <code>stack</code> gives a shell, but <strong>not a root shell</strong>. Checking <code>id</code> shows we don't have root privilege — something went wrong.</p>
+  </div>
+</section>
+
+<section id="s15">
+  <div class="section-header">
+    <span class="section-num">15</span>
+    <h2>The Countermeasure Issue (sh → zsh)</h2>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🛡️ A Linux Countermeasure</h3>
+    <p>The issue is one of the countermeasures in the Linux OS, in the shell program. We change it so the shell program does not have the countermeasure:</p>
+    <ul>
+      <li><strong>Link <code>sh</code> with <code>zsh</code>.</strong></li>
+      <li>Now do the attack again.</li>
+    </ul>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">👑 Getting Root</h3>
+    <p>Run <code>stack</code> → the prompt sign changes from <strong><code>$</code> to <code>#</code></strong> (indication of root). Check <code>id</code> → <strong><code>euid=0</code></strong>.</p>
+  </div>
+
+  <div class="highlight">After the experiment, <strong>revert the countermeasure</strong>, because many other things depend on it.</div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🎥 SEED Labs Video Tutorials</h3>
+    <ul>
+      <li>SEED Labs: Buffer Overflow Attack (Level 1)</li>
+      <li>SEED Labs: Buffer Overflow Attack (Level 2)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Buffer overflow</strong>More data than a fixed buffer holds; spills into adjacent memory</div>
+    <div class="qr-item"><strong>Buffer</strong>Sequential memory; classic/oldest vulnerability</div>
+    <div class="qr-item"><strong>Virtual↔Physical</strong>Paging maps virtual to physical RAM; OS isolates processes</div>
+    <div class="qr-item"><strong>Text</strong>Code/strings</div>
+    <div class="qr-item"><strong>Data</strong>Initialized globals (x)</div>
+    <div class="qr-item"><strong>BSS</strong>Uninitialized globals (y, z)</div>
+    <div class="qr-item"><strong>Heap</strong>Dynamically allocated blocks (ptr target)</div>
+    <div class="qr-item"><strong>Stack</strong>Local variables (a, b, ptr)</div>
+    <div class="qr-item"><strong>Stack frame</strong>Arguments + special region + local variables</div>
+    <div class="qr-item"><strong>Special region</strong>Return Address (4B) + Old EBP (4B)</div>
+    <div class="qr-item"><strong>Offsets</strong>a=ebp+8, b=ebp+12; locals negative e.g. -8(%ebp)</div>
+    <div class="qr-item"><strong>Old EBP</strong>Saved so the previous frame can be restored</div>
+    <div class="qr-item"><strong>strcpy stop</strong>Copies until \0 (the null terminator, value 0)</div>
+    <div class="qr-item"><strong>Growth direction</strong>Stack grows high→low; data copied low→high</div>
+    <div class="qr-item"><strong>Crash causes</strong>Unmapped addr (OS kills), invalid instr (CPU kills), kernel area, no pointer</div>
+    <div class="qr-item"><strong>Target</strong>Vulnerable + privileged Set-UID root program</div>
+    <div class="qr-item"><strong>Attack idea</strong>Overflow until return address is overwritten with addr of our code</div>
+    <div class="qr-item"><strong>Demo program</strong>buffer 100, reads 300 bytes from badfile into foo()</div>
+    <div class="qr-item"><strong>Crash test</strong>100 bytes OK; 160 bytes → segfault</div>
+    <div class="qr-item"><strong>Setup</strong>Turn off ASLR (randomize=0) + 2 more; chown + Set-UID bit</div>
+    <div class="qr-item"><strong>Two challenges</strong>Find offset (where) &amp; value (start of our code)</div>
+    <div class="qr-item"><strong>NOP sled</strong>Many NOPs = multiple entry points → higher success rate</div>
+    <div class="qr-item"><strong>Offset (example)</strong>p/d of ebp − buffer = 108; R.T candidate ebp+8 (or +100/+120)</div>
+    <div class="qr-item"><strong>Payload rule</strong>No 0 bytes in payload (strcpy stops at 0); 0 allowed in return addr</div>
+    <div class="qr-item"><strong>Exploit flow</strong>exploit.py → badfile; run stack → shell</div>
+    <div class="qr-item"><strong>Root fix</strong>Link sh→zsh to bypass shell countermeasure; $ → # , euid=0</div>
+    <div class="qr-item"><strong>After lab</strong>Revert the countermeasure</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>Define a buffer overflow. → Putting more data into a fixed-length buffer than it can hold, so the excess overwrites adjacent memory</li>
+      <li>Name the program memory segments and what each stores. → Text (code/strings), Data (init globals), BSS (uninit globals), Heap (dynamic blocks), Stack (locals)</li>
+      <li>What are the three portions of a stack frame? → Arguments, special region (return address + old ebp), and local variables</li>
+      <li>How are arguments and locals addressed relative to ebp? → Arguments at positive offsets (a=ebp+8, b=ebp+12); locals at negative offsets (e.g., -8(%ebp))</li>
+      <li>Why is the old ebp saved? → There is only one ebp register; saving it lets the previous function's frame be restored on return</li>
+      <li>Where does strcpy stop and why does that matter for an exploit? → It stops at a 0 byte, so the payload must contain no 0 bytes (the return address may)</li>
+      <li>Why does an overflowed program crash? → The return address is overwritten; jumping to an unmapped/invalid/restricted address makes the OS or CPU kill the process</li>
+      <li>What is the attack idea? → Overflow the buffer to overwrite the return address with the address of attacker-supplied code</li>
+      <li>What is a NOP sled and why use it? → A run of NOP instructions giving many entry points, so an approximate return address still slides into the shellcode</li>
+      <li>How is the offset found in the lab? → In GDB, print ebp and buffer and take their difference (p/d), e.g., 108</li>
+      <li>Why did the first exploit not yield root, and how was it fixed? → A shell countermeasure dropped privileges; linking sh to zsh bypassed it, giving euid=0 (prompt $ → #)</li>
+      <li>Which countermeasures are disabled in the setup? → Memory (address) randomization plus two others; then ownership is changed and the Set-UID bit is set</li>
+    </ul>
+  </div>
+</section>

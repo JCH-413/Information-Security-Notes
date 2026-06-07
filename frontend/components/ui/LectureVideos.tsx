@@ -2,8 +2,11 @@ import type { Video } from "@/lib/types";
 import { YouTubeEmbed } from "./YouTubeEmbed";
 
 export function LectureVideos({ videos }: { videos: Video[] }) {
-  if (!videos.length) return null;
-  const multiple = videos.length > 1;
+  // Ignore entries without a real URL (placeholders), so lectures with no video
+  // simply omit the section instead of rendering a dead link.
+  const playable = videos.filter((v) => v.url.trim() !== "");
+  if (!playable.length) return null;
+  const multiple = playable.length > 1;
 
   return (
     <section className="mt-8">
@@ -11,7 +14,7 @@ export function LectureVideos({ videos }: { videos: Video[] }) {
         {multiple ? "Lecture videos" : "Lecture video"}
       </h2>
       <div className={multiple ? "grid gap-5 sm:grid-cols-2" : "max-w-2xl"}>
-        {videos.map((video, i) => (
+        {playable.map((video, i) => (
           <div key={i}>
             {video.title && (
               <p className="mb-2 text-sm font-medium text-muted">{video.title}</p>

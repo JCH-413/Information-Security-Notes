@@ -1,0 +1,378 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>What is SQL &amp; Web App Architecture</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 Overview</h3>
+    <p>This topic covers SQL basics, SQL Injection against the SELECT statement, modifying a database using SQL injection, similarity with other code-injection attacks, and countermeasures.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🏗️ Web Application Architecture</h3>
+    <p>A web application has three components working together:</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Browser</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Web Application Server</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Database</div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🗄️ SQL — Structured Query Language</h3>
+    <p>SQL is the language used to communicate with a database — to create databases and tables, insert records, and query/modify data. The lab uses a MySQL database run inside Docker (via a <code>docker-compose.yml</code> file).</p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>SQL Basics: DDL, Insert &amp; Select</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🛠️ Managing Databases &amp; Tables</h3>
+    <p>Show all databases, then create a database and a table:</p>
+    <div class="math-block">
+      CREATE TABLE mytable (<br>
+      &nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INT (6) NOT NULL AUTO_INCREMENT,<br>
+      &nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;VARCHAR (30) NOT NULL,<br>
+      &nbsp;&nbsp;Age&nbsp;&nbsp;&nbsp;&nbsp;INT (3),<br>
+      &nbsp;&nbsp;Salary&nbsp;INT (10),<br>
+      &nbsp;&nbsp;PRIMARY KEY (ID)<br>
+      );
+      <span class="comment">DESCRIBE mytable; shows fields, types, keys</span>
+    </div>
+  </div>
+
+  <div class="card accent-left">
+    <h3>➕ Insert &amp; Select Records</h3>
+    <p>After inserting records, you query them with SELECT:</p>
+    <div class="math-block">
+      USE test_db<br>
+      SELECT * FROM mytable;
+      <span class="comment">returns all rows &amp; columns</span>
+    </div>
+    <div class="math-block">
+      SELECT Name, Salary FROM mytable;
+      <span class="comment">returns only the chosen columns</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Salary</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Alice</td><td>25</td><td>6000</td></tr>
+        <tr><td>2</td><td>Bob</td><td>35</td><td>7000</td></tr>
+        <tr><td>3</td><td>Charlie</td><td>45</td><td>8000</td></tr>
+        <tr><td>4</td><td>David</td><td>55</td><td>9000</td></tr>
+        <tr><td>5</td><td>Eve</td><td>40</td><td>8000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>WHERE, UPDATE &amp; Comments</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔎 Conditions: WHERE</h3>
+    <div class="math-block">
+      SELECT * FROM mytable WHERE Name='Alice';
+      <span class="comment">returns only Alice's row</span>
+    </div>
+    <div class="math-block">
+      SELECT * FROM mytable WHERE Name='Alice' OR Salary&gt;8000;
+      <span class="comment">returns Alice (id 1) and David (id 4)</span>
+    </div>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⭐ Special Condition (Always True)</h3>
+    <div class="math-block">
+      SELECT * FROM mytable WHERE 1=1;
+      <span class="comment">1=1 is always true → returns ALL rows</span>
+    </div>
+    <p class="note">This "always-true" trick is the heart of many SQL injection attacks — see <a href="#s5">Login Without Password</a>.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>✏️ UPDATE Statement</h3>
+    <div class="math-block">
+      UPDATE mytable SET Salary=9999 WHERE Name='Alice';
+      <span class="comment">Alice's salary becomes 9999</span>
+    </div>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">💬 Comments in SQL</h3>
+    <p>Three comment styles — important for injection, since attackers use comments to discard the rest of a query:</p>
+    <ul>
+      <li><code>SELECT * FROM employee; # comment</code> (hash)</li>
+      <li><code>SELECT * FROM employee; -- comment</code> (double dash)</li>
+      <li><code>SELECT * FROM /* In-line comment */ employee;</code> (inline)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>How a Web App Interacts with the Database</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔗 The Login Flow</h3>
+    <p>The browser submits a username and password through a login form. The server builds an SQL query against the <code>credential</code> table to authenticate the user.</p>
+    <div class="math-block">
+      SELECT name, eid, salary, email<br>
+      FROM credential<br>
+      WHERE name='alice' and Password='seedalice';
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ The Vulnerable Server Code</h3>
+    <p>The application server takes the user input and <strong>concatenates it directly into the SQL string</strong> — this is the root of the vulnerability:</p>
+    <div class="math-block">
+      $input_uname = $_GET['username'];<br>
+      $input_pwd&nbsp;&nbsp;= $_GET['Password'];<br>
+      <br>
+      $sql = "SELECT name, eid, salary, email<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;FROM credential<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;WHERE name='$input_uname' and Password='$input_pwd'";<br>
+      $result = $conn-&gt;query($sql);
+    </div>
+    <p class="note">Because the user input is placed inside the query as code, a crafted input can change the query's meaning.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>SQL Injection: Login Without Password</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔓 First Case — Known Username (Alice)</h3>
+    <p>The attacker types this into the <strong>username</strong> field:</p>
+    <div class="math-block">
+      Username: <span class="val-secret">alice' #</span>
+      <span class="comment">single quote closes the name string; # comments out the rest</span>
+    </div>
+    <p>The resulting query becomes:</p>
+    <div class="math-block">
+      SELECT ... WHERE name='alice' #' and Password='...'
+      <span class="comment">the password check is commented out</span>
+    </div>
+    <p>Result: the attacker logs in as Alice and sees her full profile (Employee ID 10000, Salary 20000, SSN 10211002, etc.) <strong>without knowing her password</strong>.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🔓 Second Case — Unknown Username</h3>
+    <p>Objective: <em>you don't know any name — can you still log in?</em> The attacker types into the username field:</p>
+    <div class="math-block">
+      Username: <span class="val-secret">a' OR 1=1 #</span>
+      <span class="comment">1=1 is always true; # comments out the password check</span>
+    </div>
+    <p>The <code>OR 1=1</code> makes the WHERE clause always true, so the query returns a user (typically the first row) and logs the attacker in without any valid credentials.</p>
+  </div>
+
+  <div class="highlight">Both attacks rely on the same idea: inject a single quote to break out of the data string, then alter the query logic (<code>OR 1=1</code>) or remove the password check (<code>#</code>).</div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Modify Database Using SQL Injection</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">💰 Change Your Own Salary</h3>
+    <p>The profile-edit page runs an UPDATE statement. Alice (Employee ID 10000, salary 20000) injects into the <strong>NickName</strong> field:</p>
+    <div class="math-block">
+      NickName: <span class="val-secret">alice', Salary='1000000</span>
+      <span class="comment">closes the nickname value and adds a Salary assignment</span>
+    </div>
+    <p>The UPDATE now also sets her salary, raising it far above 20000.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">💸 Change Someone Else's Salary</h3>
+    <p>Target: <strong>Ted</strong> (Employee ID 50000, salary 110000). Inject into the NickName field a clause that re-targets the WHERE:</p>
+    <div class="math-block">
+      NickName: <span class="val-secret">', Salary=1 WHERE name='Ted' #</span>
+      <span class="comment">sets Ted's salary to 1; # comments out the original WHERE</span>
+    </div>
+    <p>The attacker overwrites the <code>WHERE</code> clause to point at Ted, changing his salary to 1.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Running Multiple / Arbitrary SQL Statements</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📑 Run Multiple SQL Statements</h3>
+    <p>MySQL can run several statements separated by semicolons in one line:</p>
+    <div class="math-block">
+      mysql&gt; select 1; select 2; select 3;
+      <span class="comment">each statement returns its own result set</span>
+    </div>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚙️ Run an Arbitrary SQL Statement</h3>
+    <p>Objective: use the SQL injection vulnerability to run any statement. The attacker appends a second statement after a semicolon in the username field:</p>
+    <div class="math-block">
+      Username: <span class="val-secret">alice'; select 1 #</span>
+      <span class="comment">ends the SELECT, then runs an arbitrary statement</span>
+    </div>
+    <p>In principle this lets the attacker run a destructive statement such as a DROP or DELETE.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🛡️ Countermeasure of the Database (Why It Often Fails)</h3>
+    <p>The database will <strong>block multiple SQL statements</strong>. This countermeasure is actually enforced in the PHP code: PHP uses an <strong>API to invoke the database</strong>, and that API <strong>supports only one single SQL statement</strong>.</p>
+    <p class="note">So the "run arbitrary multiple statements" attack is stopped by the single-statement API — but single-statement injections (login bypass, salary change) still work.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Similarity With Other Code Injection</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🔁 The Common Pattern</h3>
+    <p>All code-injection attacks share the same root cause: <strong>untrusted user data is mixed with trusted code</strong>, and a parser then treats part of the data as code to execute.</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card red-left">
+      <h3 class="red">🖥️ System Injection</h3>
+      <p>Untrusted user <strong>data</strong> is mixed with a trusted <strong>command name</strong>. The shell parser splits it into Data' and <strong>Command'</strong>, and the injected command' gets executed.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">📜 JavaScript Injection</h3>
+      <p>Also known as <a href="#s5">Cross-Site Scripting (XSS)</a> — injected script is treated as code and executed by the browser.</p>
+    </div>
+    <div class="card red-left">
+      <h3 class="red">🗄️ SQL Injection</h3>
+      <p>Injected text inside a data field is parsed as part of the SQL statement and executed by the database engine.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Countermeasures</h2>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔄 Turning Code into Data (Encoding Special Characters)</h3>
+    <p>Encode special characters so they are treated as plain data rather than code:</p>
+    <ul>
+      <li><strong>Apache's configuration:</strong> <code>magic_quotes_gpc = On</code> in <code>php.ini</code>.</li>
+      <li><strong>PHP's solution:</strong> <code>mysqli::real_escape_string()</code></li>
+    </ul>
+    <div class="math-block">
+      $eid = $mysqli-&gt;real_escape_string($_GET['EID']);<br>
+      $pwd = $mysqli-&gt;real_escape_string($_GET['Password']);<br>
+      $sql = "SELECT Name, Salary, SSN FROM employee<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;WHERE eid='$eid' and password='$pwd'";
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">✅ Separate Code and Data — Prepared Statements (Best Solution)</h3>
+    <p>Turning code into data or applying a filter is <strong>not reliable</strong>, because an attacker can easily bypass both. The better solution is to <strong>separate code and data and pass each through a separate channel</strong> to prevent code injection. Most SQL engines provide this (originally for performance) as <strong>prepared statements</strong>.</p>
+    <div class="math-block">
+      PREPARE stmt FROM "SELECT * FROM mytable WHERE name = ? or age &gt; ?";<br>
+      SET @a='Alice';<br>
+      SET @b=20;<br>
+      EXECUTE stmt USING @a, @b;
+      <span class="comment">? placeholders are bound as pure data</span>
+    </div>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">🧩 Prepared Statement Program (PHP)</h3>
+    <p>Vulnerable approach vs. prepared-statement approach:</p>
+    <div class="math-block">
+      <span class="comment">Vulnerable:</span><br>
+      $sql = "SELECT name, local, gender FROM USER_TABLE<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;WHERE id=$id AND password='$pwd'";<br>
+      $result = $conn-&gt;query($sql);
+    </div>
+    <div class="math-block">
+      <span class="comment">Using prepared statement:</span><br>
+      $stmt = $conn-&gt;prepare("SELECT name, local, gender FROM USER_TABLE<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;WHERE id = ? and password = ? ");<br>
+      $stmt-&gt;bind_param("is", $id, $pwd);<br>
+      $stmt-&gt;execute();<br>
+      $stmt-&gt;bind_result($bind_name, $bind_local, $bind_gender);<br>
+      $stmt-&gt;fetch();
+    </div>
+    <p class="note">The query structure is sent first; the data is bound afterward, so injected text can never change the query's meaning.</p>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>Web app architecture</strong>Browser → Web App Server → Database</div>
+    <div class="qr-item"><strong>Create table</strong>CREATE TABLE … with types, NOT NULL, AUTO_INCREMENT, PRIMARY KEY</div>
+    <div class="qr-item"><strong>Select all</strong>SELECT * FROM mytable;</div>
+    <div class="qr-item"><strong>Select columns</strong>SELECT Name, Salary FROM mytable;</div>
+    <div class="qr-item"><strong>WHERE</strong>SELECT * FROM mytable WHERE Name='Alice';</div>
+    <div class="qr-item"><strong>Always-true</strong>WHERE 1=1 returns every row</div>
+    <div class="qr-item"><strong>UPDATE</strong>UPDATE mytable SET Salary=9999 WHERE Name='Alice';</div>
+    <div class="qr-item"><strong>Comments</strong># , -- , and /* inline */</div>
+    <div class="qr-item"><strong>Root cause</strong>User input concatenated into SQL string as code</div>
+    <div class="qr-item"><strong>Login bypass (known)</strong>Username: alice' #</div>
+    <div class="qr-item"><strong>Login bypass (unknown)</strong>Username: a' OR 1=1 #</div>
+    <div class="qr-item"><strong>Change own salary</strong>NickName: alice', Salary='1000000</div>
+    <div class="qr-item"><strong>Change other's salary</strong>', Salary=1 WHERE name='Ted' #</div>
+    <div class="qr-item"><strong>Multiple statements</strong>select 1; select 2; select 3;</div>
+    <div class="qr-item"><strong>Arbitrary statement</strong>alice'; select 1 #</div>
+    <div class="qr-item"><strong>DB countermeasure</strong>PHP API allows only one SQL statement → blocks multi-statement</div>
+    <div class="qr-item"><strong>Injection family</strong>System, JavaScript (XSS), SQL — all mix data with code</div>
+    <div class="qr-item"><strong>Encode chars</strong>magic_quotes_gpc=On; real_escape_string() — bypassable</div>
+    <div class="qr-item"><strong>Best fix</strong>Prepared statements — separate code &amp; data channels</div>
+    <div class="qr-item"><strong>Prepared SQL</strong>PREPARE … WHERE name = ? ; EXECUTE USING @a</div>
+    <div class="qr-item"><strong>PHP prepared</strong>prepare(), bind_param(), execute(), bind_result(), fetch()</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What is the fundamental cause of SQL injection? → User-supplied data is concatenated into the SQL query as code, so the parser executes injected SQL</li>
+      <li>Write the injection input to log in as a known user without a password. → alice' # (the # comments out the password check)</li>
+      <li>Write the injection input to log in when you don't know any username. → a' OR 1=1 # (always-true condition)</li>
+      <li>How can an attacker change another user's salary via injection? → Inject ', Salary=1 WHERE name='Ted' # into an updatable field to overwrite the UPDATE's WHERE clause</li>
+      <li>What is the role of the # in these attacks? → It comments out the remainder of the original query (e.g., the password condition)</li>
+      <li>How does the database/PHP block running multiple statements? → The PHP query API supports only a single SQL statement per call</li>
+      <li>Name three code-injection attacks and their common cause. → System injection, JavaScript injection (XSS), SQL injection — all mix untrusted data with trusted code</li>
+      <li>Why are filtering and encoding special characters not reliable? → Attackers can craft inputs that bypass filters/encoding</li>
+      <li>What is the best countermeasure and why? → Prepared statements, because code and data travel in separate channels so injected text can't alter the query structure</li>
+      <li>Outline the PHP prepared-statement steps. → prepare() with ? placeholders, bind_param(), execute(), bind_result(), fetch()</li>
+    </ul>
+  </div>
+</section>

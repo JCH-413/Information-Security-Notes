@@ -1,0 +1,326 @@
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Introduction to XSS</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What This Topic Covers</h3>
+    <p>Cross-Site Scripting (XSS): how the attack works, two practical attacks (Add Friend and Modify Profile), writing a self-propagating XSS worm, countermeasures, Content Security Policy (CSP), and attack generalization.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🌐 The Samy Worm (2005)</h3>
+    <p>In 2005, <strong>Samy Kamkar</strong> generated a worm on the social media website <strong>myspace.com</strong> that carried a payload. As victims clicked on the payload, two things happened:</p>
+    <ul>
+      <li>Samy was <strong>added as a friend</strong> on the victim's profile.</li>
+      <li>The victims' profiles were updated with the text <strong>"Samy is my hero"</strong>.</li>
+    </ul>
+    <p class="note">This worm victimized <strong>one million users within 20 hours</strong> on October 4, 2005.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🗳️ The votehillary.org Case (2008)</h3>
+    <p>In 2008 there was a US election with Obama and Hillary as candidates. Hillary had an election-campaign website at <code>votehillary.org</code>, which became a victim of an XSS attack.</p>
+    <p>The attack <strong>changed the content</strong> of votehillary.org — the URL stayed the same, but the content shown was Obama's website.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>How XSS Works &amp; XSS vs. CSRF</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚙️ What is Cross-Site Scripting (XSS)?</h3>
+    <p>XSS is a form of <strong>malicious code injection</strong> into the victim's system through a website or web server.</p>
+    <ul>
+      <li>The victim sends a <strong>single-site request</strong> to a legal and authenticated server.</li>
+      <li>But the attacker <strong>injects code into the server's response</strong> due to a server vulnerability.</li>
+      <li>As the browser sees code in the HTTP response, the browser <strong>immediately executes the code</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">⚖️ Difference between CSRF and XSS</h3>
+    <p>Both attacks abuse the victim's authenticated session, but the trust direction differs: in <strong>CSRF</strong> the attacker forges a request from a malicious site to a trusted server; in <strong>XSS</strong> malicious code is injected into and executed within a trusted page itself.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Aspect</th><th>CSRF</th><th>XSS</th></tr></thead>
+      <tbody>
+        <tr><td>Request type</td><td class="match">Cross-site request</td><td class="diff">Single-site request</td></tr>
+        <tr><td>Where malicious code lives</td><td class="match">On the attacker's site</td><td class="diff">Injected into the trusted server's response</td></tr>
+        <tr><td>Code execution</td><td class="match">Forged request to server</td><td class="diff">Browser executes injected code in the trusted page</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">📑 Types of XSS Attack</h3>
+    <ul>
+      <li><strong>Non-persistent XSS Attack</strong></li>
+      <li><strong>Persistent XSS Attack</strong> (e.g., the Samy worm example)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Damages Caused by XSS</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🖥️ Attack the Server</h3>
+    <p>The attacker sends an HTTP request to the server <strong>on behalf of the user</strong>. The server responds and updates the user's profile according to the attacker's HTTP request.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">🎨 Web Defacing</h3>
+    <p>JavaScript code runs inside the page and has the privilege to <strong>access elements of the page</strong>. The code can <strong>change, modify, and delete</strong> the elements.</p>
+    <p class="note">The Obama and Hillary XSS case was <strong>web defacing on the client side</strong>.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Attack 1: Add Friend (Persistent XSS)</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🎯 Objective</h3>
+    <p>The objective of this attack is to <strong>add the attacker into the victim's friend list</strong> as the victim visits the attacker's profile.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔍 Investigation</h3>
+    <p>The attacker investigates the <strong>GET method request</strong> before launching the attack (the "Add Friend" HTTP request).</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔑 How the Attacker Gets Tokens and Timestamp</h3>
+    <ul>
+      <li>The developer uses a <strong>global variable</strong> for the token and timestamp inside the web page.</li>
+      <li>When the attacker's malicious code is inside the web page, the code can easily <strong>access the global variables</strong> of token and timestamp.</li>
+      <li>Example: <code>Elgg.security.token.__elgg_token</code></li>
+    </ul>
+    <p class="note">This is a key difference from CSRF: because XSS code runs <em>inside</em> the trusted page, the anti-CSRF token defense is defeated.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🛠️ Construct the URL and Ajax Code</h3>
+    <p>The attacker constructs the attack URL and writes <strong>Ajax code</strong> to send the forged request, then completes the code and places it in <strong>plaintext mode</strong> in the attacker's profile.</p>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">💥 Reaction of the Attack</h3>
+    <p>As the victim visits Samy's profile, the code triggers and <strong>Samy is added to the friend list</strong> of the victim.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Attack 2: Modify Profile</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🎯 Objective</h3>
+    <p>The objective of this attack is to <strong>edit the victim's profile</strong> as the victim visits the attacker's profile.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">🔍 Investigate the Request</h3>
+    <p>The attacker investigates the <strong>Edit Profile HTTP request</strong> before launching the attack.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🛠️ Construct the Data and Ajax Code</h3>
+    <p>The attacker constructs the data and the <strong>Ajax code</strong>, completes the code, and places it in <strong>plaintext mode</strong> in the attacker's profile. When the victim visits, the profile-editing request triggers.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Writing a Self-Propagating XSS Worm</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📈 Spreading the Worm Exponentially</h3>
+    <p>A self-propagating worm spreads <strong>exponentially</strong>: each infected profile infects every visitor, who then spreads it further.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🧬 Two Ways to Make an Identical Copy of Malicious Code</h3>
+    <ul>
+      <li><strong>By yourself</strong> (Self-Reproducing)</li>
+      <li><strong>Using external help</strong></li>
+    </ul>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">♻️ By Yourself (Self-Reproducing / Quine)</h3>
+    <p>The "by yourself" approach means putting a <strong>copy of your code inside your code</strong>.</p>
+    <p><strong>Mechanism:</strong> the attacker writes code that <strong>prints its own source code</strong> without reading any external file. This technique is also called a <strong>"Quine"</strong>.</p>
+  </div>
+
+  <div class="card purple-left">
+    <h3 class="purple">🌍 Using External Help</h3>
+    <p>The "using external help" approach means <strong>saving your code somewhere else</strong> and loading it when needed (e.g., the worm code file <code>xssworm.js</code>).</p>
+    <p><strong>Another way:</strong> load the code inside an <strong>element of the page as content</strong>. As the web page loads in the browser, the browser has an API to <strong>access the element by id</strong> and retrieve the code.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Countermeasures</h2>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">⚠️ Fundamental Problem of XSS</h3>
+    <p>Mixing <strong>data and code</strong> is hard to separate because both have the same format (like a string). This is the fundamental problem, because the server <strong>cannot sense</strong> whether data coming from a user has malicious code inside it or not.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🧹 1st Solution: Apply Filter on Data, Extract Code</h3>
+    <p>Different filters can be applied to data coming from users to separate data and code. But hackers are creative and can counter the filters — as Samy demonstrated:</p>
+    <ul>
+      <li><strong>Samy's strategy:</strong> <code>&lt;div style="background:url('javascript:alert(1)')"&gt;</code></li>
+      <li><strong>Filter 1:</strong> MySpace filter blocks tags like <code>&lt;script&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code> etc.</li>
+      <li><strong>Samy's strategy:</strong> <code>&lt;div style="background:url('javascript(1)')"&gt;</code></li>
+      <li><strong>Filter 2:</strong> MySpace strips out the word "javascript" from anywhere.</li>
+      <li><strong>Samy's strategy:</strong> <code>eval('xmlhttp.onread' + 'ystatechange = callback');</code></li>
+      <li><strong>Filter 3:</strong> MySpace strips out the word "onreadystatechange".</li>
+    </ul>
+    <p class="note">The filters are <strong>not effective</strong>, because hackers have a creative nature and can counter them.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🔄 2nd Solution: Turning Code into Data</h3>
+    <p>The 2nd solution is to <strong>turn code into data</strong> with the help of <strong>special characters</strong>. So a <strong>full dictionary of special characters</strong> is required to convert code into data.</p>
+    <p class="note">But the problem is that this solution can also be <strong>bypassed easily</strong>.</p>
+  </div>
+
+  <div class="card green-left">
+    <h3 class="green">📦 3rd Solution: Treating Data Only as Data (Sandbox)</h3>
+    <p>The 3rd solution is to use an <strong>iframe</strong> as sandboxing functionality. This solution tells the browser to treat <strong>data = [data + code] as data</strong>, even if it contains code.</p>
+    <p>Setting the sandbox — options of privilege level:</p>
+    <ul>
+      <li><code>allow-scripts</code></li>
+      <li><code>allow-same-origin</code></li>
+      <li><code>allow-forms</code></li>
+      <li><code>allow-modals</code></li>
+      <li><code>allow-top-navigation</code></li>
+    </ul>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>CSP: Content Security Policy</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📖 What is CSP?</h3>
+    <p>CSP is another countermeasure for XSS.</p>
+  </div>
+
+  <div class="card orange-left">
+    <h3 class="orange">🕵️ The Confused Deputy / Origin Problem</h3>
+    <p>CSP helps the browser know about the <strong>deputy/origin of code and data</strong>. CSP <strong>forces the code to be labelled</strong> with respect to its deputy/origin/source.</p>
+  </div>
+
+  <div class="card accent-left">
+    <h3>🏷️ Forcing Code to be Labelled</h3>
+    <p>There are two ways to include JavaScript code inside HTML:</p>
+    <ul>
+      <li><strong>Inline approach</strong></li>
+      <li><strong>Linked approach</strong></li>
+    </ul>
+    <p>The source of the <strong>linked approach must be labelled</strong>, because code may be coming from some other resources. Once a source is labelled, CSP grants privilege to that code.</p>
+  </div>
+
+  <div class="card blue-left">
+    <h3 class="blue">⚙️ Setting Content Security Policy</h3>
+    <ul>
+      <li><strong>Setting CSP in PHP code</strong> — used for multiple headers.</li>
+      <li><strong>Setting CSP on Apache</strong> — used for a single type of header.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Attack Generalization</h2>
+  </div>
+
+  <div class="card accent-left">
+    <h3>📱 Attack on HTML5-based Mobile Applications</h3>
+    <p>Mobile phones have different operating systems and architectures, like Android and iOS. The application developer has to write separate code for both Android and iOS applications.</p>
+    <ul>
+      <li>So developers convert Android and iOS applications into <strong>web-based applications</strong> that support both platforms.</li>
+      <li>Vulnerabilities like <strong>CSRF and XSS</strong> come into mobile applications due to these web-browser-based applications.</li>
+    </ul>
+  </div>
+
+  <div class="card red-left">
+    <h3 class="red">💉 Code Injection into Mobile</h3>
+    <p>Because HTML5-based mobile apps render web content, malicious code can be <strong>injected into the mobile application</strong> — including <strong>attacks via QR code</strong>, where scanning a malicious QR code delivers the payload.</p>
+  </div>
+</section>
+
+<section id="qr">
+  <div class="section-header">
+    <span class="section-num">QR</span>
+    <h2>Quick Revision</h2>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-item"><strong>XSS</strong>Cross-Site Scripting — malicious code injected into a trusted server's response</div>
+    <div class="qr-item"><strong>Samy worm (2005)</strong>MySpace; 1 million users in 20 hours; "Samy is my hero"</div>
+    <div class="qr-item"><strong>votehillary.org (2008)</strong>Web defacing — same URL, Obama's content</div>
+    <div class="qr-item"><strong>How XSS works</strong>Victim sends single-site request; attacker injects code into response; browser executes it</div>
+    <div class="qr-item"><strong>XSS vs CSRF</strong>XSS = single-site, code runs inside trusted page; CSRF = cross-site forged request</div>
+    <div class="qr-item"><strong>Types</strong>Non-persistent &amp; Persistent (Samy = persistent)</div>
+    <div class="qr-item"><strong>Damages</strong>Attack server on user's behalf; web defacing</div>
+    <div class="qr-item"><strong>Attack 1</strong>Add Friend — add attacker when victim visits profile</div>
+    <div class="qr-item"><strong>Attack 2</strong>Modify — edit victim's profile on visit</div>
+    <div class="qr-item"><strong>Token theft</strong>Code reads global token: Elgg.security.token.__elgg_token</div>
+    <div class="qr-item"><strong>Worm copy methods</strong>Self-reproducing (Quine) or external help</div>
+    <div class="qr-item"><strong>Quine</strong>Code that prints its own source, no external file</div>
+    <div class="qr-item"><strong>External help</strong>Save code elsewhere (xssworm.js) or in a page element by id</div>
+    <div class="qr-item"><strong>Fundamental problem</strong>Data &amp; code share string format; server can't tell them apart</div>
+    <div class="qr-item"><strong>Solution 1</strong>Filter data / extract code — bypassable (Samy's tricks)</div>
+    <div class="qr-item"><strong>Solution 2</strong>Turn code into data via special chars — bypassable</div>
+    <div class="qr-item"><strong>Solution 3</strong>iframe sandbox — treat data+code as data</div>
+    <div class="qr-item"><strong>Sandbox options</strong>allow-scripts, allow-same-origin, allow-forms, allow-modals, allow-top-navigation</div>
+    <div class="qr-item"><strong>CSP</strong>Content Security Policy — forces code to be labelled by origin</div>
+    <div class="qr-item"><strong>Including JS</strong>Inline vs Linked; linked source must be labelled</div>
+    <div class="qr-item"><strong>Setting CSP</strong>PHP code (multiple headers) or Apache (single header type)</div>
+    <div class="qr-item"><strong>Generalization</strong>HTML5 mobile apps inherit XSS/CSRF; code injection via QR code</div>
+  </div>
+
+  <div class="exam-box">
+    <div class="label">📝 Common Exam Questions</div>
+    <ul>
+      <li>What is Cross-Site Scripting (XSS)? → Malicious code injection into a trusted server's response that the browser then executes</li>
+      <li>Describe the Samy worm. → 2005 MySpace persistent XSS worm; added Samy as friend and posted "Samy is my hero"; infected 1M users in 20 hours</li>
+      <li>Differentiate XSS from CSRF. → XSS uses a single-site request with code running inside the trusted page; CSRF uses a cross-site forged request</li>
+      <li>What are the two types of XSS? → Non-persistent and persistent</li>
+      <li>How does XSS defeat the anti-CSRF token? → Malicious code runs inside the page and reads the token/timestamp global variable (e.g., Elgg.security.token.__elgg_token)</li>
+      <li>What is a Quine in the context of XSS worms? → Code that reproduces (prints) its own source without reading an external file</li>
+      <li>What is the fundamental problem of XSS? → Data and code share the same string format, so the server cannot separate malicious code from data</li>
+      <li>List the three filtering/defense solutions and their weakness. → Filter data/extract code (bypassable), turn code into data (bypassable), iframe sandbox (treat data+code as data)</li>
+      <li>What does CSP do? → Forces code to be labelled by origin/source so the browser can apply privileges; solves the confused-deputy problem</li>
+      <li>Why are HTML5-based mobile apps vulnerable to XSS/CSRF? → They are web-browser-based apps built for cross-platform support, inheriting web vulnerabilities, including injection via QR code</li>
+    </ul>
+  </div>
+</section>
